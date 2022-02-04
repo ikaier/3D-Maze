@@ -38,9 +38,6 @@ void Floor::SetModel(GLuint uniformLocation)
 	glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(modelMatrix));
 }
 
-void Floor::reset()
-{
-}
 
 Floor::~Floor()
 {

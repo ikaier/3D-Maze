@@ -35,26 +35,6 @@ static const char* vShader = "Shaders/shader.vert";
 //fragment shader
 static const char* fShader = "Shaders/shader.frag";
 
-//void CreateFloor()
-//{
-//    unsigned int Floorindices[] = {
-//        0,1,3,
-//        1,2,3
-//    };
-//
-//    GLfloat Floorvertices[] = {
-//        //  x     y     z       u       v       nx   ny   nz
-//        0.5f,   0.5f,   0.0f,   1.0f,   1.0f,   0.0f,   -1.0f,  0.0f,
-//        0.5f,  -0.5f,   0.0f,   1.0f,   0.0f,   0.0f,   -1.0f,  0.0f,
-//        -0.5f, -0.5f,   0.0f,   0.0f,   0.0f,   0.0f,   -1.0f,  0.0f,
-//        -0.5f,  0.5f,   0.0f,   0.0f,   1.0f,   0.0f,   -1.0f,  0.0f,
-//    };
-//
-//
-//    Mesh* obj3 = new Mesh();
-//    obj3->CreateMesh(Floorvertices, Floorindices, 32, 6);
-//    meshList.push_back(obj3);
-//}
 
 void CreateShaders() {
     Shader* shader1 = new Shader();
@@ -72,7 +52,7 @@ int main()
 
     Floor anFloor;
     anFloor.Rotate(5.0f, 0.0f, 0.0f);
-    /*CreateFloor();*/
+
     CreateShaders();
 
     glm::mat4 projection = glm::perspective(glm::radians(60.0f), mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 100.0f);
@@ -88,11 +68,7 @@ int main()
         brickTexture.UseTexture();
         shaderList[0].UseShader();
         
-        
-        
-        /*demoTransform = MyTransform(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f);
-        demoTransform.ApplyTransform(shaderList[0].GetTransformLocation());*/
-        //anFloor.Rotate(0.1f, 0.0f, 0.0f);
+
         anFloor.SetModel(shaderList[0].GetTransformLocation());
         
         glm::mat4 view = glm::mat4(1.0f);
@@ -100,7 +76,6 @@ int main()
         glUniformMatrix4fv(shaderList[0].GetProjectionLocation(), 1, GL_FALSE, glm::value_ptr(projection));
         glUniformMatrix4fv(shaderList[0].GetViewLocation(), 1, GL_FALSE, glm::value_ptr(view));
         
-        //meshList[0]->RenderMesh();
         anFloor.Render();
         glUseProgram(0);
 
