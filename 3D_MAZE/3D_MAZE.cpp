@@ -19,6 +19,7 @@
 #include"Texture.h"
 #include"MyTransform.h"
 #include"Floor.h"
+#include"Camera.h"
 
 
 Window mainWindow;
@@ -28,6 +29,12 @@ std::vector<Shader> shaderList;
 
 Texture brickTexture;
 MyTransform demoTransform;
+Camera camera;
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+GLfloat deltaTime = 0.0f;
+GLfloat lastTime = 0.0f;
 
 //Vertex shader
 static const char* vShader = "Shaders/shader.vert";
@@ -54,14 +61,22 @@ int main()
     anFloor.Rotate(5.0f, 0.0f, 0.0f);
 
     CreateShaders();
+    camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 1.0f, 0.0f),
+        -90.0f, 0.0f,0.0f, 5.0f, 0.5f);
 
     glm::mat4 projection = glm::perspective(glm::radians(60.0f), mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 100.0f);
     GLfloat i = 0;
     while (!mainWindow.getShouldClose())
 	{
-		mainWindow.processInput();
-		glfwPollEvents();
+        GLfloat now = glfwGetTime();//SDL_GetPerformaceCounter();
+        deltaTime = now - lastTime;//(now-lastTime)*1000/SDL_GetPerformaceFrequency()
+        lastTime = now;
+        glfwPollEvents();
+		mainWindow.processInput(deltaTime);
 
+		
+
+        camera.keyControl(mainWindow.getsKeys());
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
@@ -71,8 +86,8 @@ int main()
 
         anFloor.SetModel(shaderList[0].GetTransformLocation());
         
-        glm::mat4 view = glm::mat4(1.0f);
-        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -2.0f));
+        glm::mat4 view = camera.getViewMatrix();
+        
         glUniformMatrix4fv(shaderList[0].GetProjectionLocation(), 1, GL_FALSE, glm::value_ptr(projection));
         glUniformMatrix4fv(shaderList[0].GetViewLocation(), 1, GL_FALSE, glm::value_ptr(view));
         

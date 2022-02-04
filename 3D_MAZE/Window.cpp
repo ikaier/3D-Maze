@@ -67,11 +67,36 @@ void Window::swapBuffers()
     glfwSwapBuffers(mainWindow);
 }
 
-void Window::processInput()
+void Window::processInput(GLfloat deltaTime)
 {
     if (glfwGetKey(mainWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(mainWindow, true);
     }
+
+    keys[0] = 0.0f;
+    keys[1] = 0.0f;
+    keys[2] = 0.0f;
+    keys[3] = 0.0f;
+
+    if (glfwGetKey(mainWindow, GLFW_KEY_W) == GLFW_PRESS) {
+        keys[0] = deltaTime;
+        printf("w pressed\n");
+    }
+    if (glfwGetKey(mainWindow, GLFW_KEY_S) == GLFW_PRESS) {
+        keys[1] = deltaTime;
+    }
+    if (glfwGetKey(mainWindow, GLFW_KEY_A) == GLFW_PRESS) {
+        keys[2] = deltaTime;
+    }
+    if (glfwGetKey(mainWindow, GLFW_KEY_D) == GLFW_PRESS) {
+        keys[3] = deltaTime;
+    }
+
+}
+
+GLfloat* Window::getsKeys()
+{
+    return keys;
 }
 
 GLfloat Window::getBufferWidth()

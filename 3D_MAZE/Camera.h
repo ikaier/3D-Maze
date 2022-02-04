@@ -17,9 +17,9 @@ public:
 
 	glm::vec3 getCameraPosition();
 	glm::vec3 getCameraDirection();
-	glm::vec4 getViewMatrix();
+	glm::mat4 getViewMatrix();
 
-	void keyControl(bool* keys, GLfloat deltaTime);
+	void keyControl(GLfloat* keys);
 	void mouseControl(GLfloat xChange, GLfloat yChange);
 	void flip(GLfloat deltaTime);
 
@@ -27,9 +27,9 @@ public:
 
 private:
 	glm::vec3 position;
-	glm::vec3 CameraZ;
-	glm::vec3 CameraY;
-	glm::vec3 CameraX;
+	glm::vec3 front;
+	glm::vec3 up;
+	glm::vec3 right;
 	glm::vec3 worldUp;
 
 	GLfloat yaw;

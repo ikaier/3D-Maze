@@ -13,17 +13,19 @@ Camera::Camera(glm::vec3 startPosition, glm::vec3 cameraY,
 	yaw = startYaw;
 	pitch = startPitch;
 	roll = startRoll;
-	CameraZ = glm::vec3(0.0f, 0.0f, -1.0f);
+	front = glm::vec3(0.0f, 0.0f, -1.0f);
 
 	moveSpeed = startMoveSpeed;
 	turnSpeed = startTurnSpeed;
-	update();
+
+	right = glm::normalize(glm::cross(front, worldUp));
+	up = glm::normalize(glm::cross(right, front));
 
 }
 
 glm::vec3 Camera::getCameraPosition()
 {
-	return glm::vec3();
+	return position;
 }
 
 glm::vec3 Camera::getCameraDirection()
@@ -31,29 +33,19 @@ glm::vec3 Camera::getCameraDirection()
 	return glm::vec3();
 }
 
-glm::vec4 Camera::getViewMatrix()
+glm::mat4 Camera::getViewMatrix()
 {
-	return glm::vec4();
+	return glm::lookAt(position,position+front,up);
 }
 
-void Camera::keyControl(bool* keys, GLfloat deltaTime)
+
+void Camera::keyControl(GLfloat* keys)
 {
-	GLfloat velocity = moveSpeed * deltaTime;
-	if (keys[GLFW_KEY_W]) {
-		position += CameraZ * velocity;
-	}
-	if (keys[GLFW_KEY_D]) {
-		position += CameraX * velocity;
-	}
-	if (keys[GLFW_KEY_A]) {
-		position -= CameraX * velocity;
-	}
-	if (keys[GLFW_KEY_S]) {
-		position -= CameraZ * velocity;
-	}
-	if (keys[GLFW_KEY_E]) {
-		flip(deltaTime);
-	}
+	
+	position += front * keys[0];
+	position -= front * keys[1];
+	position -= right * keys[2];
+	position += right * keys[3];
 }
 
 void Camera::mouseControl(GLfloat xChange, GLfloat yChange)

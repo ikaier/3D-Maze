@@ -10,8 +10,9 @@ public:
 	void Initialize();
 	bool getShouldClose();
 	void swapBuffers();
-	void processInput();
-
+	void processInput(GLfloat deltaTime);
+	
+	GLfloat* getsKeys();
 	GLfloat getBufferWidth();
 	GLfloat getBufferHeight();
 	
@@ -20,6 +21,7 @@ private:
 	GLint width, height;
 	GLint bufferWidth, bufferHeight;
 	
+	GLfloat keys[4] = { 0.0f,0.0f,0.0f,0.0f };
 };
 
  
