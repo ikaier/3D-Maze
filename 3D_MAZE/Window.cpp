@@ -156,7 +156,7 @@ void Window::mouseCallback(GLFWwindow* window, double xPos, double yPos)
     theWindow->lastX = xPos;
     theWindow->lastY = yPos;
 
-    float sensitivity = 0.0005f;
+    float sensitivity = 0.05f;
     theWindow->offsetX *= sensitivity;
     theWindow->offsetY *= sensitivity;
     

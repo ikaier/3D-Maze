@@ -6,6 +6,7 @@ Floor::Floor()
 	obj->CreateMesh(Floorvertices, Floorindices, 32, 6);
 	TransModel = glm::mat4(1.0f);
 	ScaleModel = glm::mat4(1.0f);
+	quaternion = glm::quat(glm::vec3(0.0f, 0.0f, 0.0f));
 }
 
 
