@@ -17,7 +17,6 @@
 #include"Mesh.h"
 #include"Shader.h"
 #include"Texture.h"
-#include"MyTransform.h"
 #include"Floor.h"
 #include"Camera.h"
 
@@ -28,7 +27,6 @@ std::vector<Shader> shaderList;
 
 
 Texture brickTexture;
-MyTransform demoTransform;
 Camera camera;
 glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -62,7 +60,7 @@ int main()
 
     CreateShaders();
     camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 1.0f, 0.0f),
-        -90.0f, 0.0f,0.0f, 5.0f, 0.5f);
+        0.0f, 0.0f,0.0f, 5.0f, 0.5f);
 
     glm::mat4 projection = glm::perspective(glm::radians(60.0f), mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 100.0f);
     GLfloat i = 0;

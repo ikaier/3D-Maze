@@ -52,14 +52,15 @@ void Camera::mouseControl(GLfloat xChange, GLfloat yChange)
 	yaw += xChange;
 	pitch += yChange;
 
-	if (pitch > 89.0f) {
-		pitch = 89.0f;
+	//limit pitching angle
+	if (pitch > 3.0f) {
+		pitch = 3.0f;
 	}
-	if (pitch < -89.0f) {
-		pitch = -89.0f;
+	if (pitch < -3.0f) {
+		pitch = -3.0f;
 	}
 
-	printf("xchange is %f \n", xChange);
+	printf("pitch is %f \n", pitch);
 	
 	update();
 }
@@ -81,21 +82,28 @@ Camera::~Camera()
 
 void Camera::update()
 {
-	//quaternion method
-	//glm::quat qPitch = glm::angleAxis(pitch, glm::vec3(1, 0, 0));
-	//glm::quat qYaw = glm::angleAxis(yaw, glm::vec3(0, 1, 0));
-	//quaternion = glm::normalize(qPitch * qYaw);
-	//front = quaternion * glm::vec3(0.0f, 0.0f, -1.0f) * glm::conjugate(quaternion);
-	//front = glm::normalize(front);
 
+	glm::quat qPitch = glm::angleAxis(-pitch, glm::vec3(1, 0, 0));
+	glm::quat qYaw = glm::angleAxis(-yaw, glm::vec3(0, 1, 0));
+	quaternion = qYaw *glm::quat(glm::vec3(0.0f,0.0f,0.0f)) * qPitch;
 
-	front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-	front.y = sin(glm::radians(pitch));
-	front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-	front = glm::normalize(front);
+	front = glm::vec3(
+		-2.0f * (quaternion.x * quaternion.z + quaternion.w * quaternion.y),
+		-2.0f * (quaternion.y * quaternion.z - quaternion.w * quaternion.x),
+		-1.0f + 2.0f * (quaternion.x * quaternion.x + quaternion.y * quaternion.y)
+	);
 
+	up = glm::vec3(
+		2.0f * (quaternion.x * quaternion.y - quaternion.w * quaternion.z),
+		1.0f - 2.0f * (quaternion.x * quaternion.x + quaternion.z * quaternion.z),
+		2.0f * (quaternion.y * quaternion.z + quaternion.w * quaternion.x)
+	);
 
-	right = glm::normalize(glm::cross(front, worldUp));
-	up = glm::normalize(glm::cross(right, front));
+	right = glm::vec3(
+		(1.0f - 2.0f * (quaternion.y * quaternion.y + quaternion.z * quaternion.z)),
+		(2.0f * (quaternion.x * quaternion.y + quaternion.w * quaternion.z)),
+		(2.0f * (quaternion.x * quaternion.z - quaternion.w * quaternion.y))
+	);
+
 	
 }
