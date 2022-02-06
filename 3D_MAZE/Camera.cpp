@@ -14,12 +14,11 @@ Camera::Camera(glm::vec3 startPosition, glm::vec3 cameraY,
 	pitch = startPitch;
 	roll = startRoll;
 	front = glm::vec3(0.0f, 0.0f, -1.0f);
-
+	quaternion = glm::quat(glm::vec3(0.0, 0.0, 0.0));
 	moveSpeed = startMoveSpeed;
 	turnSpeed = startTurnSpeed;
 
-	right = glm::normalize(glm::cross(front, worldUp));
-	up = glm::normalize(glm::cross(right, front));
+	update();
 
 }
 
@@ -41,7 +40,6 @@ glm::mat4 Camera::getViewMatrix()
 
 void Camera::keyControl(GLfloat* keys)
 {
-	
 	position += front * keys[0];
 	position -= front * keys[1];
 	position -= right * keys[2];
@@ -50,18 +48,29 @@ void Camera::keyControl(GLfloat* keys)
 
 void Camera::mouseControl(GLfloat xChange, GLfloat yChange)
 {
-	xChange *= turnSpeed;
-	yChange *= turnSpeed;
+//angle limit
+	
+	//if (pitch + yChange > 89.0f) {
+	//	yChange = 89.0f - pitch;
+	//	pitch = 89.0f;
+	//}else if (pitch + yChange < -89.0f) {
+	//	yChange = -89.0f - pitch;
+	//	pitch = -89.0f;
+	//}
+	//else {
+	//	pitch += yChange;
+	//}
 
-	yaw += xChange;
-	pitch += yChange;
 
-	if (pitch > 89.0f) {
-		pitch = 89.0f;
-	}
-	if (pitch < -89.0f) {
-		pitch = -89.0f;
-	}
+
+	printf("xchange is %f \n", xChange);
+	
+	glm::vec3 EulerAngle(yChange, xChange, 0);
+	glm::quat quatChange = glm::quat(EulerAngle);
+	//glm::quat qPitch = glm::angleAxis(yChange, glm::vec3(1, 0, 0));
+	//glm::quat qYaw = glm::angleAxis(xChange, glm::vec3(0, 1, 0));
+	//glm::quat quatChange = glm::normalize(qPitch * qYaw);
+	quaternion = glm::normalize(quatChange * quaternion);
 	update();
 }
 
@@ -82,7 +91,14 @@ Camera::~Camera()
 
 void Camera::update()
 {
-	glm::vec3 EulerAngles(pitch, yaw, roll);
-	glm::quat quaternion= glm::quat(EulerAngles);
+	//quaternion = glm::quat(glm::vec3(0.0f, 0.0f, 0.0f));
+	//std::cout << glm::to_string(front) << std::endl;
+	front = quaternion * glm::vec3(0.0f, 0.0f, -1.0f) * glm::conjugate(quaternion);
+	front = glm::normalize(front);
+	//std::cout << glm::to_string(front) << std::endl;
+	//std::cout << "***********" << std::endl;
+	std::cout << glm::to_string(front)<<std::endl;
+	right = glm::normalize(glm::cross(front, worldUp));
+	up = glm::normalize(glm::cross(right, front));
 	
 }

@@ -58,7 +58,7 @@ int main()
     brickTexture.LoadTexture();
 
     Floor anFloor;
-    anFloor.Rotate(5.0f, 0.0f, 0.0f);
+    //anFloor.Rotate(0.0.0f, 0.0f, 0.0f);
 
     CreateShaders();
     camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 1.0f, 0.0f),
@@ -73,8 +73,7 @@ int main()
         lastTime = now;
         glfwPollEvents();
 		mainWindow.processInput(deltaTime);
-
-		
+        camera.mouseControl(mainWindow.getXchange(), mainWindow.getYchange());
 
         camera.keyControl(mainWindow.getsKeys());
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);

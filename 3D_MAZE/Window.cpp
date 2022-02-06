@@ -4,12 +4,16 @@ Window::Window()
 {
 	width = 1920;
 	height = 1080;
+    offsetX = 0.0f;
+    offsetY = 0.0f;
 }
 
 Window::Window(GLint windowWidth, GLint windowHeight)
 {
 	width = windowWidth;
 	height = windowHeight;
+    offsetX = 0.0f;
+    offsetY = 0.0f;
 }
 
 void Window::Initialize()
@@ -42,7 +46,10 @@ void Window::Initialize()
 
     //set context for glew to use (usefull if there are multiple windows)
     glfwMakeContextCurrent(mainWindow);
+    glfwSetCursorPosCallback(mainWindow, mouseCallback);
 
+    //Set cursor inside the window
+    glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     //Allow moder extension features
     glewExperimental = GL_TRUE;
 
@@ -55,6 +62,8 @@ void Window::Initialize()
     glEnable(GL_DEPTH_TEST);
     //setup viewport size
     glViewport(0, 0, bufferWidth, bufferHeight);
+
+    glfwSetWindowUserPointer(mainWindow, this);
 }
 
 bool Window::getShouldClose()
@@ -99,6 +108,28 @@ GLfloat* Window::getsKeys()
     return keys;
 }
 
+GLfloat Window::getXchange()
+{
+    GLfloat theChange = offsetX;
+    offsetX = 0.0f;
+    return theChange;
+}
+
+GLfloat Window::getYchange()
+{
+    GLfloat theChange = offsetY;
+    offsetY = 0.0f;
+    
+    return theChange;
+}
+
+//glm::quat Window::getQuatChange()
+//{
+//    return quatChange;
+//}
+
+
+
 GLfloat Window::getBufferWidth()
 {
     return bufferWidth;
@@ -107,4 +138,28 @@ GLfloat Window::getBufferWidth()
 GLfloat Window::getBufferHeight()
 {
     return bufferHeight;
+}
+
+void Window::mouseCallback(GLFWwindow* window, double xPos, double yPos)
+{
+    
+    Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
+    xPos = static_cast<float>(xPos);
+    yPos = static_cast<float>(yPos);
+    if (theWindow->mouseFirstMove) {
+        theWindow->lastX = xPos;
+        theWindow->lastY = yPos;
+        theWindow->mouseFirstMove = false;
+    }
+    theWindow->offsetX = xPos - theWindow->lastX;
+    theWindow->offsetY = yPos - theWindow->lastY;
+    theWindow->lastX = xPos;
+    theWindow->lastY = yPos;
+
+    float sensitivity = 0.0005f;
+    theWindow->offsetX *= sensitivity;
+    theWindow->offsetY *= sensitivity;
+    
+
+
 }

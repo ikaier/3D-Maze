@@ -4,8 +4,10 @@
 #include<glm/glm.hpp>
 #include<glm/gtc/matrix_transform.hpp>
 #include<glm/gtc/quaternion.hpp>
-
+#include<glm/gtx/quaternion.hpp>
+#include<glm/gtx/string_cast.hpp>
 #include<GLFW/glfw3.h>
+#include<iostream>
 
 class Camera
 {
@@ -32,6 +34,7 @@ private:
 	glm::vec3 right;
 	glm::vec3 worldUp;
 
+	glm::quat quaternion;
 	GLfloat yaw;
 	GLfloat pitch;
 	GLfloat roll;
