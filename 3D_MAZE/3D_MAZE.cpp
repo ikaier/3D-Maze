@@ -19,12 +19,14 @@
 #include"Texture.h"
 #include"Floor.h"
 #include"Camera.h"
+#include"GenMap.h"
 
 
 Window mainWindow;
 std::vector<Mesh*>meshList;
 std::vector<Shader> shaderList;
 
+GenMap map;
 
 Texture brickTexture;
 Camera camera;
@@ -49,6 +51,7 @@ void CreateShaders() {
 }
 int main()
 {
+    map = GenMap(10, 10, 1);
     mainWindow = Window(1920, 1080);
     mainWindow.Initialize();
 

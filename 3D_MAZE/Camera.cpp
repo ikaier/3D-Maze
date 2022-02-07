@@ -60,7 +60,6 @@ void Camera::mouseControl(GLfloat xChange, GLfloat yChange)
 		pitch = -3.0f;
 	}
 
-	printf("pitch is %f \n", pitch);
 	
 	update();
 }
