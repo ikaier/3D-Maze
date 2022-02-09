@@ -23,7 +23,6 @@ Floor::Floor(GLuint xNum, GLuint yNum):Floor()
 {
 	this->xNum = xNum;
 	this->yNum = yNum;
-	floorPositions= std::vector<glm::vec3>(xNum * yNum);
 	
 }
 
@@ -58,7 +57,7 @@ void Floor::Draw(GLuint uniformLocation)
 		for (GLfloat x = 0.0f; x < xNum; x = x + 1.0f) {
 			for (GLfloat y = 0.0f; y < yNum; y = y + 1.0f) {
 				TransModel = glm::mat4(1.0f);
-				Translate(x * 0.25, 0, -y * 0.25f);
+				Translate(x * 0.5, 0, -y * 0.5f);
 				SetModel(uniformLocation);
 				obj->RenderMesh();
 			}

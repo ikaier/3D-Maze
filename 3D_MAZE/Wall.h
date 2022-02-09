@@ -1,8 +1,4 @@
 #pragma once
-#include <iostream>
-#include<stdio.h>
-#include<vector>
-
 #include<glm/glm.hpp>
 #include<glm/gtc/matrix_transform.hpp>
 #include<glm/gtc/type_ptr.hpp>
@@ -11,40 +7,35 @@
 
 #include<GL/glew.h>
 #include<GLFW/glfw3.h>
+
 #include"Mesh.h"
 #include"Texture.h"
-
-class Floor
+class Wall
 {
 public:
-	Floor();
-    Floor(GLuint xNum, GLuint yNum);
-
-    void Rotate(float RotateX, float RotateY , float RotateZ);
+	Wall();
+	
+    void Rotate(float RotateX, float RotateY, float RotateZ);
     void Translate(GLfloat transX, GLfloat transY, GLfloat transZ);
     void Scale(GLfloat scaleX, GLfloat scaleY, GLfloat scaleZ);
     void Draw(GLuint uniformLocation);
-    //void Render();
-    
-    ~Floor();
 
-
+    ~Wall();
 private:
-    unsigned int Floorindices[6] = {
+    unsigned int Wallindices[6] = {
         0,1,3,
         1,2,3
     };
 
-    GLfloat Floorvertices[32]= {
+    GLfloat Wallvertices[32] = {
         //  x     y     z           u       v       nx      ny      nz
-        0.5f,   0.0f,   0.5f,     20.0,   20.0,   0.0f,   1.0f,  0.0f,
-        0.5f,   0.0f,   0.0f,    20.0,   0.0f,   0.0f,   1.0f,  0.0f,
-        0.0f,  0.0f,   0.0f,    0.0f,   0.0f,   0.0f,   1.0f,  0.0f,
-        0.0f,  0.0f,   0.5f,     0.0f,   20.0,   0.0f,   1.0f,  0.0f,
+        0.5f,   0.4f,   0.0f,     5.0,   5.0,   0.0f,   -1.0f,  0.0f,
+        0.5f,   -0.0f,   0.0f,    5.0,   0.0f,   0.0f,   -1.0f,  0.0f,
+        0.0f,  -0.0f,   0.0f,    0.0f,   0.0f,   0.0f,   -1.0f,  0.0f,
+        0.0f,  0.4f,   0.0f,     0.0f,   5.0,   0.0f,   -1.0f,  0.0f,
     };
     Mesh* obj;
     Texture* texture;
-    GLuint xNum, yNum;
     glm::quat quaternion;
     glm::mat4 TransModel;
     glm::mat4 ScaleModel;
