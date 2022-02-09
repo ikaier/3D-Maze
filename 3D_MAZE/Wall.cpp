@@ -4,7 +4,7 @@ Wall::Wall()
 {
 	obj = new Mesh();
 
-	obj->CreateMesh(Wallvertices, Wallindices, 32, 6);
+	obj->CreateMesh(WallVertices, WallIndices, 192, 36);
 
 	TransModel = glm::mat4(1.0f);
 	ScaleModel = glm::mat4(1.0f);

@@ -31,8 +31,8 @@ public:
 
 private:
     unsigned int Floorindices[6] = {
-        0,1,3,
-        1,2,3
+        3,1,0,
+        3,2,1
     };
 
     GLfloat Floorvertices[32]= {
