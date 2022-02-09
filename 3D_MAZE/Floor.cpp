@@ -2,15 +2,21 @@
 
 Floor::Floor()
 {
+	
 	obj = new Mesh();
+	
 	obj->CreateMesh(Floorvertices, Floorindices, 32, 6);
+
 	TransModel = glm::mat4(1.0f);
 	ScaleModel = glm::mat4(1.0f);
 	quaternion = glm::quat(glm::vec3(0.0f, 0.0f, 0.0f));
+
 	texture = new Texture("Textures/floor.bmp");
+
 	texture->LoadTexture();
 	xNum = 0;
 	yNum = 0;
+	
 }
 
 Floor::Floor(GLuint xNum, GLuint yNum):Floor()
@@ -76,4 +82,5 @@ void Floor::SetModel(GLuint uniformLocation)
 
 Floor::~Floor()
 {
+	delete texture;
 }

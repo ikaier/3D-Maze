@@ -21,7 +21,14 @@ GenMap::GenMap(GLuint width, GLuint height, GLuint gridSize)
 	}
 	recBackTrack(3, 2);
 	printMap();
+	
+	anFloor =new Floor(xNum, yNum);
 	//SetupMap();
+}
+
+void GenMap::DrawFloor(GLuint uniformLocation)
+{
+	anFloor->Draw(uniformLocation);
 }
 
 GenMap::~GenMap()

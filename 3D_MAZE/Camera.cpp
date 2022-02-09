@@ -53,11 +53,11 @@ void Camera::mouseControl(GLfloat xChange, GLfloat yChange)
 	pitch += yChange;
 
 	//limit pitching angle
-	if (pitch > 3.0f) {
-		pitch = 3.0f;
+	if (pitch > 1.4f) {
+		pitch = 1.4f;
 	}
-	if (pitch < -3.0f) {
-		pitch = -3.0f;
+	if (pitch < -1.4f) {
+		pitch = -1.4f;
 	}
 
 	

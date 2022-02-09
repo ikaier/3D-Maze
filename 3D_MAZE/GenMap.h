@@ -14,10 +14,12 @@ class GenMap
 public:
 	GenMap();
 	GenMap(GLuint width, GLuint height, GLuint gridSize);
+	void DrawFloor(GLuint uniformLocation);
 	~GenMap();
 private:
 	GLuint xNum, yNum;
 	GLint xEnd=-1, yEnd=-1;
+	Floor* anFloor;
 	typedef struct grid
 	{
 		bool bot;
