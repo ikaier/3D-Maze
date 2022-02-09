@@ -27,12 +27,7 @@ std::vector<Mesh*>meshList;
 std::vector<Shader> shaderList;
 
 GenMap map;
-
-Texture brickTexture;
 Camera camera;
-glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
 
@@ -55,22 +50,20 @@ int main()
     mainWindow = Window(1920, 1080);
     mainWindow.Initialize();
 
-    brickTexture = Texture("Textures/brick.jpg");
-    brickTexture.LoadTexture();
 
-    Floor anFloor;
+    Floor anFloor = Floor(10, 10);
     //anFloor.Rotate(0.0.0f, 0.0f, 0.0f);
 
     CreateShaders();
-    camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 1.0f, 0.0f),
+    camera = Camera(glm::vec3(0.0f, 0.1f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
         0.0f, 0.0f,0.0f, 5.0f, 0.5f);
 
-    glm::mat4 projection = glm::perspective(glm::radians(60.0f), mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 100.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 100.0f);
     GLfloat i = 0;
     while (!mainWindow.getShouldClose())
 	{
-        GLfloat now = glfwGetTime();//SDL_GetPerformaceCounter();
-        deltaTime = now - lastTime;//(now-lastTime)*1000/SDL_GetPerformaceFrequency()
+        GLfloat now = glfwGetTime();
+        deltaTime = now - lastTime;
         lastTime = now;
         glfwPollEvents();
 		mainWindow.processInput(deltaTime);
@@ -79,19 +72,17 @@ int main()
         camera.keyControl(mainWindow.getsKeys());
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
-        brickTexture.UseTexture();
-        shaderList[0].UseShader();
-        
 
-        anFloor.SetModel(shaderList[0].GetTransformLocation());
+        shaderList[0].UseShader();
+
+        
         
         glm::mat4 view = camera.getViewMatrix();
         
         glUniformMatrix4fv(shaderList[0].GetProjectionLocation(), 1, GL_FALSE, glm::value_ptr(projection));
         glUniformMatrix4fv(shaderList[0].GetViewLocation(), 1, GL_FALSE, glm::value_ptr(view));
         
-        anFloor.Render();
+        anFloor.Draw(shaderList[0].GetTransformLocation());
         glUseProgram(0);
 
         mainWindow.swapBuffers();

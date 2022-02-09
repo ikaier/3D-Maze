@@ -7,6 +7,8 @@
 #include<algorithm>
 #include<random>
 #include<ctime>
+
+#include"Floor.h"
 class GenMap
 {
 public:
@@ -30,5 +32,6 @@ private:
 	void shuffleArray(direction* arr, int size);
 	void swap(direction *a,direction *b);
 	void printMap();
+	
 };
 

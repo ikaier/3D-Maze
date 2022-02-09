@@ -4,11 +4,11 @@
 
 
 class Texture
-{
+{	
+	
 public:
 	Texture();
 	Texture(const char* fileLocation);
-
 	bool LoadTexture();
 
 	void UseTexture();

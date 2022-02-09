@@ -21,6 +21,7 @@ GenMap::GenMap(GLuint width, GLuint height, GLuint gridSize)
 	}
 	recBackTrack(3, 2);
 	printMap();
+	//SetupMap();
 }
 
 GenMap::~GenMap()
@@ -110,3 +111,5 @@ void GenMap::printMap()
 	}
 	printf("The end is at (%d, %d)", xEnd+1, yEnd+1);
 }
+
+
