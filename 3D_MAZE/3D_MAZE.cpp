@@ -21,14 +21,17 @@
 #include"Camera.h"
 #include"GenMap.h"
 #include"Wall.h"
+#include"Light.h"
 
 
 Window mainWindow;
 std::vector<Mesh*>meshList;
 std::vector<Shader> shaderList;
 
+
 GenMap map;
 Camera camera;
+
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
 
@@ -49,10 +52,12 @@ void CreateShaders(const char* vertShader,const char* fragShader) {
 }
 int main()
 {
-   
+    
     mainWindow = Window(1920, 1080);
     mainWindow.Initialize();
+    Light light= Light(0.5f, 1.0f, 0.0f);
     map = GenMap(10, 10, 0.8f);
+    //light = Light(0.5f, 0.5f, 0.0f);
 
     CreateShaders(vShader, fShader);//shaderList[0]
     CreateShaders(vLightingShader, fLightingShader);//shaderList[1]
@@ -82,8 +87,12 @@ int main()
         shaderList[0].UseShader();
         shaderList[0].setMat4("projection", projection);
         shaderList[0].setMat4("view", camera.getViewMatrix());
-        
         map.Draw(shaderList[0].GetTransformLocation());
+
+        shaderList[1].UseShader();
+        shaderList[1].setMat4("projection", projection);
+        shaderList[1].setMat4("view", camera.getViewMatrix());
+        light.Draw(shaderList[1].GetTransformLocation());
         glUseProgram(0);
 
         mainWindow.swapBuffers();
