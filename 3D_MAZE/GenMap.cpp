@@ -4,6 +4,7 @@ GenMap::GenMap()
 {
 	xNum = 0;
 	yNum = 0;
+	WallCount = 0;
 }
 
 GenMap::GenMap(GLuint width, GLuint height, GLuint gridSize)
@@ -12,6 +13,7 @@ GenMap::GenMap(GLuint width, GLuint height, GLuint gridSize)
 	assert(width % gridSize == 0 && height % gridSize == 0);
 	xNum = width / gridSize;
 	yNum = height / gridSize;
+	WallCount = 0;
 	map = std::vector<std::vector<struct grid>>(xNum, std::vector<struct grid>(yNum));
 	for (size_t i = 0; i < xNum; i++) {
 		for (size_t j = 0; j < yNum; j++) {
@@ -23,12 +25,18 @@ GenMap::GenMap(GLuint width, GLuint height, GLuint gridSize)
 	printMap();
 	
 	anFloor =new Floor(xNum, yNum);
+	CreateWalls();
 	//SetupMap();
 }
 
 void GenMap::DrawFloor(GLuint uniformLocation)
 {
 	anFloor->Draw(uniformLocation);
+}
+
+void GenMap::DrawWall(GLuint uniformLocation)
+{
+	anWall->Draw(uniformLocation);
 }
 
 GenMap::~GenMap()
@@ -102,6 +110,7 @@ void GenMap::printMap()
 {
 	//print top row
 	for (size_t xi = 0; xi < xNum; xi++) {
+		AddWalls(xi * 0.5, yNum * 0.5);
 		printf("__");
 	}
 	printf("\n");
@@ -109,14 +118,48 @@ void GenMap::printMap()
 	{
 		//left border
 		printf("|");
+
+		//+-0.25 is a small trick to indicate that the wall need to be rotated
+		AddWalls(-0.25, i * 0.5);
 		for (int x = 0; x < xNum; x++) {
-			printf("%s", (map[x][i].bot ? "_" : " "));
-			printf("%s", (map[x][i].right ? "|" : " "));
+			//x direction
+			if (map[x][i].bot) {
+				printf("_");
+				AddWalls(x * 0.5, i * 0.5);
+			}
+			else {
+				printf(" ");
+			}
+			//y direction
+			if (map[x][i].right) {
+				printf("|");
+				AddWalls(x * 0.5+0.25, i * 0.5);
+			}
+			else {
+				printf(" ");
+			}
+			
+			//printf("%s", (map[x][i].right ? "|" : " "));
 			
 		}
 		printf("\n");
 	}
 	printf("The end is at (%d, %d)", xEnd+1, yEnd+1);
+}
+
+void GenMap::CreateWalls()
+{
+	printf("%d", WallCount);
+	anWall = new Wall(xWallPos, yWallPos, WallCount);
+	
+}
+
+void GenMap::AddWalls(GLfloat xPos, GLfloat yPos)
+{
+	xWallPos.push_back(xPos);
+	yWallPos.push_back(yPos);
+	WallCount++;
+
 }
 
 

@@ -7,6 +7,7 @@
 
 #include<GL/glew.h>
 #include<GLFW/glfw3.h>
+#include<vector>
 
 #include"Mesh.h"
 #include"Texture.h"
@@ -14,14 +15,20 @@ class Wall
 {
 public:
 	Wall();
+    Wall(std::vector<GLfloat> xWallPos, std::vector<GLfloat> yWallPos,GLuint WallCount);
 	
-    void Rotate(float RotateX, float RotateY, float RotateZ);
+    void Rotate(float yAngle);
     void Translate(GLfloat transX, GLfloat transY, GLfloat transZ);
     void Scale(GLfloat scaleX, GLfloat scaleY, GLfloat scaleZ);
     void Draw(GLuint uniformLocation);
 
     ~Wall();
 private:
+    std::vector<GLfloat> xWallPos;
+    std::vector<GLfloat> yWallPos;
+    GLuint WallCount;
+
+
     unsigned int WallIndices[36] = {
         //front and back
          0,1,2,
@@ -85,7 +92,7 @@ private:
     };
     Mesh* obj;
     Texture* texture;
-    glm::quat quaternion;
+    glm::mat4 RotateModel;
     glm::mat4 TransModel;
     glm::mat4 ScaleModel;
     void SetTexture();

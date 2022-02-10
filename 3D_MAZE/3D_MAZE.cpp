@@ -51,7 +51,7 @@ int main()
     mainWindow = Window(1920, 1080);
     mainWindow.Initialize();
     map = GenMap(10, 10, 1);
-    Wall awall;
+    //Wall awall;
     //Floor anFloor = Floor(10, 10);
     //anFloor.Rotate(0.0.0f, 0.0f, 0.0f);
 
@@ -82,8 +82,9 @@ int main()
         
         glUniformMatrix4fv(shaderList[0].GetProjectionLocation(), 1, GL_FALSE, glm::value_ptr(projection));
         glUniformMatrix4fv(shaderList[0].GetViewLocation(), 1, GL_FALSE, glm::value_ptr(view));
-        awall.Draw(shaderList[0].GetTransformLocation());
+        //awall.Draw(shaderList[0].GetTransformLocation());
         map.DrawFloor(shaderList[0].GetTransformLocation());
+        map.DrawWall(shaderList[0].GetTransformLocation());
         glUseProgram(0);
 
         mainWindow.swapBuffers();

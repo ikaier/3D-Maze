@@ -9,17 +9,24 @@
 #include<ctime>
 
 #include"Floor.h"
+#include"Wall.h"
+
 class GenMap
 {
 public:
 	GenMap();
 	GenMap(GLuint width, GLuint height, GLuint gridSize);
 	void DrawFloor(GLuint uniformLocation);
+	void DrawWall(GLuint uniformLocation);
 	~GenMap();
 private:
 	GLuint xNum, yNum;
 	GLint xEnd=-1, yEnd=-1;
+	GLuint WallCount;
 	Floor* anFloor;
+	Wall* anWall;
+	std::vector<GLfloat> xWallPos;
+	std::vector<GLfloat> yWallPos;
 	typedef struct grid
 	{
 		bool bot;
@@ -34,6 +41,8 @@ private:
 	void shuffleArray(direction* arr, int size);
 	void swap(direction *a,direction *b);
 	void printMap();
+	void CreateWalls();
+	void AddWalls(GLfloat xPos,GLfloat yPos);
 	
 };
 
