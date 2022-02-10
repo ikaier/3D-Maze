@@ -7,6 +7,7 @@
 #include<algorithm>
 #include<random>
 #include<ctime>
+#include <assert.h>
 
 #include"Floor.h"
 #include"Wall.h"
@@ -15,18 +16,20 @@ class GenMap
 {
 public:
 	GenMap();
-	GenMap(GLuint width, GLuint height, GLuint gridSize);
+	GenMap(GLuint width, GLuint height, GLfloat gridSize);
 	void DrawFloor(GLuint uniformLocation);
 	void DrawWall(GLuint uniformLocation);
 	~GenMap();
 private:
 	GLuint xNum, yNum;
 	GLint xEnd=-1, yEnd=-1;
+	GLfloat gridSize;
 	GLuint WallCount;
 	Floor* anFloor;
 	Wall* anWall;
 	std::vector<GLfloat> xWallPos;
 	std::vector<GLfloat> yWallPos;
+	std::vector<bool> ifRotates;
 	typedef struct grid
 	{
 		bool bot;
@@ -42,7 +45,7 @@ private:
 	void swap(direction *a,direction *b);
 	void printMap();
 	void CreateWalls();
-	void AddWalls(GLfloat xPos,GLfloat yPos);
+	void AddWalls(GLfloat xPos,GLfloat yPos, bool ifRotate);
 	
 };
 

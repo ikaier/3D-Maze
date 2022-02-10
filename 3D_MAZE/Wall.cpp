@@ -12,15 +12,18 @@ Wall::Wall()
 	RotateModel = glm::mat4(1.0f);
 
 	texture = new Texture("Textures/wall.bmp");
-
+	gridSize = 0;
 	texture->LoadTexture();
 
 }
-Wall::Wall(std::vector<GLfloat> xWallPos, std::vector<GLfloat> yWallPos, GLuint WallCount):Wall()
+Wall::Wall(std::vector<GLfloat> xWallPos, std::vector<GLfloat> yWallPos, std::vector<bool> ifRotates, GLuint WallCount,GLfloat gridSize):Wall()
 {
 	this->WallCount = WallCount;
 	this->xWallPos = xWallPos;
 	this->yWallPos = yWallPos;
+	this->gridSize = gridSize;
+	this->ifRotates = ifRotates;
+	Scale(gridSize, gridSize*3/5, 1.0f);
 	/*for (size_t i = 0; i < xNum; i++) {
 		this->xWallPos.push_back( xWallPos[i]);
 	}
@@ -45,6 +48,8 @@ void Wall::Scale(GLfloat scaleX, GLfloat scaleY, GLfloat scaleZ)
 
 void Wall::Draw(GLuint uniformLocation)
 {
+	//printf(" %f ", gridSize);
+	assert(gridSize > 0);
 	SetTexture();
 	if (WallCount == 0) {
 		SetModel(uniformLocation);
@@ -54,8 +59,8 @@ void Wall::Draw(GLuint uniformLocation)
 		for (size_t i = 0; i < WallCount; i = i + 1) {
 			//printf("%f,%f\n", xWallPos[i], yWallPos[i]);	
 			TransModel = glm::mat4(1.0f);	
-			if (glm::mod(xWallPos[i], 0.5f) != 0.0f) {
-				Translate(xWallPos[i]+0.25f, 0, -yWallPos[i]);
+			if (ifRotates[i]) {
+				Translate(xWallPos[i], 0, -yWallPos[i]);
 				RotateModel = glm::mat4(1.0f);
 				Rotate(90.0);	
 			}

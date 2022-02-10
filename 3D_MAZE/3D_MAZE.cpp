@@ -50,7 +50,7 @@ int main()
    
     mainWindow = Window(1920, 1080);
     mainWindow.Initialize();
-    map = GenMap(10, 10, 1);
+    map = GenMap(10, 10, 0.8f);
     //Wall awall;
     //Floor anFloor = Floor(10, 10);
     //anFloor.Rotate(0.0.0f, 0.0f, 0.0f);

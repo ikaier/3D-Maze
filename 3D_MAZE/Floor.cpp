@@ -19,11 +19,13 @@ Floor::Floor()
 	
 }
 
-Floor::Floor(GLuint xNum, GLuint yNum):Floor()
+Floor::Floor(GLuint xNum, GLuint yNum,GLfloat gridSize):Floor()
 {
 	this->xNum = xNum;
 	this->yNum = yNum;
-	
+	this->gridSize = gridSize;
+	Scale(gridSize, 1.0f, gridSize);
+
 }
 
 
@@ -57,7 +59,7 @@ void Floor::Draw(GLuint uniformLocation)
 		for (GLfloat x = 0.0f; x < xNum; x = x + 1.0f) {
 			for (GLfloat y = 0.0f; y < yNum; y = y + 1.0f) {
 				TransModel = glm::mat4(1.0f);
-				Translate(x * 0.5, 0, -y * 0.5f);
+				Translate(x * gridSize, 0, -y * gridSize);
 				SetModel(uniformLocation);
 				obj->RenderMesh();
 			}

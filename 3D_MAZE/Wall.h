@@ -15,7 +15,7 @@ class Wall
 {
 public:
 	Wall();
-    Wall(std::vector<GLfloat> xWallPos, std::vector<GLfloat> yWallPos,GLuint WallCount);
+    Wall(std::vector<GLfloat> xWallPos, std::vector<GLfloat> yWallPos, std::vector<bool> ifRotates,GLuint WallCount,GLfloat gridSize);
 	
     void Rotate(float yAngle);
     void Translate(GLfloat transX, GLfloat transY, GLfloat transZ);
@@ -26,7 +26,9 @@ public:
 private:
     std::vector<GLfloat> xWallPos;
     std::vector<GLfloat> yWallPos;
+    std::vector<bool> ifRotates;
     GLuint WallCount;
+    GLfloat gridSize;
 
 
     unsigned int WallIndices[36] = {
@@ -56,39 +58,39 @@ private:
         //  x     y    z    u   v        nx   ny   nz
         //front
         0.0f,0.0f,0.0f,   0.0f,0.0f,   0.0f,0.0f,1.0f,               //left bottom 0
-        0.5f,0.0f,0.0f,    1.0f,0.0f,   0.0f,0.0f,1.0f,               //right bottom 1
-        0.5f,0.4f,0.0f,     1.0f,1.0f,   0.0f,0.0f,1.0f,               //right top 2
-        0.0f,0.4f,0.0f,    0.0f,1.0f,   0.0f,0.0f,1.0f,               //left top 3
+        1.0f,0.0f,0.0f,    2.0f,0.0f,   0.0f,0.0f,1.0f,               //right bottom 1
+        1.0f,1.0f,0.0f,     2.0f,2.0f,   0.0f,0.0f,1.0f,               //right top 2
+        0.0f,1.0f,0.0f,    0.0f,2.0f,   0.0f,0.0f,1.0f,               //left top 3
 
         //back
         0.0f,0.0f,0.01f,   0.0f,0.0f,   0.0f,0.0f,-1.0f,                // 4
-        0.5f,0.0f,0.01f,    1.0f,0.0f,   0.0f,0.0f,-1.0f,                // 5
-        0.5f,0.4f,0.01f,     1.0f,1.0f,   0.0f,0.0f,-1.0f,                // 6
-        0.0f,0.4f,0.01f,    0.0f,1.0f,   0.0f,0.0f,-1.0f,                //7
+        1.0f,0.0f,0.01f,    2.0f,0.0f,   0.0f,0.0f,-1.0f,                // 5
+        1.0f,1.0f,0.01f,     2.0f,2.0f,   0.0f,0.0f,-1.0f,                // 6
+        0.0f,1.0f,0.01f,    0.0f,2.0f,   0.0f,0.0f,-1.0f,                //7
 
         //left
         0.0f,0.0f,0.0f,     0.02f,0.0f,   1.0f,0.0f,0.0f,               //left bottom 8
-        0.5f,0.0f,0.0f,     0.0f,0.0f,   -1.0f,0.0f,0.0f,               //right bottom 9
-        0.5f,0.4f,0.0f,      0.02f,1.0f,   -1.0f,0.0f,0.0f,               //right top 10
-        0.0f,0.4f,0.0f,     0.0f,1.0f,   1.0f,0.0f,0.0f,               //left top 11
+        1.0f,0.0f,0.0f,     0.0f,0.0f,   -1.0f,0.0f,0.0f,               //right bottom 9
+        1.0f,1.0f,0.0f,      0.02f,2.0f,   -1.0f,0.0f,0.0f,               //right top 10
+        0.0f,1.0f,0.0f,     0.0f,2.0f,   1.0f,0.0f,0.0f,               //left top 11
 
         //right
         0.0f,0.0f,0.01f,   0.0f,0.0f,   1.0f,0.0f,0.0f,                // 12
-        0.5f,0.0f,0.01f,    0.02f,0.0f,   -1.0f,0.0f,0.0f,                // 13
-        0.5f,0.4f,0.01f,     0.02f,1.0f,   -1.0f,0.0f,0.0f,                // 14
-        0.0f,0.4f,0.01f,    0.0f,1.0f,   1.0f,0.0f,0.0f,                //15
+        1.0f,0.0f,0.01f,    0.02f,0.0f,   -1.0f,0.0f,0.0f,                // 13
+        1.0f,1.0f,0.01f,     0.02f,2.0f,   -1.0f,0.0f,0.0f,                // 14
+        0.0f,1.0f,0.01f,    0.0f,2.0f,   1.0f,0.0f,0.0f,                //15
 
         //top
         0.0f,0.0f,0.0f,  0.0f,0.02f,   0.0f,1.0f,0.0f,                //left bottom 16
-        0.5f,0.0f,0.0f,    1.0f,0.02f,   0.0f,1.0f,0.0f,                //right bottom 17
-        0.5f,0.4f,0.0f,     1.0f,0.0f,   0.0f,-1.0f,0.0f,                //right top 18
-        0.0f,0.4f,0.0f,    0.0f,0.0f,   0.0f,-1.0f,0.0f,                //left top 19
+        1.0f,0.0f,0.0f,    2.0f,0.02f,   0.0f,1.0f,0.0f,                //right bottom 17
+        1.0f,1.0f,0.0f,     2.0f,0.0f,   0.0f,-1.0f,0.0f,                //right top 18
+        0.0f,1.0f,0.0f,    0.0f,0.0f,   0.0f,-1.0f,0.0f,                //left top 19
 
         //bot
         0.0f,0.0f,0.01f,   0.0f,0.0f,   0.0f,1.0f,0.0f,                // 20
-        0.5f,0.0f,0.01f,    1.0f,0.0f,   0.0f,1.0f,0.0f,                // 21
-        0.5f,0.4f,0.01f,     1.0f,0.02f,   0.0f,-1.0f,0.0f,                // 22
-        0.0f,0.4f,0.01f,    0.0f,0.02f,   0.0f,-1.0f,0.0f                 //23
+        1.0f,0.0f,0.01f,    2.0f,0.0f,   0.0f,1.0f,0.0f,                // 21
+        1.0f,1.0f,0.01f,     2.0f,0.02f,   0.0f,-1.0f,0.0f,                // 22
+        0.0f,1.0f,0.01f,    0.0f,0.02f,   0.0f,-1.0f,0.0f                 //23
     };
     Mesh* obj;
     Texture* texture;

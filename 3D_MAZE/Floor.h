@@ -18,7 +18,7 @@ class Floor
 {
 public:
 	Floor();
-    Floor(GLuint xNum, GLuint yNum);
+    Floor(GLuint xNum, GLuint yNum,GLfloat gridSize);
 
     void Rotate(float RotateX, float RotateY , float RotateZ);
     void Translate(GLfloat transX, GLfloat transY, GLfloat transZ);
@@ -30,17 +30,18 @@ public:
 
 
 private:
+    GLfloat gridSize;
     unsigned int Floorindices[6] = {
         3,1,0,
         3,2,1
     };
 
     GLfloat Floorvertices[32]= {
-        //  x     y     z           u       v       nx      ny      nz
-        0.5f,   0.0f,   -0.5f,      20.0,   20.0,   0.0f,   1.0f,  0.0f,
-        0.5f,   0.0f,   0.0f,       20.0,   0.0f,   0.0f,   1.0f,  0.0f,
-        0.0f,   0.0f,   0.0f,       0.0f,   0.0f,   0.0f,   1.0f,  0.0f,
-        0.0f,   0.0f,   -0.5f,      0.0f,   20.0,   0.0f,   1.0f,  0.0f,
+        //  x       y       z           u       v       nx      ny      nz
+        1.0f,       0.0f,   -1.0,      20.0,   20.0,   0.0f,   1.0f,  0.0f,
+        1.0f,       0.0f,   0.0f,           20.0,   0.0f,   0.0f,   1.0f,  0.0f,
+        0.0f,       0.0f,   0.0f,           0.0f,   0.0f,   0.0f,   1.0f,  0.0f,
+        0.0f,       0.0f,   -1.0,      0.0f,   20.0,   0.0f,   1.0f,  0.0f,
     };
     Mesh* obj;
     Texture* texture;
