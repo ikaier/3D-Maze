@@ -31,18 +31,16 @@ GenMap::GenMap(GLuint width, GLuint height, GLfloat gridSize)
 	//SetupMap();
 }
 
-void GenMap::DrawFloor(GLuint uniformLocation)
+void GenMap::Draw(GLuint uniformLocation)
 {
 	anFloor->Draw(uniformLocation);
-}
-
-void GenMap::DrawWall(GLuint uniformLocation)
-{
 	anWall->Draw(uniformLocation);
 }
 
 GenMap::~GenMap()
 {
+	//delete anFloor;
+	//delete anWall;
 }
 
 void GenMap::recBackTrack(GLint x, GLint y)

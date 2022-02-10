@@ -34,14 +34,16 @@ GLfloat lastTime = 0.0f;
 
 //Vertex shader
 static const char* vShader = "Shaders/shader.vert";
+static const char* vLightingShader = "Shaders/Lightingshader.vert";
 
 //fragment shader
 static const char* fShader = "Shaders/shader.frag";
+static const char* fLightingShader = "Shaders/Lightingshader.frag";
 
 
-void CreateShaders() {
+void CreateShaders(const char* vertShader,const char* fragShader) {
     Shader* shader1 = new Shader();
-    shader1->CreateFromFiles(vShader, fShader);
+    shader1->CreateFromFiles(vertShader, fragShader);
     shaderList.push_back(*shader1);
      
 }
@@ -51,11 +53,10 @@ int main()
     mainWindow = Window(1920, 1080);
     mainWindow.Initialize();
     map = GenMap(10, 10, 0.8f);
-    //Wall awall;
-    //Floor anFloor = Floor(10, 10);
-    //anFloor.Rotate(0.0.0f, 0.0f, 0.0f);
 
-    CreateShaders();
+    CreateShaders(vShader, fShader);//shaderList[0]
+    CreateShaders(vLightingShader, fLightingShader);//shaderList[1]
+
     camera = Camera(glm::vec3(0.0f, 0.1f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
         0.0f, 0.0f,0.0f, 5.0f, 0.5f);
 
@@ -63,28 +64,26 @@ int main()
     GLfloat i = 0;
     while (!mainWindow.getShouldClose())
 	{
+        //delta time calculation
         GLfloat now = glfwGetTime();
         deltaTime = now - lastTime;
         lastTime = now;
+
+        //input
         glfwPollEvents();
 		mainWindow.processInput(deltaTime);
         camera.mouseControl(mainWindow.getXchange(), mainWindow.getYchange());
-
         camera.keyControl(mainWindow.getsKeys());
+
+
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         shaderList[0].UseShader();
-
+        shaderList[0].setMat4("projection", projection);
+        shaderList[0].setMat4("view", camera.getViewMatrix());
         
-        
-        glm::mat4 view = camera.getViewMatrix();
-        
-        glUniformMatrix4fv(shaderList[0].GetProjectionLocation(), 1, GL_FALSE, glm::value_ptr(projection));
-        glUniformMatrix4fv(shaderList[0].GetViewLocation(), 1, GL_FALSE, glm::value_ptr(view));
-        //awall.Draw(shaderList[0].GetTransformLocation());
-        map.DrawFloor(shaderList[0].GetTransformLocation());
-        map.DrawWall(shaderList[0].GetTransformLocation());
+        map.Draw(shaderList[0].GetTransformLocation());
         glUseProgram(0);
 
         mainWindow.swapBuffers();

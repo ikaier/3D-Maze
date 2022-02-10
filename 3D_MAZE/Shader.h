@@ -17,9 +17,8 @@ public:
 	void UseShader();
 	void ClearShader();
 
+	void setMat4(const std::string &name,const glm::mat4 &mat) const;
 	GLuint GetTransformLocation();
-	GLuint GetViewLocation();
-	GLuint GetProjectionLocation();
 
 private:
 	GLuint shaderID, transformLocation, viewLocation, projectionLocation;

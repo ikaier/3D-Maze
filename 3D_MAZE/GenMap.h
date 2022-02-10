@@ -17,8 +17,7 @@ class GenMap
 public:
 	GenMap();
 	GenMap(GLuint width, GLuint height, GLfloat gridSize);
-	void DrawFloor(GLuint uniformLocation);
-	void DrawWall(GLuint uniformLocation);
+	void Draw(GLuint uniformLocation);
 	~GenMap();
 private:
 	GLuint xNum, yNum;

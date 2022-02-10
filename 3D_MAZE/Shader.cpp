@@ -4,6 +4,8 @@ Shader::Shader()
 {
 	shaderID = 0;
 	transformLocation = 0;
+	projectionLocation = 0;
+	viewLocation = 0;
 }
 
 void Shader::CreateFromString(const char* vertexCode, const char* fragmentCode)
@@ -49,20 +51,16 @@ void Shader::ClearShader()
 	}
 }
 
+void Shader::setMat4(const std::string& name, const glm::mat4& mat) const
+{
+	glUniformMatrix4fv(glGetUniformLocation(shaderID,name.c_str()), 1, GL_FALSE, glm::value_ptr(mat));
+}
+
 GLuint Shader::GetTransformLocation()
 {
 	return transformLocation;
 }
 
-GLuint Shader::GetViewLocation()
-{
-	return viewLocation;
-}
-
-GLuint Shader::GetProjectionLocation()
-{
-	return projectionLocation;
-}
 
 std::string Shader::ReadFile(const char* fileLocation)
 {
@@ -142,7 +140,5 @@ void Shader::CompileProgram()
 	}
 	
 	transformLocation = glGetUniformLocation(shaderID, "model");
-	viewLocation = glGetUniformLocation(shaderID, "view");
-	projectionLocation = glGetUniformLocation(shaderID, "projection");
 	
 }
