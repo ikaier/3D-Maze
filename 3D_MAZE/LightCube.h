@@ -7,19 +7,20 @@
 #include<GLFW/glfw3.h>
 #include"Mesh.h"
 
-class Light
+class LightCube
 {
 public:
-	Light();
-	Light(GLfloat xLightPos, GLfloat yLightPos, GLfloat zLightPos);
+	LightCube();
+	LightCube(GLfloat xLightPos, GLfloat yLightPos, GLfloat zLightPos,
+		GLfloat red, GLfloat green,GLfloat blue);
 
 	void Translate(GLfloat transX, GLfloat transY, GLfloat transZ);
 	void Scale(GLfloat scaleX, GLfloat scaleY, GLfloat scaleZ);
 	void Draw(GLuint uniformLocation);
-	~Light();
+	~LightCube();
 
 private:
-	GLfloat xLightPos, yLightPos, zLightPos;
+	GLfloat xLightPos, yLightPos, zLightPos, red, green, blue;
 	GLuint VAO, VBO, EBO;
 	unsigned int LightIndices[36] = {
 		1,0,3,

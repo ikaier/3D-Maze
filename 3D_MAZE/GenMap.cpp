@@ -31,10 +31,11 @@ GenMap::GenMap(GLuint width, GLuint height, GLfloat gridSize)
 	//SetupMap();
 }
 
-void GenMap::Draw(GLuint uniformLocation)
+void GenMap::Draw(Shader& shader)
 {
-	anFloor->Draw(uniformLocation);
-	anWall->Draw(uniformLocation);
+	
+	anFloor->Draw(shader.GetTransformLocation());
+	anWall->Draw(shader.GetTransformLocation());
 }
 
 GenMap::~GenMap()

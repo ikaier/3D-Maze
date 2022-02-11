@@ -11,13 +11,14 @@
 
 #include"Floor.h"
 #include"Wall.h"
+#include"Shader.h"
 
 class GenMap
 {
 public:
 	GenMap();
 	GenMap(GLuint width, GLuint height, GLfloat gridSize);
-	void Draw(GLuint uniformLocation);
+	void Draw(Shader& shader);
 	~GenMap();
 private:
 	GLuint xNum, yNum;

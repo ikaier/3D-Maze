@@ -21,7 +21,7 @@
 #include"Camera.h"
 #include"GenMap.h"
 #include"Wall.h"
-#include"Light.h"
+#include"WallLight.h"
 
 
 Window mainWindow;
@@ -55,8 +55,10 @@ int main()
     
     mainWindow = Window(1920, 1080);
     mainWindow.Initialize();
-    Light light= Light(0.5f, 1.0f, 0.0f);
-    map = GenMap(10, 10, 0.8f);
+    WallLight light= WallLight(0.5f, 1.0f, 0.0f,
+        246.0f / 255.0f, 228.0f / 255.0f, 188.0f/255.0f,
+                                1.0f,1.0f);
+    map = GenMap(20, 10, 0.8f);
     //light = Light(0.5f, 0.5f, 0.0f);
 
     CreateShaders(vShader, fShader);//shaderList[0]
@@ -87,12 +89,12 @@ int main()
         shaderList[0].UseShader();
         shaderList[0].setMat4("projection", projection);
         shaderList[0].setMat4("view", camera.getViewMatrix());
-        map.Draw(shaderList[0].GetTransformLocation());
+        map.Draw(shaderList[0]);
 
         shaderList[1].UseShader();
         shaderList[1].setMat4("projection", projection);
         shaderList[1].setMat4("view", camera.getViewMatrix());
-        light.Draw(shaderList[1].GetTransformLocation());
+        light.Apply(shaderList[1]);
         glUseProgram(0);
 
         mainWindow.swapBuffers();
