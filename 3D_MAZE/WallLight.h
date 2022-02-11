@@ -11,8 +11,8 @@ public:
 	WallLight();
 	WallLight(GLfloat xLightPos, GLfloat yLightPos, GLfloat zLightPos,
 		GLfloat red, GLfloat green, GLfloat yellow,
-		GLfloat AmbientIntensity, GLfloat DiffuseIntensity);
-	void Apply(Shader& shader);
+		 GLfloat DiffuseIntensity);
+	void Apply(Shader& LightingShader);
 	~WallLight();
 private:
 	LightCube* aCube;
