@@ -37,9 +37,9 @@ GLfloat lastTime = 0.0f;
 
 glm::vec3 lightPos = glm::vec3(1.0f, 1.0f, -1.0f);
 GLfloat ambientIntensity = 0.1f;
-GLfloat diffuseIntensity = 0.2f;
-GLfloat specularIntensity = 0.3f;
-glm::vec3 ambientColor = glm::vec3(246.0f / 255.0f, 228.0f / 255.0f, 188.0f / 255.0f);
+GLfloat diffuseIntensity = 0.3f;
+GLfloat specularIntensity = 0.5f;
+glm::vec3 lightColor = glm::vec3(246.0f / 255.0f, 228.0f / 255.0f, 188.0f / 255.0f);
 
 //Vertex shader
 static const char* vShader = "Shaders/shader.vert";
@@ -62,7 +62,7 @@ int main()
     mainWindow = Window(1920, 1080);
     mainWindow.Initialize();
     WallLight light= WallLight(lightPos.x, lightPos.y, lightPos.z,
-        ambientColor.x, ambientColor.y, ambientColor.z,
+        lightColor.x, lightColor.y, lightColor.z,
                                 1.0f);
     map = GenMap(10, 10, 0.8f);
 
@@ -94,12 +94,21 @@ int main()
         shaderList[0].UseShader();
         shaderList[0].setMat4("projection", projection);
         shaderList[0].setMat4("view", camera.getViewMatrix());
-        shaderList[0].setvec3("lightColor", ambientColor);
-        shaderList[0].setFloat("ambientIntensity", ambientIntensity);
-        shaderList[0].setvec3("lightPos", lightPos);
-        shaderList[0].setFloat("diffuseIntensity", diffuseIntensity);
+        glm::vec3 diffuse = lightColor * diffuseIntensity;
+        //printf("%f,%f,%f", diffuse.x, diffuse.y, diffuse.z);
+        glm::vec3 ambient = diffuse * ambientIntensity;
+        //printf("%f,%f,%f\n", ambient.x, ambient.y, ambient.z);
+        glm::vec3 specular = glm::vec3(1.0f) * specularIntensity;
+        shaderList[0].setvec3("light.ambient", ambient);
+        shaderList[0].setvec3("light.diffuse", diffuse);
+        shaderList[0].setvec3("light.specular", specular);
+        float shininess = 8.0f;
+        shaderList[0].setFloat("shininess", shininess);
         shaderList[0].setvec3("viewPos", camera.getCameraPosition());
-        shaderList[0].setFloat("specularIntensity", specularIntensity);
+        shaderList[0].setvec3("light.position", lightPos);
+        shaderList[0].setFloat("light.constant", 1.0f);
+        shaderList[0].setFloat("light.linear", 0.09f);
+        shaderList[0].setFloat("light.quadratic", 0.032f);
         map.Draw(shaderList[0]);
 
         shaderList[1].UseShader();
