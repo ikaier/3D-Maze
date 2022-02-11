@@ -37,6 +37,8 @@ GLfloat lastTime = 0.0f;
 
 glm::vec3 lightPos = glm::vec3(1.0f, 1.0f, -1.0f);
 GLfloat ambientIntensity = 0.1f;
+GLfloat diffuseIntensity = 0.2f;
+GLfloat specularIntensity = 0.3f;
 glm::vec3 ambientColor = glm::vec3(246.0f / 255.0f, 228.0f / 255.0f, 188.0f / 255.0f);
 
 //Vertex shader
@@ -62,8 +64,7 @@ int main()
     WallLight light= WallLight(lightPos.x, lightPos.y, lightPos.z,
         ambientColor.x, ambientColor.y, ambientColor.z,
                                 1.0f);
-    map = GenMap(20, 10, 0.8f);
-    //light = Light(0.5f, 0.5f, 0.0f);
+    map = GenMap(10, 10, 0.8f);
 
     CreateShaders(vShader, fShader);//shaderList[0]
     CreateShaders(vLightingShader, fLightingShader);//shaderList[1]
@@ -96,6 +97,9 @@ int main()
         shaderList[0].setvec3("lightColor", ambientColor);
         shaderList[0].setFloat("ambientIntensity", ambientIntensity);
         shaderList[0].setvec3("lightPos", lightPos);
+        shaderList[0].setFloat("diffuseIntensity", diffuseIntensity);
+        shaderList[0].setvec3("viewPos", camera.getCameraPosition());
+        shaderList[0].setFloat("specularIntensity", specularIntensity);
         map.Draw(shaderList[0]);
 
         shaderList[1].UseShader();
