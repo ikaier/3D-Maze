@@ -35,6 +35,7 @@ Camera camera;
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
 
+glm::vec3 lightPos = glm::vec3(1.0f, 1.0f, -1.0f);
 GLfloat ambientIntensity = 0.1f;
 glm::vec3 ambientColor = glm::vec3(246.0f / 255.0f, 228.0f / 255.0f, 188.0f / 255.0f);
 
@@ -58,7 +59,7 @@ int main()
     
     mainWindow = Window(1920, 1080);
     mainWindow.Initialize();
-    WallLight light= WallLight(0.5f, 1.0f, 0.0f,
+    WallLight light= WallLight(lightPos.x, lightPos.y, lightPos.z,
         ambientColor.x, ambientColor.y, ambientColor.z,
                                 1.0f);
     map = GenMap(20, 10, 0.8f);
@@ -94,6 +95,7 @@ int main()
         shaderList[0].setMat4("view", camera.getViewMatrix());
         shaderList[0].setvec3("lightColor", ambientColor);
         shaderList[0].setFloat("ambientIntensity", ambientIntensity);
+        shaderList[0].setvec3("lightPos", lightPos);
         map.Draw(shaderList[0]);
 
         shaderList[1].UseShader();

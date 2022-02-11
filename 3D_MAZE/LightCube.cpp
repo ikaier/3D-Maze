@@ -32,6 +32,7 @@ LightCube::LightCube(GLfloat xLightPos, GLfloat yLightPos, GLfloat zLightPos,
 {
 	this->xLightPos = xLightPos;
 	this->yLightPos = yLightPos;
+	this->zLightPos = zLightPos;
 }
 
 void LightCube::Translate(GLfloat transX, GLfloat transY, GLfloat transZ)
