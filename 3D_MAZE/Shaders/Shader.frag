@@ -56,7 +56,7 @@ vec4 CalcLightByDirection(PointLightCommon light,vec3 direction){
 
 vec4 CalcPointLight(pointLight pLight)
 {
-		vec3 direction=FragPos - pLight.position;
+		vec3 direction= pLight.position-FragPos;
 		float distance = length(direction);
 		direction = normalize(direction);
 		

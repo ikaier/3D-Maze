@@ -35,12 +35,6 @@ Camera camera;
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
 
-glm::vec3 lightPos = glm::vec3(1.0f, 1.0f, -1.0f);
-GLfloat ambientIntensity = 0.2f;
-GLfloat diffuseIntensity = 0.3f;
-GLfloat specularIntensity = 0.5f;
-glm::vec3 lightColor = glm::vec3(246.0f / 255.0f, 228.0f / 255.0f, 188.0f / 255.0f);
-
 //Vertex shader
 static const char* vShader = "Shaders/shader.vert";
 
@@ -64,7 +58,6 @@ int main()
     map = GenMap(10, 10, 0.8f);
 
     CreateShaders(vShader, fShader);//shaderList[0]
-    //CreateShaders(vLightingShader, fLightingShader);//shaderList[1]
 
     camera = Camera(glm::vec3(0.0f, 0.1f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
         0.0f, 0.0f,0.0f, 5.0f, 0.5f);
@@ -95,8 +88,6 @@ int main()
 
         map.Draw(shaderList[0], projection, camera.getViewMatrix());
 
-
-        //light.Apply(shaderList[1]);
         glUseProgram(0);
 
         mainWindow.swapBuffers();

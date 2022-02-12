@@ -32,8 +32,8 @@ GenMap::GenMap(GLuint width, GLuint height, GLfloat gridSize)
 	Lightingshader->CreateFromFiles(vLightingShader, fLightingShader);
 	anFloor =new Floor(xNum, yNum, gridSize);
 	CreateWalls(); 
-	AddWallLights(0.0f, 1.0f, 0.0f);
-	AddWallLights(5.0f, 1.0f, -5.0f);
+	AddWallLights(0.3f, 0.3f, 0.0f);
+	AddWallLights(1.0f, 0.3f, -1.0f);
 	
 	//SetupMap();
 }

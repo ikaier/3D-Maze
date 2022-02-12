@@ -19,9 +19,6 @@ void WallLight::Apply(/*Shader& LightingShader,*/ GLuint positionLocation)
 
 	glUniform3f(positionLocation, xLightPos, yLightPos, zLightPos);
 
-
-	/*
-	*/
 }
 
 void WallLight::DrawCubes(GLuint positionLocation)

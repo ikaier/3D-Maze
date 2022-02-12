@@ -33,8 +33,8 @@ private:
 	 GLfloat ambientIntensity = 0.2f;
 	 GLfloat diffuseIntensity = 0.3f;
 	 GLfloat constant = 1.0f;
-	 GLfloat linear = 0.09f;
-	 GLfloat exponent = 0.032f;
+	 GLfloat linear = 0.35f;
+	 GLfloat exponent = 1.8f;
 
 	 WallLight wallLightList[MAX_POINT_LIGHTS];
 
