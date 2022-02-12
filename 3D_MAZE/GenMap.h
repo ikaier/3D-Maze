@@ -18,15 +18,34 @@ class GenMap
 public:
 	GenMap();
 	GenMap(GLuint width, GLuint height, GLfloat gridSize);
-	void Draw(Shader& shader);
+	void Draw(Shader& shader, glm::mat4 projection, glm::mat4 view);
+	void DrawLightCubes(glm::mat4 projection, glm::mat4 view);
 	~GenMap();
 private:
+	//Wall property
+	 GLfloat WallSpecularIntensity = 0.5f;
+	 GLfloat WallShiness = 4.0f;
+
+	//wall light property
+	 GLfloat red = 246.0f / 255.0f;
+	 GLfloat green = 228.0f / 255.0f;
+	 GLfloat blue = 188.0f / 255.0f;
+	 GLfloat ambientIntensity = 0.2f;
+	 GLfloat diffuseIntensity = 0.3f;
+	 GLfloat constant = 1.0f;
+	 GLfloat linear = 0.09f;
+	 GLfloat exponent = 0.032f;
+
+	 WallLight wallLightList[MAX_POINT_LIGHTS];
+
 	GLuint xNum, yNum;
 	GLint xEnd=-1, yEnd=-1;
 	GLfloat gridSize;
 	GLuint WallCount;
+	GLuint WallLightCount;
 	Floor* anFloor;
 	Wall* anWall;
+	Shader* Lightingshader;
 	std::vector<GLfloat> xWallPos;
 	std::vector<GLfloat> yWallPos;
 	std::vector<bool> ifRotates;
@@ -46,6 +65,7 @@ private:
 	void printMap();
 	void CreateWalls();
 	void AddWalls(GLfloat xPos,GLfloat yPos, bool ifRotate);
+	void AddWallLights(GLfloat xPos, GLfloat yPos, GLfloat zPos);
 	
 };
 

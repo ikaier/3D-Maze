@@ -3,19 +3,21 @@
 #include<GLFW/glfw3.h>
 
 #include"LightCube.h"
-#include"Shader.h"
+
 
 class WallLight
 {
 public:
 	WallLight();
-	WallLight(GLfloat xLightPos, GLfloat yLightPos, GLfloat zLightPos,
-		GLfloat red, GLfloat green, GLfloat yellow,
-		 GLfloat DiffuseIntensity);
-	void Apply(Shader& LightingShader);
+	WallLight(GLfloat xLightPos, GLfloat yLightPos, GLfloat zLightPos);
+	void Apply(/*Shader& LightingShader,*/ GLuint positionLocation);
+	void DrawCubes(GLuint positionLocation);
 	~WallLight();
 private:
 	LightCube* aCube;
-	GLfloat xLightPos, yLightPos, zLightPos, red, green, blue, AmbientIntensity, DiffuseIntensity;
+	GLfloat xLightPos, yLightPos, zLightPos;
+	//Wall light property
+
+		
 };
 

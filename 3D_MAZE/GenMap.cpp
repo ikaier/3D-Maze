@@ -16,6 +16,7 @@ GenMap::GenMap(GLuint width, GLuint height, GLfloat gridSize)
 	yNum = height;
 	this->gridSize = gridSize;
 	WallCount = 0;
+	WallLightCount = 0;
 	map = std::vector<std::vector<struct grid>>(xNum, std::vector<struct grid>(yNum));
 	for (size_t i = 0; i < xNum; i++) {
 		for (size_t j = 0; j < yNum; j++) {
@@ -25,17 +26,46 @@ GenMap::GenMap(GLuint width, GLuint height, GLfloat gridSize)
 	}
 	recBackTrack(3, 2);
 	printMap();
-	
+	static const char* vLightingShader = "Shaders/Lightingshader.vert";
+	static const char* fLightingShader = "Shaders/Lightingshader.frag";
+	Lightingshader = new Shader();
+	Lightingshader->CreateFromFiles(vLightingShader, fLightingShader);
 	anFloor =new Floor(xNum, yNum, gridSize);
-	CreateWalls();
+	CreateWalls(); 
+	AddWallLights(0.0f, 1.0f, 0.0f);
+	AddWallLights(5.0f, 1.0f, -5.0f);
+	
 	//SetupMap();
 }
 
-void GenMap::Draw(Shader& shader)
+void GenMap::Draw(Shader& shader,glm::mat4 projection,glm::mat4 view)
 {
+	shader.setFloat("material.shininess", WallShiness);
+	shader.setFloat("material.specularIntensity", WallSpecularIntensity);
+
+	shader.setFloat("pointLightProperty.ambientIntensity", ambientIntensity);
+	shader.setFloat("pointLightProperty.diffuseIntensity", diffuseIntensity);
+	shader.setFloat("pointLightProperty.constant", constant);
+	shader.setFloat("pointLightProperty.linear", linear);
+	shader.setFloat("pointLightProperty.exponent", exponent);
+	shader.setvec3("pointLightProperty.color", glm::vec3(red,green,blue));
+	shader.SetPointLights(wallLightList, 2);
+	
 	
 	anFloor->Draw(shader.GetTransformLocation());
 	anWall->Draw(shader.GetTransformLocation());
+	DrawLightCubes( projection, view);
+}
+
+void GenMap::DrawLightCubes(glm::mat4 projection, glm::mat4 view)
+{
+	Lightingshader->UseShader();
+	Lightingshader->setMat4("projection", projection);
+	Lightingshader->setMat4("view", view);
+	Lightingshader->setvec4("Color", glm::vec4(red + (1 - red) * 0.3f, green + (1 - green) * 0.3f, blue + (1 - blue) * 0.3f, 0.8f));
+	for (size_t i = 0; i < WallLightCount; i++) {
+		wallLightList[i].DrawCubes(Lightingshader->GetTransformLocation());
+	}
 }
 
 GenMap::~GenMap()
@@ -162,6 +192,14 @@ void GenMap::AddWalls(GLfloat xPos, GLfloat yPos,bool ifRotate)
 	ifRotates.push_back(ifRotate);
 	WallCount++;
 
+}
+
+void GenMap::AddWallLights(GLfloat xPos, GLfloat yPos, GLfloat zPos)
+{
+	assert(WallLightCount < MAX_POINT_LIGHTS);
+	WallLight aLight = WallLight(xPos, yPos, zPos);
+	wallLightList[WallLightCount] = aLight;
+	WallLightCount++;
 }
 
 

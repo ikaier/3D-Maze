@@ -48,6 +48,7 @@ void Wall::Scale(GLfloat scaleX, GLfloat scaleY, GLfloat scaleZ)
 
 void Wall::Draw(GLuint uniformLocation)
 {
+	
 	//printf(" %f ", gridSize);
 	assert(gridSize > 0);
 	SetTexture();
