@@ -32,8 +32,8 @@ public:
 private:
     GLfloat gridSize;
     unsigned int Floorindices[6] = {
-        3,1,0,
-        3,2,1
+        0,1,3,
+        1,2,3
     };
 
     GLfloat Floorvertices[32]= {
