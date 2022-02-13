@@ -31,6 +31,7 @@ public:
 
 private:
     GLfloat gridSize;
+    GLuint count;
     unsigned int Floorindices[6] = {
         0,1,3,
         1,2,3
@@ -45,11 +46,13 @@ private:
     };
     Mesh* obj;
     Texture* texture;
+    glm::mat4* modelMatrics;
     GLuint xNum, yNum;
     glm::quat quaternion;
     glm::mat4 TransModel;
     glm::mat4 ScaleModel;
     void SetTexture();
-    void SetModel(GLuint uniformLocation);
+    void SetModel(GLuint count);
+    void SendModel(GLuint uniformLocation,GLuint count);
 };
 

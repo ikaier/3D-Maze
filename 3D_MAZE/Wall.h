@@ -30,7 +30,7 @@ private:
     GLuint WallCount;
     GLfloat gridSize;
 
-
+    GLuint count;
     unsigned int WallIndices[36] = {
         //front and back
          0,1,2,
@@ -94,10 +94,12 @@ private:
     };
     Mesh* obj;
     Texture* texture;
+    glm::mat4* modelMatrics;
     glm::mat4 RotateModel;
     glm::mat4 TransModel;
     glm::mat4 ScaleModel;
     void SetTexture();
-    void SetModel(GLuint uniformLocation);
+    void SetModel(GLuint count);
+    void SendModel(GLuint uniformLocation, GLuint count);
 };
 
