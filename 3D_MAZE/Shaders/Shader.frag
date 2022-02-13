@@ -67,7 +67,7 @@ vec4 CalcPointLight(pointLight pLight)
 
 vec4 CalcPointLights()
 {
-	vec4 totalColor=vec4(0,0,0,0);
+	vec4 totalColor=vec4(0,0,0,1);
 	for(int i=0;i<pointLightCount;i++)
 	{
 		totalColor+=CalcPointLight(pointLights[i]);

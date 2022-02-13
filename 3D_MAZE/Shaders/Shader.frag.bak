@@ -6,7 +6,7 @@ in vec2 TexCoord;
 in vec3 Normal;
 in vec3 FragPos;
 
-const int MAX_POINT_LIGHTS=3;
+const int MAX_POINT_LIGHTS=100;
 
 struct PointLightCommon{
 	vec3 color;
