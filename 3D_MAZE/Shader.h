@@ -7,6 +7,7 @@
 #include"MyTransform.h"
 #include"CommonValues.h"
 #include"WallLight.h"
+#include<vector>
 
 class Shader
 {

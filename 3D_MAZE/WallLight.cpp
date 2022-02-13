@@ -16,7 +16,6 @@ WallLight::WallLight(GLfloat xLightPos, GLfloat yLightPos, GLfloat zLightPos)
 
 void WallLight::Apply(/*Shader& LightingShader,*/ GLuint positionLocation)
 {
-
 	glUniform3f(positionLocation, xLightPos, yLightPos, zLightPos);
 
 }

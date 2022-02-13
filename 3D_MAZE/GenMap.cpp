@@ -32,8 +32,8 @@ GenMap::GenMap(GLuint width, GLuint height, GLfloat gridSize)
 	Lightingshader->CreateFromFiles(vLightingShader, fLightingShader);
 	anFloor =new Floor(xNum, yNum, gridSize);
 	CreateWalls(); 
-	AddWallLights(0.3f, 0.3f, 0.0f);
-	AddWallLights(1.0f, 0.3f, -1.0f);
+	CreateWallLights();
+
 	
 	//SetupMap();
 }
@@ -49,7 +49,7 @@ void GenMap::Draw(Shader& shader,glm::mat4 projection,glm::mat4 view)
 	shader.setFloat("pointLightProperty.linear", linear);
 	shader.setFloat("pointLightProperty.exponent", exponent);
 	shader.setvec3("pointLightProperty.color", glm::vec3(red,green,blue));
-	shader.SetPointLights(wallLightList, 2);
+	shader.SetPointLights(wallLightList, WallLightCount);
 	
 	
 	anFloor->Draw(shader.GetTransformLocation());
@@ -76,6 +76,8 @@ GenMap::~GenMap()
 
 void GenMap::recBackTrack(GLint x, GLint y)
 {
+	assert(x < xNum&& y < yNum);
+
 	map[x][y].visited = true;
 	direction arraydirecs[4]{ left,right,up,down };
 	GLint tx, ty;
@@ -185,6 +187,29 @@ void GenMap::CreateWalls()
 	
 }
 
+void GenMap::CreateWallLights()
+{
+	GLuint lightnumber = xNum * yNum / 4;
+	if (lightnumber > MAX_POINT_LIGHTS) lightnumber = MAX_POINT_LIGHTS;
+
+	for (int x = 0; x < xNum; x++) {
+		for (int y = 0; y < yNum; y++) {
+			int d=rand() % 100;
+			if (d < 25) {
+				if (map[x][y].bot) {
+					AddWallLights(x * gridSize+gridSize / 2, 0.2f, -y * gridSize-0.01f);
+				}
+				else if (map[x][y].right) {
+					AddWallLights((x+1) * gridSize -0.06f, 0.2f, -y * gridSize- gridSize / 2);
+				}
+			}
+		}
+	}
+	//printf("%d",lightnumber);
+	//AddWallLights(0.3f, 0.3f, 0.0f);
+	//AddWallLights(1.0f, 0.3f, -1.0f);
+}
+
 void GenMap::AddWalls(GLfloat xPos, GLfloat yPos,bool ifRotate)
 {
 	xWallPos.push_back(xPos);
@@ -198,6 +223,7 @@ void GenMap::AddWallLights(GLfloat xPos, GLfloat yPos, GLfloat zPos)
 {
 	assert(WallLightCount < MAX_POINT_LIGHTS);
 	WallLight aLight = WallLight(xPos, yPos, zPos);
+	//printf("%f,%f,%f\n", xPos, yPos, zPos);
 	wallLightList[WallLightCount] = aLight;
 	WallLightCount++;
 }

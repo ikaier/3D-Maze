@@ -64,6 +64,7 @@ private:
 	void swap(direction *a,direction *b);
 	void printMap();
 	void CreateWalls();
+	void CreateWallLights();
 	void AddWalls(GLfloat xPos,GLfloat yPos, bool ifRotate);
 	void AddWallLights(GLfloat xPos, GLfloat yPos, GLfloat zPos);
 	
