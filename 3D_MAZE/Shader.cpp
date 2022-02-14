@@ -60,6 +60,11 @@ void Shader::SetPointLights(WallLight* pLight, unsigned int lightCount)
 	}
 }
 
+//void Shader::SetSpotLight(FlashLight Slight)
+//{
+//	Slight.applyFlash(spotLightPositionLocation, spotLighDirectiontLocation);
+//}
+
 void Shader::setMat4(const std::string& name, const glm::mat4& mat) const
 {
 	glUniformMatrix4fv(glGetUniformLocation(shaderID,name.c_str()), 1, GL_FALSE, glm::value_ptr(mat));
@@ -172,7 +177,8 @@ void Shader::CompileProgram()
 	projectionLocation = glGetUniformLocation(shaderID, "projection");
 	viewLocation = glGetUniformLocation(shaderID, "view");
 	pointLightCountLocation = glGetUniformLocation(shaderID, "pointLightCount");
-
+	/*spotLightPositionLocation = glGetUniformLocation(shaderID, "spotLight.position");
+	spotLighDirectiontLocation = glGetUniformLocation(shaderID, "spotLight.spotdirection");*/
 	for (size_t i = 0; i < MAX_POINT_LIGHTS; i++) {
 		char locBuff[100] = { '\0' };
 

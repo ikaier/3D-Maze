@@ -43,12 +43,28 @@ void GenMap::Draw(Shader& shader,glm::mat4 projection,glm::mat4 view)
 	shader.setFloat("material.shininess", WallShiness);
 	shader.setFloat("material.specularIntensity", WallSpecularIntensity);
 
-	shader.setFloat("pointLightProperty.ambientIntensity", ambientIntensity);
-	shader.setFloat("pointLightProperty.diffuseIntensity", diffuseIntensity);
-	shader.setFloat("pointLightProperty.constant", constant);
-	shader.setFloat("pointLightProperty.linear", linear);
-	shader.setFloat("pointLightProperty.exponent", exponent);
-	shader.setvec3("pointLightProperty.color", glm::vec3(red,green,blue));
+	for (size_t i = 0; i < WallLightCount; i++) {
+		char locBuff[100] = { '\0' };
+
+		snprintf(locBuff, sizeof(locBuff), "pointLights[%d].base.ambientIntensity", i);
+		shader.setFloat(locBuff, ambientIntensity);
+
+		snprintf(locBuff, sizeof(locBuff), "pointLights[%d].base.diffuseIntensity", i);
+		shader.setFloat(locBuff, diffuseIntensity);
+
+		snprintf(locBuff, sizeof(locBuff), "pointLights[%d].base.constant", i);
+		shader.setFloat(locBuff, constant);
+
+		snprintf(locBuff, sizeof(locBuff), "pointLights[%d].base.linear", i);
+		shader.setFloat(locBuff, linear);
+
+		snprintf(locBuff, sizeof(locBuff), "pointLights[%d].base.exponent", i);
+		shader.setFloat(locBuff, exponent);
+
+		snprintf(locBuff, sizeof(locBuff), "pointLights[%d].base.color", i);
+		shader.setvec3(locBuff, glm::vec3(red, green, blue));
+		
+	}
 	shader.SetPointLights(wallLightList, WallLightCount);
 	
 	

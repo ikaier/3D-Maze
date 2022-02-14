@@ -9,6 +9,9 @@
 #include<GLFW/glfw3.h>
 #include<iostream>
 
+#include"FlashLight.h"
+#include"Shader.h"
+
 class Camera
 {
 public:
@@ -21,6 +24,9 @@ public:
 	glm::vec3 getCameraDirection();
 	glm::mat4 getViewMatrix();
 
+	void applyFlashLight(Shader& shader);
+	void flashLightOFF(Shader& shader);
+
 	void keyControl(GLfloat* keys);
 	void mouseControl(GLfloat xChange, GLfloat yChange);
 	void flip(GLfloat deltaTime);
@@ -28,6 +34,7 @@ public:
 	~Camera();
 
 private:
+
 	glm::vec3 position;
 	glm::vec3 front;
 	glm::vec3 up;
@@ -41,6 +48,18 @@ private:
 
 	GLfloat moveSpeed;
 	GLfloat turnSpeed;
+
+	//flash light direction
+	GLfloat red = 255.0f / 255.0f;
+	GLfloat green = 255.0f / 255.0f;
+	GLfloat blue = 255.0f / 255.0f;
+	GLfloat ambientIntensity = 0.2f;
+	GLfloat diffuseIntensity = 0.3f;
+	GLfloat constant = 1.0f;
+	GLfloat linear = 0.35f;
+	GLfloat exponent = 0.44f;
+	GLfloat edge = glm::cos(glm::radians(12.5));
+
 
 	void update();
 

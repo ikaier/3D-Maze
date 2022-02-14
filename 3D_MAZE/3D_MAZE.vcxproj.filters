@@ -51,7 +51,7 @@
     <ClCompile Include="Light.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EdgeDetection.cpp">
+    <ClCompile Include="FlashLight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,7 +92,7 @@
     <ClInclude Include="Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EdgeDetection.h">
+    <ClInclude Include="FlashLight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

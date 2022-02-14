@@ -7,6 +7,7 @@
 #include"MyTransform.h"
 #include"CommonValues.h"
 #include"WallLight.h"
+#include"FlashLight.h"
 #include<vector>
 
 class Shader
@@ -22,7 +23,7 @@ public:
 	void ClearShader();
 
 	void SetPointLights(WallLight* pLight, unsigned int lightCount);
-
+	//void SetSpotLight(FlashLight Slight);
 	void setMat4(const std::string &name,const glm::mat4 &mat) const;
 	void setvec4(const std::string& name, const glm::vec4& vec) const;
 	void setvec3(const std::string& name, const glm::vec3& vec) const;
@@ -32,7 +33,9 @@ public:
 
 
 private:
-	GLuint shaderID, transformLocation, viewLocation, projectionLocation, pointLightCountLocation;
+	GLuint shaderID, transformLocation, viewLocation, 
+		projectionLocation, pointLightCountLocation;
+	
 	std::string ReadFile(const char* fileLocation);
 	void CompileShader(const char* vertexCode, const char* fragmentCode);
 	GLuint AttachShader(GLuint theProgram, const char* shaderCode, GLenum shaderType);

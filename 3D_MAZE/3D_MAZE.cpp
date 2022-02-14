@@ -32,8 +32,12 @@ std::vector<Shader> shaderList;
 GenMap map;
 Camera camera;
 
+
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
+
+bool flashIsOn = false;
+bool lPressed = false;
 
 //Vertex shader
 static const char* vShader = "Shaders/shader.vert";
@@ -85,7 +89,18 @@ int main()
         shaderList[0].setMat4("projection", projection);
         shaderList[0].setMat4("view", camera.getViewMatrix());
         shaderList[0].setvec3("viewPos", camera.getCameraPosition());
+        if (!lPressed && mainWindow.getsKeys()[4]){
+            flashIsOn = !flashIsOn;
+        }
 
+        lPressed = mainWindow.getsKeys()[4];
+        printf("%d\n", flashIsOn);
+        if (flashIsOn) {
+            camera.applyFlashLight(shaderList[0]);
+        }
+        else {
+            camera.flashLightOFF(shaderList[0]);
+        }
         map.Draw(shaderList[0], projection, camera.getViewMatrix());
 
         glUseProgram(0);
