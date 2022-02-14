@@ -24,8 +24,10 @@ public:
 
 	void SetPointLights(WallLight* pLight, unsigned int lightCount);
 	//void SetSpotLight(FlashLight Slight);
+	void setInt(const std::string& name, const int value) const;
 	void setMat4(const std::string &name,const glm::mat4 &mat) const;
 	void setvec4(const std::string& name, const glm::vec4& vec) const;
+	void setvec2(const std::string& name, const glm::vec2& vec) const;
 	void setvec3(const std::string& name, const glm::vec3& vec) const;
 	void setFloat(const std::string& name, float value) const;
 	GLuint GetTransformLocation();

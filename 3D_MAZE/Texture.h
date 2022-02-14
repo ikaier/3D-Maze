@@ -10,7 +10,7 @@ public:
 	Texture();
 	Texture(const char* fileLocation);
 	bool LoadTexture();
-
+	int GetTextureID() { return textureID; };
 	void UseTexture();
 	void ClearTexture();
 	~Texture();

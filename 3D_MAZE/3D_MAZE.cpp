@@ -31,7 +31,7 @@ std::vector<Shader> shaderList;
 
 GenMap map;
 Camera camera;
-
+Texture lighttexure;
 
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
@@ -60,7 +60,8 @@ int main()
     mainWindow = Window(1920, 1080);
     mainWindow.Initialize();
     map = GenMap(10, 10, 0.8f);
-
+    lighttexure = Texture("Textures/fl.jpg");
+    lighttexure.LoadTexture();
     CreateShaders(vShader, fShader);//shaderList[0]
 
     camera = Camera(glm::vec3(0.0f, 0.1f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
@@ -89,12 +90,16 @@ int main()
         shaderList[0].setMat4("projection", projection);
         shaderList[0].setMat4("view", camera.getViewMatrix());
         shaderList[0].setvec3("viewPos", camera.getCameraPosition());
+        shaderList[0].setvec2("viewPort", glm::vec2(mainWindow.getBufferWidth(), mainWindow.getBufferHeight()));
+        shaderList[0].setInt("lightTexture", 3);
+        glActiveTexture(GL_TEXTURE3);
+        glBindTexture(GL_TEXTURE_2D, lighttexure.GetTextureID());
         if (!lPressed && mainWindow.getsKeys()[4]){
             flashIsOn = !flashIsOn;
         }
 
         lPressed = mainWindow.getsKeys()[4];
-        printf("%d\n", flashIsOn);
+        
         if (flashIsOn) {
             camera.applyFlashLight(shaderList[0]);
         }

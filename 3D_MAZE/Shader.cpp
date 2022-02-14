@@ -65,6 +65,11 @@ void Shader::SetPointLights(WallLight* pLight, unsigned int lightCount)
 //	Slight.applyFlash(spotLightPositionLocation, spotLighDirectiontLocation);
 //}
 
+void Shader::setInt(const std::string& name, const int value) const
+{
+	glUniform1i(glGetUniformLocation(shaderID, name.c_str()), value);
+}
+
 void Shader::setMat4(const std::string& name, const glm::mat4& mat) const
 {
 	glUniformMatrix4fv(glGetUniformLocation(shaderID,name.c_str()), 1, GL_FALSE, glm::value_ptr(mat));
@@ -73,6 +78,11 @@ void Shader::setMat4(const std::string& name, const glm::mat4& mat) const
 void Shader::setvec4(const std::string& name, const glm::vec4& vec) const
 {
 	glUniform4f(glGetUniformLocation(shaderID, name.c_str()), vec.x,vec.y,vec.z,vec.w);
+}
+
+void Shader::setvec2(const std::string& name, const glm::vec2& vec) const
+{
+	glUniform2f(glGetUniformLocation(shaderID, name.c_str()), vec.x, vec.y);
 }
 
 void Shader::setvec3(const std::string& name, const glm::vec3& vec) const

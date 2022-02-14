@@ -7,6 +7,7 @@ in vec3 Normal;
 in vec3 FragPos;
 
 const int MAX_POINT_LIGHTS=100;
+uniform vec2 viewPort;
 
 struct LightCommon{
 	vec3 color;
@@ -37,6 +38,7 @@ struct Material{
 
 uniform int pointLightCount;
 uniform sampler2D ourTexture;
+uniform sampler2D lightTexture;
 
 uniform pointLight pointLights[MAX_POINT_LIGHTS];
 uniform SpotLight spotLight;
@@ -99,7 +101,9 @@ vec4 CalcPointLights(){
 
 vec4 CalcSpotLights(){
 	vec4 totalColor=vec4(0,0,0,0);
-	totalColor+=CalcSpotLight(spotLight);
+	vec2 fragCoord=gl_FragCoord.xy/viewPort*vec2(1.0,-1.0);
+	totalColor+=CalcSpotLight(spotLight)*texture(lightTexture,fragCoord);
+	
 	return totalColor;
 }
 
@@ -108,5 +112,7 @@ void main()
 	
 	vec4 finalColor=CalcPointLights();
 	finalColor += CalcSpotLights();
+	
+	//finalColor*=
 	FragColor=texture(ourTexture,TexCoord)*finalColor;
 }

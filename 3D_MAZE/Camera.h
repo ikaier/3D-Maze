@@ -54,11 +54,11 @@ private:
 	GLfloat green = 255.0f / 255.0f;
 	GLfloat blue = 255.0f / 255.0f;
 	GLfloat ambientIntensity = 0.2f;
-	GLfloat diffuseIntensity = 0.3f;
+	GLfloat diffuseIntensity = 1.0f;
 	GLfloat constant = 1.0f;
-	GLfloat linear = 0.35f;
-	GLfloat exponent = 0.44f;
-	GLfloat edge = glm::cos(glm::radians(12.5));
+	GLfloat linear = 0.09f;
+	GLfloat exponent = 0.32f;
+	GLfloat edge = glm::cos(glm::radians(15.5));
 
 
 	void update();
