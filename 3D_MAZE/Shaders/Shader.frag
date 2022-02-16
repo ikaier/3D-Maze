@@ -55,9 +55,9 @@ vec4 CalcLightByDirection(LightCommon light,vec3 direction){
 	vec4 specularColor=vec4(0,0,0,0);
 	if(diffuseFactor>0.0f){
 		vec3 fragToEye=normalize(viewPos-FragPos);
-		vec3 reflectedVertex=normalize(reflect(-direction,normalize(Normal)));
-		
-		float specularFactor=dot(fragToEye,reflectedVertex);
+		//vec3 reflectedVertex=normalize(reflect(-direction,normalize(Normal)));
+        vec3 halfwayDir=normalize(direction+fragToEye);
+		float specularFactor=dot(normalize(Normal),halfwayDir);
 		if(specularFactor>0.0f){
 			specularFactor=pow(specularFactor, material.shininess);
 			specularColor=vec4(light.color*material.specularIntensity*specularFactor,1.0f);
