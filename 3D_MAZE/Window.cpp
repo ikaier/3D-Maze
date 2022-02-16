@@ -32,6 +32,10 @@ void Window::Initialize()
     //Allow forward compatibility
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
+    //MSAA
+    glfwWindowHint(GLFW_SAMPLES, 4);
+    glEnable(GL_MULTISAMPLE);
+
     //Create mian window
     mainWindow = glfwCreateWindow(width, height, "3D MAZE", NULL, NULL);
     if (!mainWindow)

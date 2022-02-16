@@ -58,7 +58,7 @@ private:
 	GLfloat constant = 1.0f;
 	GLfloat linear = 0.09f;
 	GLfloat exponent = 0.32f;
-	GLfloat edge = glm::cos(glm::radians(15.5));
+	GLfloat edge = glm::cos(glm::radians(14.5));
 
 
 	void update();

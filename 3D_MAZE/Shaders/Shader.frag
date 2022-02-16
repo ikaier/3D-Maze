@@ -49,12 +49,13 @@ uniform vec3 viewPos;
 vec4 CalcLightByDirection(LightCommon light,vec3 direction){
 	vec4 ambientColor = vec4 (light.color, 1.0f ) * light.ambientIntensity;
 	float diffuseFactor = max( dot(normalize(Normal), normalize(direction)), 0.0f);
+    //diffuse
 	vec4 diffuseColor = vec4(light.color* light.diffuseIntensity*diffuseFactor, 1.0f) ;
-
+    //specular
 	vec4 specularColor=vec4(0,0,0,0);
 	if(diffuseFactor>0.0f){
 		vec3 fragToEye=normalize(viewPos-FragPos);
-		vec3 reflectedVertex=normalize(reflect(direction,normalize(Normal)));
+		vec3 reflectedVertex=normalize(reflect(-direction,normalize(Normal)));
 		
 		float specularFactor=dot(fragToEye,reflectedVertex);
 		if(specularFactor>0.0f){
@@ -62,15 +63,17 @@ vec4 CalcLightByDirection(LightCommon light,vec3 direction){
 			specularColor=vec4(light.color*material.specularIntensity*specularFactor,1.0f);
 		}
 	}
-	return (ambientColor +diffuseColor + specularColor);
+	return (ambientColor +diffuseColor+specularColor ); //+specularColor
 }
 
 vec4 CalcPointLight(pointLight pLight)
 {
+    //attenuation
 		vec3 direction= pLight.position-FragPos;
 		float distance = length(direction);
+    
+    
 		direction = normalize(direction);
-		
 		vec4 color = CalcLightByDirection(pLight.base,direction);
 		float attenuation=pLight.base.exponent*distance*distance+pLight.base.linear*distance+pLight.base.constant;
 		return (color/attenuation);
