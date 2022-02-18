@@ -23,8 +23,11 @@ public:
 	~GenMap();
 private:
 	//Wall property
-	 GLfloat WallSpecularIntensity = 0.8f;
-	 GLfloat WallShiness = 256;
+	 GLfloat WallSpecularIntensity = 0.3f;
+	 GLfloat WallShiness = 3;
+
+	 GLfloat FloorSpecularIntensity = 0.8f;
+	 GLfloat FloorShiness = 256;
 
 	//wall light property
 	 GLfloat red = 246.0f / 255.0f;

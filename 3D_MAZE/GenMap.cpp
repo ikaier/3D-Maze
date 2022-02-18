@@ -40,8 +40,8 @@ GenMap::GenMap(GLuint width, GLuint height, GLfloat gridSize)
 
 void GenMap::Draw(Shader& shader,glm::mat4 projection,glm::mat4 view)
 {
-	shader.setFloat("material.shininess", WallShiness);
-	shader.setFloat("material.specularIntensity", WallSpecularIntensity);
+	shader.setFloat("material.shininess", FloorShiness);
+	shader.setFloat("material.specularIntensity", FloorSpecularIntensity);
 
 	for (size_t i = 0; i < WallLightCount; i++) {
 		char locBuff[100] = { '\0' };
@@ -69,6 +69,10 @@ void GenMap::Draw(Shader& shader,glm::mat4 projection,glm::mat4 view)
 	
 	
 	anFloor->Draw(shader.GetTransformLocation());
+
+	shader.setFloat("material.shininess", WallShiness);
+	shader.setFloat("material.specularIntensity", WallSpecularIntensity);
+
 	anWall->Draw(shader.GetTransformLocation());
 	DrawLightCubes( projection, view);
 }
