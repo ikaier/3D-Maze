@@ -15,7 +15,7 @@ class Wall
 {
 public:
 	Wall();
-    Wall(std::vector<GLfloat> xWallPos, std::vector<GLfloat> yWallPos, std::vector<bool> ifRotates,GLuint WallCount,GLfloat gridSize);
+    Wall(std::vector<glm::vec3> walls,GLuint WallCount,GLfloat gridSize);
 	
     void Rotate(float yAngle);
     void Translate(GLfloat transX, GLfloat transY, GLfloat transZ);
@@ -24,9 +24,8 @@ public:
 
     ~Wall();
 private:
-    std::vector<GLfloat> xWallPos;
-    std::vector<GLfloat> yWallPos;
-    std::vector<bool> ifRotates;
+    std::vector<glm::vec3> walls;
+
     GLuint WallCount;
     GLfloat gridSize;
 

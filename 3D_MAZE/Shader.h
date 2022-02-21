@@ -6,8 +6,6 @@
 #include<GL/glew.h>
 #include"MyTransform.h"
 #include"CommonValues.h"
-#include"WallLight.h"
-#include"FlashLight.h"
 #include<vector>
 
 class Shader
@@ -22,7 +20,7 @@ public:
 	void UseShader();
 	void ClearShader();
 
-	void SetPointLights(WallLight* pLight, unsigned int lightCount);
+	//void SetPointLights(WallLight* pLight, unsigned int lightCount);
 	//void SetSpotLight(FlashLight Slight);
 	void setInt(const std::string& name, const int value) const;
 	void setMat4(const std::string &name,const glm::mat4 &mat) const;
@@ -30,7 +28,7 @@ public:
 	void setvec2(const std::string& name, const glm::vec2& vec) const;
 	void setvec3(const std::string& name, const glm::vec3& vec) const;
 	void setFloat(const std::string& name, float value) const;
-	GLuint GetTransformLocation();
+	GLuint GetTransformLocation() const;
 	GLuint GetPositionLocation();
 
 

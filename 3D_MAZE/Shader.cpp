@@ -51,14 +51,14 @@ void Shader::ClearShader()
 	}
 }
 
-void Shader::SetPointLights(WallLight* pLight, unsigned int lightCount)
-{
-	if (lightCount > MAX_POINT_LIGHTS) lightCount = MAX_POINT_LIGHTS;
-	glUniform1i(pointLightCountLocation, lightCount);
-	for (size_t i = 0; i < lightCount; i++) {
-		pLight[i].Apply(uniformPointLight[i].uniformPosition);
-	}
-}
+//void Shader::SetPointLights(WallLight* pLight, unsigned int lightCount)
+//{
+//	if (lightCount > MAX_POINT_LIGHTS) lightCount = MAX_POINT_LIGHTS;
+//	glUniform1i(pointLightCountLocation, lightCount);
+//	for (size_t i = 0; i < lightCount; i++) {
+//		pLight[i].Apply(uniformPointLight[i].uniformPosition);
+//	}
+//}
 
 //void Shader::SetSpotLight(FlashLight Slight)
 //{
@@ -95,7 +95,7 @@ void Shader::setFloat(const std::string& name, float value) const
 	glUniform1f(glGetUniformLocation(shaderID, name.c_str()), value);
 }
 
-GLuint Shader::GetTransformLocation()
+GLuint Shader::GetTransformLocation() const
 {
 	return transformLocation;
 }

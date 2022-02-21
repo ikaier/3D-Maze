@@ -19,18 +19,30 @@
 #include"Texture.h"
 #include"Floor.h"
 #include"Camera.h"
-#include"GenMap.h"
 #include"Wall.h"
 #include"WallLight.h"
+#include"MazeMap.h"
+#include"Material.h"
 
 
 Window mainWindow;
-std::vector<Mesh*>meshList;
-std::vector<Shader> shaderList;
+Shader mainShader;
+Shader lightingCubeShader;
+Shader flashShadowShader;
+Floor mazeFloor;
+Wall mazeWall;
+MazeMap mazeMap;
+WallLight mazeWallLight;
+FlashLight flashLight;
+Material wallMaterial;
+Material floorMaterial;
+
+GLuint mazeWidth=10, mazeHeight=10;
+GLfloat gridSize=0.8f;
 
 
-GenMap map;
 Camera camera;
+//flashlight cookie texture
 Texture lighttexure;
 
 GLfloat deltaTime = 0.0f;
@@ -39,36 +51,44 @@ GLfloat lastTime = 0.0f;
 bool flashIsOn = false;
 bool lPressed = false;
 
-//Vertex shader
-static const char* vShader = "Shaders/shader.vert";
+void RenderScene(const Shader &shader) {
+    //render floor
+    floorMaterial.UseMaterial(shader);
+    mazeFloor.Draw(shader.GetTransformLocation());
 
+    //render wall
+    wallMaterial.UseMaterial(shader);
+    mazeWall.Draw(shader.GetTransformLocation());
 
-//fragment shader
-static const char* fShader = "Shaders/shader.frag";
-
-
-
-void CreateShaders(const char* vertShader,const char* fragShader) {
-    Shader* shader1 = new Shader();
-    shader1->CreateFromFiles(vertShader, fragShader);
-    shaderList.push_back(*shader1);
-     
 }
+
+void RenderLightCube(const Shader& Lightingshader) {
+    //mazeWallLight.Draw(Lightingshader.GetTransformLocation());
+}
+
 int main()
 {
     
     mainWindow = Window(1920, 1080);
     mainWindow.Initialize();
-    map = GenMap(10, 10, 0.8f);
-    lighttexure = Texture("Textures/fl.jpg");
-    lighttexure.LoadTexture();
-    CreateShaders(vShader, fShader);//shaderList[0]
 
+    
+    mainShader.CreateFromFiles("Shaders/shader.vert", "Shaders/shader.frag");
+    lightingCubeShader.CreateFromFiles("Shaders/Lightingshader.vert", "Shaders/Lightingshader.frag");
+    flashShadowShader.CreateFromFiles("Shaders/FlashShadowShader.vert", "Shaders/FlashShadowShader.frag");
+    
+    mazeMap = MazeMap(10, 10, 0.8f);
+    mazeFloor = Floor(mazeWidth, mazeHeight, gridSize);
+    mazeWall = Wall(mazeMap.GetWalls(),mazeMap.GetWallCount(), gridSize);
+    mazeWallLight = WallLight(mazeMap.GetWallLights(), mazeMap.GetWallLightCount());
+    wallMaterial = Material(0.3f, 3.0f);
+    floorMaterial = Material(0.8f, 256.0f);
     camera = Camera(glm::vec3(0.0f, 0.1f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
         0.0f, 0.0f,0.0f, 5.0f, 0.5f);
-
+    flashLight = FlashLight(camera.getCameraPosition(), camera.getCameraDirection());
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 100.0f);
     GLfloat i = 0;
+
     while (!mainWindow.getShouldClose())
 	{
         //delta time calculation
@@ -86,12 +106,25 @@ int main()
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        shaderList[0].UseShader();
-        shaderList[0].setMat4("projection", projection);
-        shaderList[0].setMat4("view", camera.getViewMatrix());
-        shaderList[0].setvec3("viewPos", camera.getCameraPosition());
-        shaderList[0].setvec2("viewPort", glm::vec2(mainWindow.getBufferWidth(), mainWindow.getBufferHeight()));
-        shaderList[0].setInt("lightTexture", 3);
+        /************************ render depth scene from light's perspective ***************************/
+        flashLight.SetFlashLight(camera.getCameraPosition(), camera.getCameraDirection());
+        flashShadowShader.UseShader();
+        flashShadowShader.setMat4("lightSpaceMatrix", flashLight.GetLightSpaceMatrix());
+
+        glViewport(0, 0, flashLight.GetShadowMap()->GetShadowHeight(), flashLight.GetShadowMap()->GetShadowWidth());
+        flashLight.GetShadowMap()->Write();
+        glClear(GL_DEPTH_BUFFER_BIT);
+        RenderScene(flashShadowShader);
+
+        /************************** render normal scene using depth map ***********************************/
+        glViewport(0, 0, 1920, 1080);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        mainShader.UseShader();
+        mainShader.setMat4("projection", projection);
+        mainShader.setMat4("view", camera.getViewMatrix());
+        mainShader.setvec3("viewPos", camera.getCameraPosition());
+        mainShader.setvec2("viewPort", glm::vec2(mainWindow.getBufferWidth(), mainWindow.getBufferHeight()));
+        mainShader.setInt("lightTexture", 3);
         glActiveTexture(GL_TEXTURE3);
         glBindTexture(GL_TEXTURE_2D, lighttexure.GetTextureID());
         if (!lPressed && mainWindow.getsKeys()[4]){
@@ -101,12 +134,18 @@ int main()
         lPressed = mainWindow.getsKeys()[4];
         
         if (flashIsOn) {
-            camera.applyFlashLight(shaderList[0]);
+            flashLight.applyFlash(mainShader);
         }
         else {
-            camera.flashLightOFF(shaderList[0]);
+            flashLight.flashLightOFF(mainShader);
         }
-        map.Draw(shaderList[0], projection, camera.getViewMatrix());
+
+        mazeWallLight.Draw(mainShader);
+        flashLight.GetShadowMap()->Read(GL_TEXTURE2);
+        mainShader.setInt("flashShadowMap", 2);
+        mainShader.setInt("ourTexture", 1);
+        RenderScene(mainShader);
+        //map.Draw(shaderList[0], projection, camera.getViewMatrix());
 
         glUseProgram(0);
 
