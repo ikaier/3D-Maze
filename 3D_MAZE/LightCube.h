@@ -11,8 +11,7 @@ class LightCube
 {
 public:
 	LightCube();
-	LightCube(GLfloat xLightPos, GLfloat yLightPos, GLfloat zLightPos,
-		GLfloat red, GLfloat green,GLfloat blue);
+	LightCube(GLfloat xLightPos, GLfloat yLightPos, GLfloat zLightPos);
 
 	void Translate(GLfloat transX, GLfloat transY, GLfloat transZ);
 	void Scale(GLfloat scaleX, GLfloat scaleY, GLfloat scaleZ);
@@ -20,7 +19,7 @@ public:
 	~LightCube();
 
 private:
-	GLfloat xLightPos, yLightPos, zLightPos, red, green, blue;
+	GLfloat xLightPos, yLightPos, zLightPos;
 	GLuint VAO, VBO, EBO;
 	unsigned int LightIndices[36] = {
 		1,0,3,

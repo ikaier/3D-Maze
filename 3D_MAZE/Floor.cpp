@@ -123,5 +123,5 @@ void Floor::SendModel(GLuint uniformLocation, GLuint count)
 
 Floor::~Floor()
 {
-	delete texture;
+	//delete texture;
 }

@@ -4,6 +4,7 @@
 #include<glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include"Shader.h"
+#include"Texture.h"
 #include"FlashLightShadowMap.h"
 class FlashLight
 {
@@ -17,6 +18,8 @@ public:
 	void flashLightOFF(Shader& shader);
 
 private:
+	//flashlight cookie texture
+	Texture* lighttexure;
 	GLfloat red = 255.0f / 255.0f;
 	GLfloat green = 255.0f / 255.0f;
 	GLfloat blue = 255.0f / 255.0f;

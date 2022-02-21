@@ -5,6 +5,7 @@
 #include<vector>
 
 #include"Shader.h"
+#include"LightCube.h"
 
 
 class WallLight
@@ -14,9 +15,11 @@ public:
 	WallLight(std::vector<glm::vec3> wallLights, GLuint wallLightsCount);
 	//void Apply(/*Shader& LightingShader,*/ GLuint positionLocation);
 	void Draw(Shader& shader);
+	void DrawLightCubes(glm::mat4 projection,glm::mat4 view);
 	~WallLight();
 private:
 	//std::vector<LightCube> cubes;
+	Shader lightingCubeShader;
 	std::vector<glm::vec3> wallLights;
 	GLuint wallLightsCount;
 

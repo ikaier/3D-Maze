@@ -11,6 +11,8 @@ FlashLight::FlashLight(glm::vec3 flashPos, glm::vec3 flashDir)
 {
 	flashShadowMap = new FlashLightShadowMap();
 	flashShadowMap->Init(1024, 1024);
+	lighttexure = new Texture("Textures/fl.jpg");
+	lighttexure->LoadTexture();
 	this->flashPos = flashPos;
 	this->flashDir = flashDir;
 }
@@ -28,6 +30,9 @@ void FlashLight::SetFlashLight(glm::vec3 flashPos, glm::vec3 flashDir)
 
 void FlashLight::applyFlash(Shader& shader)
 {
+	shader.setInt("lightTexture", 3);
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, lighttexure->GetTextureID());
 	shader.setFloat("spotLight.base.base.ambientIntensity", ambientIntensity);
 	shader.setFloat("spotLight.base.base.diffuseIntensity", diffuseIntensity);
 	shader.setFloat("spotLight.base.base.constant", constant);
@@ -36,7 +41,6 @@ void FlashLight::applyFlash(Shader& shader)
 	shader.setvec3("spotLight.base.base.color", glm::vec3(red, green, blue));
 	shader.setvec3("spotLight.base.position", flashPos);
 	shader.setvec3("spotLight.spotdirection", flashDir);
-	//printf("%f,%f,%f\n", getCameraDirection().x, getCameraDirection().y, getCameraDirection().z);
 	shader.setFloat("spotLight.edge", edge);
 }
 

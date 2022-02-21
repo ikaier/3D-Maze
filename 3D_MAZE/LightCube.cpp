@@ -27,8 +27,7 @@ LightCube::LightCube()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-LightCube::LightCube(GLfloat xLightPos, GLfloat yLightPos, GLfloat zLightPos,
-	GLfloat red, GLfloat green, GLfloat blue):LightCube()
+LightCube::LightCube(GLfloat xLightPos, GLfloat yLightPos, GLfloat zLightPos):LightCube()
 {
 	this->xLightPos = xLightPos;
 	this->yLightPos = yLightPos;

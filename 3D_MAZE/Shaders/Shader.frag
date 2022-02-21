@@ -85,8 +85,9 @@ vec4 CalcLightByDirection(LightCommon light,vec3 direction){
 			specularColor=vec4(light.color*material.specularIntensity*specularFactor,1.0f);
 		}
 	}
-	float shadow=FlashShadowCalculation(FragPosLightSpace);
-	return (ambientColor + (1.0-shadow)*(diffuseColor+specularColor)); //+specularColor
+	//float shadow=FlashShadowCalculation(FragPosLightSpace);
+	//return (ambientColor + (1.0-shadow)*(diffuseColor+specularColor)); 
+	return (ambientColor + (1.0)*(diffuseColor+specularColor)); //+specularColor
 }
 
 vec4 CalcPointLight(pointLight pLight)
