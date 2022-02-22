@@ -15,8 +15,8 @@ Wall::Wall()
 }
 Wall::Wall(std::vector<glm::vec3> walls, GLuint WallCount,GLfloat gridSize):Wall()
 {
-	obj = new Mesh();
-	obj->CreateMesh(WallVertices, WallIndices, 192, 36);
+	obj = Mesh();
+	obj.CreateMesh(WallVertices, WallIndices, 192, 36);
 	texture = new Texture("Textures/wall.bmp");
 	texture->LoadTexture();
 	this->WallCount = WallCount;
@@ -24,6 +24,7 @@ Wall::Wall(std::vector<glm::vec3> walls, GLuint WallCount,GLfloat gridSize):Wall
 	this->gridSize = gridSize;
 
 	Scale(gridSize, gridSize*3/5, 1.0f);
+	Set();
 	/*for (size_t i = 0; i < xNum; i++) {
 		this->xWallPos.push_back( xWallPos[i]);
 	}
@@ -46,20 +47,18 @@ void Wall::Scale(GLfloat scaleX, GLfloat scaleY, GLfloat scaleZ)
 	ScaleModel = glm::scale(ScaleModel, glm::vec3(scaleX, scaleY, scaleZ));
 }
 
-void Wall::Draw(GLuint uniformLocation)
+void Wall::Set()
 {
-	
+	modelMatrics.clear();
 	//printf(" %f ", gridSize);
 	assert(gridSize > 0);
 	SetTexture();
 	if (WallCount == 0) {
-		modelMatrics = new glm::mat4[1];
-		SetModel(0);
-		SendModel(uniformLocation, 1);
+		SetModel();
+		SendModel();
 	}
 	else {
 		count = 0;
-		modelMatrics = new glm::mat4[WallCount];
 		for (size_t i = 0; i < WallCount; i = i + 1) {
 			//printf("%f,%f\n", xWallPos[i], yWallPos[i]);	
 			TransModel = glm::mat4(1.0f);	
@@ -73,10 +72,10 @@ void Wall::Draw(GLuint uniformLocation)
 				RotateModel = glm::mat4(1.0f);
 			}
 			
-			SetModel(count);
+			SetModel();
 			count++;
 		}
-		SendModel(uniformLocation, count);
+		SendModel();
 		
 	}
 }
@@ -86,20 +85,26 @@ void Wall::SetTexture()
 	texture->UseTexture();
 }
 
-void Wall ::SetModel(GLuint count)
+void Wall::Draw()
+{
+	SetTexture();
+	obj.RenderMesh(count);
+}
+
+void Wall ::SetModel()
 {
 	glm::mat4 modelMatrix = TransModel * RotateModel * ScaleModel;
-	modelMatrics[count] = modelMatrix;
+	modelMatrics.push_back(modelMatrix);
 	//glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(modelMatrix));
 }
-void Wall::SendModel(GLuint uniformLocation, GLuint count)
+void Wall::SendModel()
 {
 	unsigned int buffer;
 	glGenBuffers(1, &buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, buffer);
 	glBufferData(GL_ARRAY_BUFFER, count * sizeof(glm::mat4), &modelMatrics[0], GL_STATIC_DRAW);
 
-	unsigned int VAO = obj->GetVAO();
+	unsigned int VAO = obj.GetVAO();
 	glBindVertexArray(VAO);
 	// vertex attributes
 	std::size_t vec4Size = sizeof(glm::vec4);
@@ -118,10 +123,9 @@ void Wall::SendModel(GLuint uniformLocation, GLuint count)
 	glVertexAttribDivisor(6, 1);
 
 	glBindVertexArray(0);
-	obj->RenderMesh(count);
 	
 }
 Wall::~Wall()
 {
-    
+	
 }

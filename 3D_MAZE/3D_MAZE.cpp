@@ -53,11 +53,11 @@ bool lPressed = false;
 void RenderScene(const Shader &shader) {
     //render floor
     floorMaterial.UseMaterial(shader);
-    mazeFloor.Draw(shader.GetTransformLocation());
+    mazeFloor.Draw();
 
     //render wall
     wallMaterial.UseMaterial(shader);
-    mazeWall.Draw(shader.GetTransformLocation());
+    mazeWall.Draw();
 
 }
 
@@ -86,6 +86,7 @@ int main()
     flashLight = FlashLight(camera.getCameraPosition(), camera.getCameraDirection());
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 100.0f);
     GLfloat i = 0;
+
 
     while (!mainWindow.getShouldClose())
 	{
@@ -122,7 +123,6 @@ int main()
         mainShader.setMat4("view", camera.getViewMatrix());
         mainShader.setvec3("viewPos", camera.getCameraPosition());
         mainShader.setvec2("viewPort", glm::vec2(mainWindow.getBufferWidth(), mainWindow.getBufferHeight()));
-       
         if (!lPressed && mainWindow.getsKeys()[4]){
             flashIsOn = !flashIsOn;
         }

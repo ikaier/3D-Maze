@@ -16,9 +16,9 @@ Floor::Floor()
 
 Floor::Floor(GLuint xNum, GLuint yNum,GLfloat gridSize):Floor()
 {
-	obj = new Mesh();
+	obj = Mesh();
 
-	obj->CreateMesh(Floorvertices, Floorindices, 32, 6);
+	obj.CreateMesh(Floorvertices, Floorindices, 32, 6);
 	texture = new Texture("Textures/floor.bmp");
 
 	texture->LoadTexture();
@@ -26,7 +26,7 @@ Floor::Floor(GLuint xNum, GLuint yNum,GLfloat gridSize):Floor()
 	this->yNum = yNum;
 	this->gridSize = gridSize;
 	Scale(gridSize, 1.0f, gridSize);
-
+	Set();
 }
 
 
@@ -47,57 +47,66 @@ void Floor::Scale(GLfloat scaleX, GLfloat scaleY, GLfloat scaleZ)
 	ScaleModel = glm::scale(ScaleModel, glm::vec3(scaleX, scaleY, scaleZ));
 }
 
-void Floor::Draw(GLuint uniformLocation)
+void Floor::Set()
 {
-	SetTexture();
+
 	//single floor grid
 	if (xNum == 0 && yNum == 0) {
-		modelMatrics = new glm::mat4[1];
-		SetModel(0);
-		SendModel(uniformLocation,1);
+		modelMatrics.clear();
+		//modelMatrics = new glm::mat4[1];
+		SetModel();
+		SendModel();
 		
 
 	}
 	else {
 		//map
 		count = 0;
-		modelMatrics = new glm::mat4[xNum * yNum];
+		//modelMatrics = new glm::mat4[xNum * yNum];
+		modelMatrics.clear();
 		for (GLfloat x = 0.0f; x < xNum; x = x + 1.0f) {
 			for (GLfloat y = 0.0f; y < yNum; y = y + 1.0f) {
 				TransModel = glm::mat4(1.0f);
 				Translate(x * gridSize, 0, -y * gridSize);
-				SetModel(count);
+				SetModel();
 				count++;
 				//
 			}
 		}
 		
-		SendModel(uniformLocation,count);
+		SendModel();
 	}
+}
+
+void Floor::Draw()
+{
+	SetTexture();
+	obj.RenderMesh(count);
 }
 
 
 void Floor::SetTexture()
 {
+
 	texture->UseTexture();
 }
 
-void Floor::SetModel(GLuint count)
+void Floor::SetModel()
 {
 	glm::mat4 RotatMatix = glm::toMat4(quaternion);
 	glm::mat4 modelMatrix = TransModel * RotatMatix * ScaleModel;
-	modelMatrics[count] = modelMatrix;
+	modelMatrics.push_back( modelMatrix);
 	//glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(modelMatrix));
 }
 
-void Floor::SendModel(GLuint uniformLocation, GLuint count)
+void Floor::SendModel()
 {
 	unsigned int buffer;
 	glGenBuffers(1, &buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, buffer);
 	glBufferData(GL_ARRAY_BUFFER, count * sizeof(glm::mat4), &modelMatrics[0], GL_STATIC_DRAW);
 
-	unsigned int VAO = obj->GetVAO();
+	unsigned int VAO = obj.GetVAO();
 		glBindVertexArray(VAO);
 		// vertex attributes
 		std::size_t vec4Size = sizeof(glm::vec4);
@@ -116,12 +125,10 @@ void Floor::SendModel(GLuint uniformLocation, GLuint count)
 		glVertexAttribDivisor(6, 1);
 
 		glBindVertexArray(0);	
-		obj->RenderMesh(count);
-
 }
 
 
 Floor::~Floor()
 {
-	//delete texture;
+	
 }

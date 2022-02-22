@@ -13,6 +13,11 @@ WallLight::WallLight(std::vector<glm::vec3> wallLights, GLuint wallLightsCount)
 	//	cubes.push_back(tempCube);
 	//}
 	lightingCubeShader.CreateFromFiles("Shaders/Lightingshader.vert", "Shaders/Lightingshader.frag");
+	for (size_t i = 0; i < wallLightsCount; i++) {
+		LightCube tempcube = LightCube(wallLights[i].x, wallLights[i].y, wallLights[i].z);
+		tempcube.Draw(lightingCubeShader.GetTransformLocation());
+		lightCubes.push_back(tempcube);
+	}
 }
 
 //void WallLight::Apply(/*Shader& LightingShader,*/ GLuint positionLocation)
@@ -61,8 +66,7 @@ void WallLight::DrawLightCubes(glm::mat4 projection, glm::mat4 view)
 	lightingCubeShader.setMat4("view", view);
 	lightingCubeShader.setvec4("Color", glm::vec4(red + (1 - red) * 0.3f, green + (1 - green) * 0.3f, blue + (1 - blue) * 0.3f, 0.8f));
 	for (size_t i = 0; i < wallLightsCount; i++) {
-		LightCube tempcube = LightCube(wallLights[i].x, wallLights[i].y, wallLights[i].z);
-		tempcube.Draw(lightingCubeShader.GetTransformLocation());
+		lightCubes[i].Draw(lightingCubeShader.GetTransformLocation());
 	}
 	glUseProgram(0);
 }

@@ -21,6 +21,7 @@ private:
 	//std::vector<LightCube> cubes;
 	Shader lightingCubeShader;
 	std::vector<glm::vec3> wallLights;
+	std::vector<LightCube>lightCubes;
 	GLuint wallLightsCount;
 
 	//Wall light property

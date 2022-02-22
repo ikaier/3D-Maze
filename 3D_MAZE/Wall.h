@@ -20,7 +20,8 @@ public:
     void Rotate(float yAngle);
     void Translate(GLfloat transX, GLfloat transY, GLfloat transZ);
     void Scale(GLfloat scaleX, GLfloat scaleY, GLfloat scaleZ);
-    void Draw(GLuint uniformLocation);
+    void Draw();
+    void Set();
 
     ~Wall();
 private:
@@ -91,14 +92,14 @@ private:
         1.0f,1.0f,0.01f,     2.0f,0.02f,   0.0f,1.0f,0.0f,                // 22
         0.0f,1.0f,0.01f,    0.0f,0.02f,   0.0f,1.0f,0.0f                 //23
     };
-    Mesh* obj;
+    Mesh obj;
     Texture* texture;
-    glm::mat4* modelMatrics;
+    std::vector<glm::mat4>modelMatrics;
     glm::mat4 RotateModel;
     glm::mat4 TransModel;
     glm::mat4 ScaleModel;
     void SetTexture();
-    void SetModel(GLuint count);
-    void SendModel(GLuint uniformLocation, GLuint count);
+    void SetModel();
+    void SendModel();
 };
 

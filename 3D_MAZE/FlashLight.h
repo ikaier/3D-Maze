@@ -16,7 +16,7 @@ public:
 	FlashLightShadowMap* GetShadowMap() { return flashShadowMap; };
 	void applyFlash(Shader& shader);
 	void flashLightOFF(Shader& shader);
-
+	 ~FlashLight();
 private:
 	//flashlight cookie texture
 	Texture* lighttexure;

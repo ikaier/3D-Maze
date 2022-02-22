@@ -9,8 +9,8 @@ FlashLight::FlashLight()
 
 FlashLight::FlashLight(glm::vec3 flashPos, glm::vec3 flashDir)
 {
-	flashShadowMap = new FlashLightShadowMap();
-	flashShadowMap->Init(1024, 1024);
+	//flashShadowMap = new FlashLightShadowMap();
+	//flashShadowMap->Init(1024, 1024);
 	lighttexure = new Texture("Textures/fl.jpg");
 	lighttexure->LoadTexture();
 	this->flashPos = flashPos;
@@ -48,4 +48,9 @@ void FlashLight::flashLightOFF(Shader& shader)
 {
 	shader.setvec3("spotLight.base.base.color", glm::vec3(0.0f, 0.0f, 0.0f));
 
+}
+
+FlashLight::~FlashLight()
+{
+	
 }
