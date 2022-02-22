@@ -5,6 +5,7 @@ out vec4 FragColor;
 in vec2 TexCoord;
 in vec3 Normal;
 in vec3 FragPos;
+in vec4 FragPosLightSpace;
 
 const int MAX_POINT_LIGHTS=100;
 uniform vec2 viewPort;
@@ -39,12 +40,33 @@ struct Material{
 uniform int pointLightCount;
 uniform sampler2D ourTexture;
 uniform sampler2D lightTexture;
+uniform sampler2D flashShadowMap;
 
 uniform pointLight pointLights[MAX_POINT_LIGHTS];
 uniform SpotLight spotLight;
 uniform Material material;
 
 uniform vec3 viewPos;
+
+float FlashShadowCalculation(vec4 fragPosLightSpace)
+{
+	//perspective divide
+	vec3 projCoords=fragPosLightSpace.xyz/fragPosLightSpace.w;
+	
+	//transform to [1,0] range
+	projCoords=projCoords*0.5+0.5;
+	
+	//get closest depth value from light's perspective
+	float closestDepth=texture(flashShadowMap,projCoords.xy).r;
+	
+	//get depth of current fragment from light's perspective
+	float currentDepth=projCoords.z;
+	
+	//compare
+	float shadow=currentDepth>closestDepth ? 1.0 : 0.0;
+	
+	return shadow;
+}
 
 vec4 CalcLightByDirection(LightCommon light,vec3 direction){
 	vec4 ambientColor = vec4 (light.color, 1.0f ) * light.ambientIntensity;
@@ -63,7 +85,9 @@ vec4 CalcLightByDirection(LightCommon light,vec3 direction){
 			specularColor=vec4(light.color*material.specularIntensity*specularFactor,1.0f);
 		}
 	}
-	return (ambientColor +diffuseColor+specularColor ); //+specularColor
+	//float shadow=FlashShadowCalculation(FragPosLightSpace);
+	//return (ambientColor + (1.0-shadow)*(diffuseColor+specularColor)); 
+	return (ambientColor + (1.0)*(diffuseColor+specularColor)); //+specularColor
 }
 
 vec4 CalcPointLight(pointLight pLight)
@@ -110,6 +134,8 @@ vec4 CalcSpotLights(){
 	return totalColor;
 }
 
+
+
 void main()
 {
 	
@@ -122,4 +148,9 @@ void main()
 	//gamma correction
 	float gamma = 2.2;
     FragColor.rgb = pow(FragColor.rgb, vec3(1.0/gamma));
+	
+	//shadow calculate
+	
+	
+	
 }

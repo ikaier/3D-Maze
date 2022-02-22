@@ -21,9 +21,8 @@ Camera::Camera(glm::vec3 startPosition, glm::vec3 cameraY,
 	//flash light
 	
 	update();
-	FlashLight flashLight = FlashLight(startPosition.x, startPosition.y, startPosition.z,
-		getCameraDirection().x, getCameraDirection().y, getCameraDirection().z);
 }
+
 
 glm::vec3 Camera::getCameraPosition()
 {
@@ -40,25 +39,10 @@ glm::mat4 Camera::getViewMatrix()
 	return glm::lookAt(position,position+front,up);
 }
 
-void Camera::applyFlashLight(Shader& shader)
-{
-	shader.setFloat("spotLight.base.base.ambientIntensity", ambientIntensity);
-	shader.setFloat("spotLight.base.base.diffuseIntensity", diffuseIntensity);
-	shader.setFloat("spotLight.base.base.constant", constant);
-	shader.setFloat("spotLight.base.base.linear", linear);
-	shader.setFloat("spotLight.base.base.exponent", exponent);
-	shader.setvec3("spotLight.base.base.color", glm::vec3(red, green, blue));
-	shader.setvec3("spotLight.base.position", getCameraPosition());
-	shader.setvec3("spotLight.spotdirection", getCameraDirection());
-	//printf("%f,%f,%f\n", getCameraDirection().x, getCameraDirection().y, getCameraDirection().z);
-	shader.setFloat("spotLight.edge", edge);
-}
 
-void Camera::flashLightOFF(Shader& shader)
-{
-	shader.setvec3("spotLight.base.base.color", glm::vec3(0.0f, 0.0f, 0.0f));
 
-}
+
+
 
 
 void Camera::keyControl(GLfloat* keys)
@@ -129,3 +113,5 @@ void Camera::update()
 
 	
 }
+
+

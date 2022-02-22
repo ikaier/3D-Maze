@@ -36,9 +36,6 @@
     <ClCompile Include="Floor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GenMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Wall.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -48,10 +45,16 @@
     <ClCompile Include="WallLight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Light.cpp">
+    <ClCompile Include="FlashLight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FlashLight.cpp">
+    <ClCompile Include="FlashLightShadowMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MazeMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -77,9 +80,6 @@
     <ClInclude Include="Floor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GenMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Wall.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -89,10 +89,16 @@
     <ClInclude Include="WallLight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Light.h">
+    <ClInclude Include="FlashLight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FlashLight.h">
+    <ClInclude Include="FlashLightShadowMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MazeMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

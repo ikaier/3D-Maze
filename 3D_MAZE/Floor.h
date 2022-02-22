@@ -23,7 +23,8 @@ public:
     void Rotate(float RotateX, float RotateY , float RotateZ);
     void Translate(GLfloat transX, GLfloat transY, GLfloat transZ);
     void Scale(GLfloat scaleX, GLfloat scaleY, GLfloat scaleZ);
-    void Draw(GLuint uniformLocation);
+    void Set();
+    void Draw();
     //void Render();
     
     ~Floor();
@@ -44,15 +45,17 @@ private:
         0.0f,       0.0f,   0.0f,       0.0f,   0.0f,   0.0f,   1.0f,  0.0f,
         0.0f,       0.0f,   -1.0f,      0.0f,   20.0,   0.0f,   1.0f,  0.0f,
     };
-    Mesh* obj;
+    Mesh obj;
     Texture* texture;
-    glm::mat4* modelMatrics;
+    std::vector<glm::mat4>modelMatrics;
+   
+    //glm::mat4* modelMatrics;
     GLuint xNum, yNum;
     glm::quat quaternion;
     glm::mat4 TransModel;
     glm::mat4 ScaleModel;
     void SetTexture();
-    void SetModel(GLuint count);
-    void SendModel(GLuint uniformLocation,GLuint count);
+    void SetModel();
+    void SendModel();
 };
 
