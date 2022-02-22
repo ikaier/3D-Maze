@@ -21,5 +21,5 @@ void main()
 	TexCoord = aTexCoord;
 	Normal = mat3(transpose(inverse(instanceMatrix)))*aNormal;
 	FragPos = vec3(instanceMatrix*vec4(aPos,1.0));
-	FragPosLightSpace=lightSpaceMatrix*vec4(vec3(instanceMatrix * vec4(aPos,1.0f)),1.0);
+	FragPosLightSpace=lightSpaceMatrix*vec4(FragPos,1.0);
 }

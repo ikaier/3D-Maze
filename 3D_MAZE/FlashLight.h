@@ -30,7 +30,7 @@ private:
 	GLfloat exponent = 0.32f;
 	GLfloat edge = glm::cos(glm::radians(14.5));
 
-	float near_plane = 1.0f, far_plane = 7.5f;
+	float near_plane = 0.1f, far_plane = 10.0f;
 	glm::mat4 lightProjection;
 	glm::mat4 lightView, lightSpaceMatrix;
 	glm::vec3 flashPos, flashDir;

@@ -61,9 +61,8 @@ float FlashShadowCalculation(vec4 fragPosLightSpace)
 	
 	//get depth of current fragment from light's perspective
 	float currentDepth=projCoords.z;
-	
 	//compare
-	float shadow=currentDepth>closestDepth ? 1.0 : 0.0;
+	float shadow = currentDepth > closestDepth  ? 1.0 : 0.0;
 	
 	return shadow;
 }
@@ -85,7 +84,7 @@ vec4 CalcLightByDirection(LightCommon light,vec3 direction){
 			specularColor=vec4(light.color*material.specularIntensity*specularFactor,1.0f);
 		}
 	}
-	//float shadow=FlashShadowCalculation(FragPosLightSpace);
+	
 	//return (ambientColor + (1.0-shadow)*(diffuseColor+specularColor)); 
 	return (ambientColor + (1.0)*(diffuseColor+specularColor)); //+specularColor
 }
@@ -129,7 +128,8 @@ vec4 CalcPointLights(){
 vec4 CalcSpotLights(){
 	vec4 totalColor=vec4(0,0,0,0);
 	vec2 fragCoord=gl_FragCoord.xy/viewPort*vec2(1.0,-1.0);
-	totalColor+=CalcSpotLight(spotLight)*texture(lightTexture,fragCoord);
+	float shadow=FlashShadowCalculation(FragPosLightSpace);
+	totalColor+=(1.0-shadow)*CalcSpotLight(spotLight);//*texture(lightTexture,fragCoord);
 	
 	return totalColor;
 }
