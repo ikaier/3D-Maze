@@ -137,8 +137,14 @@ int main()
 
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        flashLight.SetFlashLight(glm::vec3(1.0f,1.0f,0.0f), glm::vec3(0.0f, -1.0f, -1.0f));
-        //flashLight.SetFlashLight(camera.getCameraPosition(),camera.getCameraDirection());
+        //flashLight.SetFlashLight(glm::vec3(1.0f,1.0f,0.0f), glm::vec3(0.0f, -1.0f, -1.0f));
+        glm::vec3 position = camera.getCameraPosition();
+        position.y += 0.02f;
+        position.x += 0.02f;
+        glm::vec3 direction = camera.getCameraDirection();
+        direction.y += 0.01f;
+        direction.x += 0.01f;
+        flashLight.SetFlashLight(position, direction);
         /************************ render depth scene from light's perspective ***************************/
         
         flashShadowShader.UseShader();
@@ -164,13 +170,12 @@ int main()
         }
 
         lPressed = mainWindow.getsKeys()[4];
-        flashLight.applyFlash(mainShader);
-        /*if (flashIsOn) {
+        if (flashIsOn) {
             flashLight.applyFlash(mainShader);
         }
         else {
             flashLight.flashLightOFF(mainShader);
-        }*/
+        }
 
         mazeWallLight.Draw(mainShader);
         flashLight.GetShadowMap()->Read(GL_TEXTURE2);
@@ -183,14 +188,14 @@ int main()
         mazeWallLight.DrawLightCubes(projection, camera.getViewMatrix());
 
 
-        /***************************** render light view********************************/
-        glViewport(0, 0, 1920, 1080);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        debugDepthQuad.UseShader();
-        debugDepthQuad.setFloat("near_plane", 0.1f);
-        debugDepthQuad.setFloat("far_plane", 10.0f);
-        flashLight.GetShadowMap()->Read(GL_TEXTURE0);
-        renderQuad();
+        /***************************** render light view for Testing ********************************/
+        //glViewport(0, 0, 1920, 1080);
+        //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        //debugDepthQuad.UseShader();
+        //debugDepthQuad.setFloat("near_plane", 0.1f);
+        //debugDepthQuad.setFloat("far_plane", 10.0f);
+        //flashLight.GetShadowMap()->Read(GL_TEXTURE0);
+        //renderQuad();
 
         //glUseProgram(0);
 
