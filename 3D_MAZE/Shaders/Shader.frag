@@ -151,7 +151,7 @@ vec4 CalcSpotLight(SpotLight sLight,float shadowFactor){
 float WallLightShadowCal(pointLight plight,int sIndex)
 {
 	if(sIndex>ShadowPointLightCount){
-		return 1.0;
+		return 0.0;
 	}
 	vec3 fragToLight=FragPos-plight.position;
 	

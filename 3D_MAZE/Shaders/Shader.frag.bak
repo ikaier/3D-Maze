@@ -158,7 +158,7 @@ float WallLightShadowCal(pointLight plight,int sIndex)
 	
 	float currentDepth=length(fragToLight);
 	float shadow=0.0;
-	float bias=0.001;
+	float bias=0.005;
 	int samples=20;
 	
 	float viewDistance=length(viewPos-FragPos);

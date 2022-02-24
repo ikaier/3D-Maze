@@ -96,9 +96,9 @@ GLfloat WallLight::squareDistance(glm::vec3 wallLight)
 
 void WallLight::Draw(Shader& shader)
 {
-	if (wallLightsCount > MAX_POINT_LIGHTS) wallLightsCount = MAX_POINT_LIGHTS;
-	shader.setInt("pointLightCount", wallLightsCount);
-	for (size_t i = 0; i < wallLightsCount; i++) {
+	if (SetWLShadowNumber > MAX_POINT_LIGHTS) SetWLShadowNumber = MAX_POINT_LIGHTS;
+	shader.setInt("pointLightCount", SetWLShadowNumber);
+	for (size_t i = 0; i < SetWLShadowNumber; i++) {
 		//cubes[i].Draw(uniformLocation);
 		char locBuff[100] = { '\0' };
 

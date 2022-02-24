@@ -45,7 +45,7 @@ Material floorMaterial;
 GLuint mazeWidth=10, mazeHeight=10;
 GLfloat gridSize=0.8f;
 
-GLuint WLShadowNumber = 3;
+GLuint workingLightsNumber = 10;
 Camera camera;
 
 GLfloat omniShadowNearPlane = 0.01f;
@@ -144,7 +144,7 @@ int main()
     mazeMap = MazeMap(mazeWidth, mazeHeight, 0.8f);
     mazeFloor = Floor(mazeWidth, mazeHeight, gridSize);
     mazeWall = Wall(mazeMap.GetWalls(),mazeMap.GetWallCount(), gridSize);
-    mazeWallLight = WallLight(mazeMap.GetWallLights(), mazeMap.GetWallLightCount(), WLShadowNumber);
+    mazeWallLight = WallLight(mazeMap.GetWallLights(), mazeMap.GetWallLightCount(), workingLightsNumber);
     wallMaterial = Material(0.3f, 3.0f);
     floorMaterial = Material(0.8f, 256.0f);
     camera = Camera(glm::vec3(1.0f, 1.0f, 0.0f), glm::vec3(0.0f, -1.0f, -1.0f),
