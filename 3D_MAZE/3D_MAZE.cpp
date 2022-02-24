@@ -45,7 +45,7 @@ Material floorMaterial;
 GLuint mazeWidth=10, mazeHeight=10;
 GLfloat gridSize=0.8f;
 
-GLuint WLShadowNumber = 1;
+GLuint WLShadowNumber = 3;
 Camera camera;
 
 GLfloat omniShadowNearPlane = 0.01f;

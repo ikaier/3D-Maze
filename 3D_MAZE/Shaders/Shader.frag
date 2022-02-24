@@ -56,6 +56,15 @@ uniform Material material;
 
 uniform vec3 viewPos;
 
+vec3 sampleOffsetDirections[20]=vec3[]
+(
+	vec3( 1, 1, 1), vec3( 1, -1, 1), vec3(-1, -1, 1), vec3(-1, 1, 1),
+	vec3( 1, 1, -1), vec3( 1, -1, -1), vec3(-1, -1, -1), vec3(-1, 1, -1),
+	vec3( 1, 1, 0), vec3( 1, -1, 0), vec3(-1, -1, 0), vec3(-1, 1, 0),
+	vec3( 1, 0, 1), vec3( -1, 0, 1), vec3(1, 0, -1), vec3(-1, 0, -1),
+	vec3( 0, 1, 1), vec3( 0, -1, 1), vec3(0, -1, -1), vec3(0, 1, -1)
+);
+
 float FlashShadowCalculation(vec4 fragPosLightSpace)
 {
 	//perspective divide
@@ -145,12 +154,26 @@ float WallLightShadowCal(pointLight plight,int sIndex)
 		return 1.0;
 	}
 	vec3 fragToLight=FragPos-plight.position;
-	float closestDepth=texture(omniShadowMaps[sIndex].shadowMap,fragToLight).r;
-	closestDepth *= omniShadowMaps[sIndex].farPlane;
+	
 	
 	float currentDepth=length(fragToLight);
-	float bais=0.0001;
-	float shadow=currentDepth-bais>closestDepth?1.0:0.0;
+	float shadow=0.0;
+	float bias=0.005;
+	int samples=20;
+	
+	float viewDistance=length(viewPos-FragPos);
+	float diskRadius=(1.0+(viewDistance/omniShadowMaps[sIndex].farPlane))/1000.0;
+	
+	for(int i=0;i<samples;i++){
+		float closestDepth = texture(omniShadowMaps[sIndex].shadowMap,fragToLight+sampleOffsetDirections[i]*diskRadius).r;
+				closestDepth *= omniShadowMaps[sIndex].farPlane;
+				if(currentDepth - bias > closestDepth){
+					shadow+=1.0;
+				}
+	}
+
+	
+	shadow /=float(samples);
 	return shadow;
 	
 }
