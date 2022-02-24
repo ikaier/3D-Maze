@@ -5,8 +5,8 @@ WallLight::WallLight()
 	wallLightsCount = 0;
 }
 
-WallLight::WallLight(std::vector<glm::vec3> wallLights, GLuint wallLightsCount)
-	:wallLights(wallLights), wallLightsCount(wallLightsCount)
+WallLight::WallLight(std::vector<glm::vec3> wallLights, GLuint wallLightsCount, GLuint SetWLShadowNumber)
+	:wallLights(wallLights), wallLightsCount(wallLightsCount), SetWLShadowNumber(SetWLShadowNumber)
 {
 	//for (size_t i = 0; i < wallLightsCount; i++) {
 	//	LightCube tempCube = LightCube(wallLights[i].x, wallLights[i].y, wallLights[i].z, 246.0f / 255.0f, 228.0f / 255.0f, 188.0f / 255.0f);
@@ -18,14 +18,81 @@ WallLight::WallLight(std::vector<glm::vec3> wallLights, GLuint wallLightsCount)
 		tempcube.Draw(lightingCubeShader.GetTransformLocation());
 		lightCubes.push_back(tempcube);
 	}
+	if (wallLightsCount < SetWLShadowNumber)
+	{
+		SetWLShadowNumber = wallLightsCount;
+	}
+	for (size_t i = 0; i < SetWLShadowNumber; i++) {
+		OmniShadowMap* temp = new OmniShadowMap();
+		temp->Init(1024, 1024);
+		wallLightsWithShadows.push_back(*temp);
+	}
 }
 
-//void WallLight::Apply(/*Shader& LightingShader,*/ GLuint positionLocation)
-//{
-//	glUniform3f(positionLocation, xLightPos, yLightPos, zLightPos);
-//
-//}
 
+std::vector<glm::vec3> WallLight::GetWLShadow(glm::vec3 cameraPosition)
+{
+	this->cameraPosition = cameraPosition;
+	wallLights = quickSelect(wallLights);
+
+	//std::vector<GLfloat> list;
+	//for (size_t i = 0; i < wallLightsCount; i++) {
+	//	list.push_back(squareDistance(wallLights[i]));
+	//	printf("%f, ", squareDistance(wallLights[i]));
+	//}
+	//printf("\n");
+	
+
+	return wallLights;
+}
+std::vector<glm::vec3> WallLight::quickSelect(std::vector<glm::vec3>& wallLights)
+{
+	GLuint left = 0;
+	GLuint right = wallLightsCount - 1;
+	GLuint pivotIndex = wallLightsCount;
+	while (pivotIndex != SetWLShadowNumber) {
+		pivotIndex = partition(wallLights, left, right);//problem here 
+		//printf("%d\n", pivotIndex);
+		if (pivotIndex < SetWLShadowNumber) {
+			left = pivotIndex;
+		}
+		else {
+			right = pivotIndex - 1;
+		}
+	}
+	return wallLights;
+}
+
+GLuint WallLight::partition(std::vector<glm::vec3>& wallLights, GLuint left, GLuint right)
+{
+	GLuint pivot = choosePivot(left, right);
+	GLfloat pivotDistance = squareDistance(wallLights[pivot]);
+	while (left < right) {
+		//printf("%d,%d\n", left,right);
+		if (squareDistance(wallLights[left]) >= pivotDistance) {
+			std::swap(wallLights[left], wallLights[right]);
+
+			right--;
+		}
+		else {
+			left++;
+		}
+	}
+	if (squareDistance(wallLights[left]) < pivotDistance) {
+		left++;
+	}
+	return left;
+}
+
+GLuint WallLight::choosePivot(GLuint left, GLuint right)
+{
+	return left + (right - left) / 2;
+}
+
+GLfloat WallLight::squareDistance(glm::vec3 wallLight)
+{
+	return glm::pow(wallLight.x - cameraPosition.x,2) + glm::pow(wallLight.z - cameraPosition.z,2);
+}
 
 void WallLight::Draw(Shader& shader)
 {

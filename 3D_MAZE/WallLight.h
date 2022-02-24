@@ -6,20 +6,27 @@
 
 #include"Shader.h"
 #include"LightCube.h"
+#include"OmniShadowMap.h"
 
 
 class WallLight
 {
 public:
 	WallLight();
-	WallLight(std::vector<glm::vec3> wallLights, GLuint wallLightsCount);
+	WallLight(std::vector<glm::vec3> wallLights, GLuint wallLightsCount, GLuint SetWLShadowNumber);
+	std::vector<glm::vec3> GetWLShadow(glm::vec3 cameraPosition);
+	
+	GLuint GetSetWLShadowNumber() { return SetWLShadowNumber; };
+	std::vector<OmniShadowMap> GetShadowMap() { return wallLightsWithShadows; };
 	//void Apply(/*Shader& LightingShader,*/ GLuint positionLocation);
 	void Draw(Shader& shader);
 	void DrawLightCubes(glm::mat4 projection,glm::mat4 view);
-	void SetShadow();
 	~WallLight();
 private:
 	//std::vector<LightCube> cubes;
+	GLuint SetWLShadowNumber;
+	std::vector<OmniShadowMap> wallLightsWithShadows;
+	glm::vec3 cameraPosition;
 	Shader lightingCubeShader;
 	std::vector<glm::vec3> wallLights;
 	std::vector<LightCube>lightCubes;
@@ -36,5 +43,9 @@ private:
 	GLfloat linear = 0.35f;
 	GLfloat exponent = 1.8f;
 		
+	std::vector<glm::vec3> quickSelect(std::vector<glm::vec3>& wallLights);
+	GLuint partition(std::vector<glm::vec3>& wallLights, GLuint left, GLuint right);
+	GLuint choosePivot(GLuint left, GLuint right);
+	GLfloat squareDistance(glm::vec3 wallLight);
 };
 

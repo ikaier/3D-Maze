@@ -142,14 +142,14 @@ vec4 CalcSpotLight(SpotLight sLight,float shadowFactor){
 float WallLightShadowCal(pointLight plight,int sIndex)
 {
 	if(sIndex>ShadowPointLightCount){
-		return 0.0;
+		return 1.0;
 	}
 	vec3 fragToLight=FragPos-plight.position;
 	float closestDepth=texture(omniShadowMaps[sIndex].shadowMap,fragToLight).r;
 	closestDepth *= omniShadowMaps[sIndex].farPlane;
 	
 	float currentDepth=length(fragToLight);
-	float bais=0.005;
+	float bais=0.0001;
 	float shadow=currentDepth-bais>closestDepth?1.0:0.0;
 	return shadow;
 	

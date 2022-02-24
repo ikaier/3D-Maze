@@ -29,7 +29,7 @@ private:
 	GLfloat linear = 0.09f;
 	GLfloat exponent = 0.32f;
 	GLfloat edge = glm::cos(glm::radians(14.5));
-
+	GLuint shadowWidth = 1024, shadowHeight = 1024;
 	float near_plane = 0.1f, far_plane = 10.0f;
 	glm::mat4 lightProjection;
 	glm::mat4 lightView, lightSpaceMatrix;
