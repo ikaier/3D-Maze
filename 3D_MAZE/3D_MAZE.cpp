@@ -23,12 +23,14 @@
 #include"WallLight.h"
 #include"MazeMap.h"
 #include"Material.h"
+#include"WallLightWithShadows.h"
 
 
 Window mainWindow;
 
 Shader mainShader;
 Shader flashShadowShader;
+Shader omniShadowShader;
 Shader debugDepthQuad;
 
 Floor mazeFloor;
@@ -36,18 +38,20 @@ Wall mazeWall;
 MazeMap mazeMap;
 WallLight mazeWallLight;
 FlashLight flashLight;
+WallLightWithShadows wallLightWithShadows;
 Material wallMaterial;
 Material floorMaterial;
 
 GLuint mazeWidth=10, mazeHeight=10;
 GLfloat gridSize=0.8f;
 
-
+GLuint WLShadowNumber = 10;
 Camera camera;
 
-
+GLfloat omniShadowFarPlane = 100.0f;
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
+
 
 bool flashIsOn = false;
 bool lPressed = false;
@@ -96,6 +100,35 @@ void renderQuad()
     glBindVertexArray(0);
 }
 
+void OmniShadowMapPass(glm::vec3 wallLight,OmniShadowMap omniShadowMap) {
+
+    glm::mat4 shadowProj = glm::perspective(glm::radians(90.0f), 1.0f, 1.0f, 25.0f);
+    std::vector<glm::mat4> shadowTransforms;
+    shadowTransforms.push_back(shadowProj * glm::lookAt(wallLight, wallLight + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+    shadowTransforms.push_back(shadowProj * glm::lookAt(wallLight, wallLight + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+    shadowTransforms.push_back(shadowProj * glm::lookAt(wallLight, wallLight + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
+    shadowTransforms.push_back(shadowProj * glm::lookAt(wallLight, wallLight + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f)));
+    shadowTransforms.push_back(shadowProj * glm::lookAt(wallLight, wallLight + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+    shadowTransforms.push_back(shadowProj * glm::lookAt(wallLight, wallLight + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f)));
+
+    glViewport(0, 0, omniShadowMap.GetShadowWidth(), omniShadowMap.GetShadowHeight());
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    omniShadowMap.Write();
+    glClear(GL_DEPTH_BUFFER_BIT);
+    omniShadowShader.UseShader();
+    
+    for (unsigned int i = 0; i < 6; ++i) {
+        omniShadowShader.setMat4("shadowMatrices[" + std::to_string(i) + "]", shadowTransforms[i]);
+    }
+    omniShadowShader.setFloat("far_plane", omniShadowFarPlane);
+    omniShadowShader.setvec3("lightPos", wallLight);
+    omniShadowShader.Validate();
+
+    RenderScene(omniShadowShader);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
 int main()
 {
     
@@ -106,7 +139,7 @@ int main()
     mainShader.CreateFromFiles("Shaders/shader.vert", "Shaders/shader.frag");
     flashShadowShader.CreateFromFiles("Shaders/FlashShadowShader.vert", "Shaders/FlashShadowShader.frag");
     debugDepthQuad.CreateFromFiles("Shaders/DebugShadowShader.vert", "Shaders/DebugShadowShader.frag");
-
+    omniShadowShader.CreateFromFiles("Shaders/OmniShadowShader.vert", "Shaders/OmniShadowShader.gs", "Shaders/OmniShadowShader.frag");
     mazeMap = MazeMap(10, 10, 0.8f);
     mazeFloor = Floor(mazeWidth, mazeHeight, gridSize);
     mazeWall = Wall(mazeMap.GetWalls(),mazeMap.GetWallCount(), gridSize);
@@ -115,11 +148,14 @@ int main()
     floorMaterial = Material(0.8f, 256.0f);
     camera = Camera(glm::vec3(1.0f, 1.0f, 0.0f), glm::vec3(0.0f, -1.0f, -1.0f),
         0.0f, 0.0f,0.0f, 5.0f, 0.5f);
-    //flashLight = FlashLight(camera.getCameraPosition(), camera.getCameraDirection());
-    flashLight = FlashLight(glm::vec3(0.0f,1.0f,1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+    flashLight = FlashLight(camera.getCameraPosition(), camera.getCameraDirection());
+    //flashLight = FlashLight(glm::vec3(0.0f,1.0f,1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+    wallLightWithShadows = WallLightWithShadows(mazeMap.GetWallLights(), mazeMap.GetWallLightCount(), WLShadowNumber);
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 100.0f);
-    GLfloat i = 0;
-
+    //GLfloat i = 0;
+    GLuint ShadowWallLightNumber = wallLightWithShadows.GetSetWLShadowNumber();
+    std::vector<glm::vec3> choosenWallLights = wallLightWithShadows.GetWLShadow(camera.getCameraPosition());
+    glm::vec3 lastPos = camera.getCameraPosition();
 
     while (!mainWindow.getShouldClose())
 	{
@@ -145,7 +181,7 @@ int main()
         direction.y += 0.01f;
         direction.x += 0.01f;
         flashLight.SetFlashLight(position, direction);
-        /************************ render depth scene from light's perspective ***************************/
+        /************************ render depth scene from flashlight's perspective ***************************/
         
         flashShadowShader.UseShader();
         flashShadowShader.setMat4("lightSpaceMatrix", flashLight.GetLightSpaceMatrix());
@@ -155,16 +191,33 @@ int main()
         glClear(GL_DEPTH_BUFFER_BIT);
         RenderScene(flashShadowShader);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        /************************** render depth scene from wallLights' perspective ***********************************/
+        
+        if (lastPos!=camera.getCameraPosition())
+        {
+            choosenWallLights = wallLightWithShadows.GetWLShadow(camera.getCameraPosition());
+            lastPos = camera.getCameraPosition();
+        }
+        
+        std::vector<OmniShadowMap> shaowmaps = wallLightWithShadows.GetShadowMap();
+        
+        for (size_t i = 0; i < ShadowWallLightNumber; i++) {
+            OmniShadowMapPass(choosenWallLights[i], shaowmaps[i]);
+        }
+        
+
+
 
         /************************** render normal scene using depth map ***********************************/
         glViewport(0, 0, 1920, 1080);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         mainShader.UseShader();
         mainShader.setMat4("projection", projection);
         mainShader.setMat4("view", camera.getViewMatrix());
         mainShader.setvec3("viewPos", camera.getCameraPosition());
-        mainShader.setvec2("viewPort", glm::vec2(mainWindow.getBufferWidth(), mainWindow.getBufferHeight()));
+        mainShader.setvec2("viewPort", glm::vec2(mainWindow.getBufferWidth(), mainWindow.getBufferHeight()));//mainWindow.getBufferWidth(), mainWindow.getBufferHeight()
         mainShader.setMat4("lightSpaceMatrix", flashLight.GetLightSpaceMatrix());
+
         if (!lPressed && mainWindow.getsKeys()[4]){
             flashIsOn = !flashIsOn;
         }
@@ -176,14 +229,23 @@ int main()
         else {
             flashLight.flashLightOFF(mainShader);
         }
-
+        
         mazeWallLight.Draw(mainShader);
+        
         flashLight.GetShadowMap()->Read(GL_TEXTURE2);
+        
         mainShader.setInt("flashShadowMap", 2);
+        mainShader.setInt("ourTexture", 1);
 
-        mainShader.setInt("ourTexture", 0);
+        for (size_t i = 0; i < ShadowWallLightNumber; i++) {
+            shaowmaps[i].Read(GL_TEXTURE0 + 4 + i);
+            mainShader.setInt("omniShadowMaps[" + std::to_string(i) + "].shadowMap", 4 + i);
+            mainShader.setFloat("omniShadowMaps[" + std::to_string(i) + "].farPlane", omniShadowFarPlane);
+            
+        }
+        
+        
         RenderScene(mainShader);
-
         /*************************** render light cubes **********************************************/
         mazeWallLight.DrawLightCubes(projection, camera.getViewMatrix());
 
@@ -198,7 +260,6 @@ int main()
         //renderQuad();
 
         //glUseProgram(0);
-
 
 
         mainWindow.swapBuffers();

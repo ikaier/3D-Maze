@@ -15,7 +15,8 @@ public:
 
 	void CreateFromString(const char* vertexCode, const char* fragmentCode);
 	void CreateFromFiles(const char* vertexLocation, const char* fragmentLocation);
-	
+	void CreateFromFiles(const char* vertexLocation, const char* geometryLocation, const char* fragmentLocation);
+
 	void Validate();
 	void UseShader();
 	void ClearShader();
@@ -38,6 +39,7 @@ private:
 	
 	std::string ReadFile(const char* fileLocation);
 	void CompileShader(const char* vertexCode, const char* fragmentCode);
+	void CompileShader(const char* vertexCode, const char* geometryCode, const char* fragmentCode);
 	GLuint AttachShader(GLuint theProgram, const char* shaderCode, GLenum shaderType);
 	void CompileProgram();
 

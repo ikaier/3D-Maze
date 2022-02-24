@@ -71,6 +71,8 @@ void WallLight::DrawLightCubes(glm::mat4 projection, glm::mat4 view)
 	glUseProgram(0);
 }
 
+
+
 WallLight::~WallLight()
 {
 }

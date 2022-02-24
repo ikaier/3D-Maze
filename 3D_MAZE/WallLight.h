@@ -16,6 +16,7 @@ public:
 	//void Apply(/*Shader& LightingShader,*/ GLuint positionLocation);
 	void Draw(Shader& shader);
 	void DrawLightCubes(glm::mat4 projection,glm::mat4 view);
+	void SetShadow();
 	~WallLight();
 private:
 	//std::vector<LightCube> cubes;
@@ -23,6 +24,7 @@ private:
 	std::vector<glm::vec3> wallLights;
 	std::vector<LightCube>lightCubes;
 	GLuint wallLightsCount;
+
 
 	//Wall light property
 	GLfloat red = 246.0f / 255.0f;

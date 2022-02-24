@@ -8,6 +8,8 @@ FlashLightShadowMap::FlashLightShadowMap()
 
 bool FlashLightShadowMap::Init(GLuint width, GLuint height)
 {
+	this->shadowHeight = height;
+	this->shadowWidth = width;
 	glGenFramebuffers(1, &FBO);
 	glGenTextures(1, &depthMap);
 	glBindTexture(GL_TEXTURE_2D, depthMap);
