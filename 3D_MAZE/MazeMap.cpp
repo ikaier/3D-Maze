@@ -144,7 +144,7 @@ void MazeMap::CreateWallLights()
 			int d = rand() % 100;
 			if (d < 25) {
 				if (map[x][y].bot) {
-					AddWallLights(x * gridSize + gridSize / 2, 0.2f, -y * gridSize - 0.02f);
+					AddWallLights(x * gridSize + gridSize / 2, 0.2f, -y * gridSize - 0.01f);
 				}
 				else if (map[x][y].right) {
 					AddWallLights((x + 1) * gridSize - 0.06f, 0.2f, -y * gridSize - gridSize / 2);
