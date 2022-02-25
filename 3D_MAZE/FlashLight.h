@@ -20,9 +20,9 @@ public:
 private:
 	//flashlight cookie texture
 	Texture* lighttexure;
-	GLfloat red = 255.0f / 255.0f;
-	GLfloat green = 255.0f / 255.0f;
-	GLfloat blue = 255.0f / 255.0f;
+	GLfloat red = 255.0f / 4;
+	GLfloat green = 255.0f / 4;
+	GLfloat blue = 255.0f /4;
 	GLfloat ambientIntensity = 0.2f;
 	GLfloat diffuseIntensity = 1.0f;
 	GLfloat constant = 1.0f;

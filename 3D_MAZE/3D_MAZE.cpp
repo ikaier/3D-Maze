@@ -24,6 +24,7 @@
 #include"MazeMap.h"
 #include"Material.h"
 #include"WallLightWithShadows.h"
+#include"HDRProcess.h"
 
 
 Window mainWindow;
@@ -32,13 +33,15 @@ Shader mainShader;
 Shader flashShadowShader;
 Shader omniShadowShader;
 Shader debugDepthQuad;
+Shader HDRShader;
+
+HDRProcess HDRframebuffer;
 
 Floor mazeFloor;
 Wall mazeWall;
 MazeMap mazeMap;
 WallLight mazeWallLight;
 FlashLight flashLight;
-//WallLightWithShadows wallLightWithShadows;
 Material wallMaterial;
 Material floorMaterial;
 
@@ -49,7 +52,7 @@ GLuint workingLightsNumber = 10;
 Camera camera;
 
 GLfloat omniShadowNearPlane = 0.01f;
-GLfloat omniShadowFarPlane = 100.0f;
+GLfloat omniShadowFarPlane = 20.0f;
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
 
@@ -80,8 +83,11 @@ void renderQuad()
     {
         float quadVertices[] = {
             // positions        // texture Coords
-            -1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
             -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+            -1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+             1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+
+             -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
              1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
              1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
         };
@@ -97,7 +103,7 @@ void renderQuad()
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     }
     glBindVertexArray(quadVAO);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
     glBindVertexArray(0);
 }
 
@@ -135,12 +141,14 @@ int main()
     
     mainWindow = Window(1920, 1080);
     mainWindow.Initialize();
-
+    HDRframebuffer.CreateHDR(1920, 1080);
     
     mainShader.CreateFromFiles("Shaders/shader.vert", "Shaders/shader.frag");
     flashShadowShader.CreateFromFiles("Shaders/FlashShadowShader.vert", "Shaders/FlashShadowShader.frag");
     debugDepthQuad.CreateFromFiles("Shaders/DebugShadowShader.vert", "Shaders/DebugShadowShader.frag");
     omniShadowShader.CreateFromFiles("Shaders/OmniShadowShader.vert", "Shaders/OmniShadowShader.gs", "Shaders/OmniShadowShader.frag");
+    HDRShader.CreateFromFiles("Shaders/HDRShader.vert", "Shaders/HDRShader.frag");
+
     mazeMap = MazeMap(mazeWidth, mazeHeight, 0.8f);
     mazeFloor = Floor(mazeWidth, mazeHeight, gridSize);
     mazeWall = Wall(mazeMap.GetWalls(),mazeMap.GetWallCount(), gridSize);
@@ -150,10 +158,9 @@ int main()
     camera = Camera(glm::vec3(1.0f, 1.0f, 0.0f), glm::vec3(0.0f, -1.0f, -1.0f),
         0.0f, 0.0f,0.0f, 5.0f, 0.5f);
     flashLight = FlashLight(camera.getCameraPosition(), camera.getCameraDirection());
+
     //flashLight = FlashLight(glm::vec3(0.0f,1.0f,1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-    //wallLightWithShadows = WallLightWithShadows(mazeMap.GetWallLights(), mazeMap.GetWallLightCount(), WLShadowNumber);
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 100.0f);
-    //GLfloat i = 0;
     GLuint ShadowWallLightNumber = mazeWallLight.GetSetWLShadowNumber();
     std::vector<glm::vec3> choosenWallLights = mazeWallLight.GetWLShadow(camera.getCameraPosition());
     glm::vec3 lastPos = camera.getCameraPosition();
@@ -212,7 +219,10 @@ int main()
 
         /************************** render normal scene using depth map ***********************************/
         glViewport(0, 0, 1920, 1080);
-        //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
+        HDRframebuffer.Write();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         mainShader.UseShader();
         mainShader.setMat4("projection", projection);
         mainShader.setMat4("view", camera.getViewMatrix());
@@ -248,18 +258,17 @@ int main()
         
         
         RenderScene(mainShader);
-        /*************************** render light cubes **********************************************/
+                /*************************** render light cubes **************************************/
         mazeWallLight.DrawLightCubes(projection, camera.getViewMatrix());
-
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         /***************************** render light view for Testing ********************************/
-        //glViewport(0, 0, 1920, 1080);
-        //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        //debugDepthQuad.UseShader();
-        //debugDepthQuad.setFloat("near_plane", 0.1f);
-        //debugDepthQuad.setFloat("far_plane", 10.0f);
-        //flashLight.GetShadowMap()->Read(GL_TEXTURE0);
-        //renderQuad();
+        glViewport(0, 0, 1920, 1080);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        HDRShader.UseShader();
+        HDRShader.setFloat("exposure", 0.1f);
+        HDRframebuffer.Read(GL_TEXTURE0);
+        renderQuad();
 
         glUseProgram(0);
 

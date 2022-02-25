@@ -162,7 +162,7 @@ float WallLightShadowCal(pointLight plight,int sIndex)
 	int samples=20;
 	
 	float viewDistance=length(viewPos-FragPos);
-	float diskRadius=(1.0+(viewDistance/omniShadowMaps[sIndex].farPlane))/1000.0;
+	float diskRadius=(1.0+(viewDistance/omniShadowMaps[sIndex].farPlane))/600.0;
 	
 	for(int i=0;i<samples;i++){
 		float closestDepth = texture(omniShadowMaps[sIndex].shadowMap,fragToLight+sampleOffsetDirections[i]*diskRadius).r;
@@ -211,6 +211,7 @@ void main()
 	//gamma correction
 	float gamma = 2.2;
     FragColor.rgb = pow(FragColor.rgb, vec3(1.0/gamma));
+	FragColor=vec4(vec3(FragColor),1.0);
 	//shadow calculate
 	
 	

@@ -34,14 +34,14 @@ private:
 
 
 	//Wall light property
-	GLfloat red = 246.0f / 255.0f;
-	GLfloat green = 228.0f / 255.0f;
-	GLfloat blue = 188.0f / 255.0f;
-	GLfloat ambientIntensity = 0.0f;
+	GLfloat red = 246.0f/2 ;
+	GLfloat green = 228.0f/2 ;
+	GLfloat blue = 188.0f/2 ;
+	GLfloat ambientIntensity = 0.01f;
 	GLfloat diffuseIntensity = 0.3f;
 	GLfloat constant = 1.0f;
-	GLfloat linear = 0.35f;
-	GLfloat exponent = 1.8f;
+	GLfloat linear = 0.8f;
+	GLfloat exponent = 6.4f;
 		
 	std::vector<glm::vec3> quickSelect(std::vector<glm::vec3>& wallLights);
 	GLuint partition(std::vector<glm::vec3>& wallLights, GLuint left, GLuint right);

@@ -156,6 +156,7 @@
     <ClCompile Include="FlashLight.cpp" />
     <ClCompile Include="FlashLightShadowMap.cpp" />
     <ClCompile Include="Floor.cpp" />
+    <ClCompile Include="HDRProcess.cpp" />
     <ClCompile Include="LightCube.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="MazeMap.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="FlashLight.h" />
     <ClInclude Include="FlashLightShadowMap.h" />
     <ClInclude Include="Floor.h" />
+    <ClInclude Include="HDRProcess.h" />
     <ClInclude Include="LightCube.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MazeMap.h" />
