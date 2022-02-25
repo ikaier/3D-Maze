@@ -7,11 +7,17 @@ class HDRProcess
 {
 public:
 	HDRProcess();
-	void CreateHDR(GLuint width, GLuint height);
-	void Write();
-	void Read(GLenum textureUnit);
+	void InitBloom(GLuint width, GLuint height);
+	void WriteFloatBuffer();
+	void ReadFloatBuffer(GLenum textureUnit, GLuint colorBufferIndex);
+	void WriteColorBuffer(GLuint colorIndex);
+	void ReadColorBuffer(GLenum textureUnit, GLuint colorBufferIndex);
 private:
-	GLuint hdrFBO, textureID,hdrRBODepth;
+	GLuint hdrFBO,hdrRBODepth;
 	GLuint width, height;
+	GLuint colorBufferIDs[2];
+	GLuint attachments[2];
+	GLuint pingpongFBO[2];
+	GLuint pingpongColorBIDS[2];
 };
 

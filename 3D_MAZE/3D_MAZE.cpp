@@ -34,6 +34,7 @@ Shader flashShadowShader;
 Shader omniShadowShader;
 Shader debugDepthQuad;
 Shader HDRShader;
+Shader BlurShader;
 
 HDRProcess HDRframebuffer;
 
@@ -141,13 +142,14 @@ int main()
     
     mainWindow = Window(1920, 1080);
     mainWindow.Initialize();
-    HDRframebuffer.CreateHDR(1920, 1080);
+    HDRframebuffer.InitBloom(1920, 1080);
     
     mainShader.CreateFromFiles("Shaders/shader.vert", "Shaders/shader.frag");
     flashShadowShader.CreateFromFiles("Shaders/FlashShadowShader.vert", "Shaders/FlashShadowShader.frag");
     debugDepthQuad.CreateFromFiles("Shaders/DebugShadowShader.vert", "Shaders/DebugShadowShader.frag");
     omniShadowShader.CreateFromFiles("Shaders/OmniShadowShader.vert", "Shaders/OmniShadowShader.gs", "Shaders/OmniShadowShader.frag");
     HDRShader.CreateFromFiles("Shaders/HDRShader.vert", "Shaders/HDRShader.frag");
+    BlurShader.CreateFromFiles("Shaders/BlurShader.vert", "Shaders/BlurShader.frag");
 
     mazeMap = MazeMap(mazeWidth, mazeHeight, 0.8f);
     mazeFloor = Floor(mazeWidth, mazeHeight, gridSize);
@@ -179,7 +181,7 @@ int main()
         camera.keyControl(mainWindow.getsKeys());
 
 
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         //flashLight.SetFlashLight(glm::vec3(1.0f,1.0f,0.0f), glm::vec3(0.0f, -1.0f, -1.0f));
         glm::vec3 position = camera.getCameraPosition();
@@ -220,7 +222,7 @@ int main()
         /************************** render normal scene using depth map ***********************************/
         glViewport(0, 0, 1920, 1080);
         
-        HDRframebuffer.Write();
+        HDRframebuffer.WriteFloatBuffer();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         mainShader.UseShader();
@@ -262,12 +264,37 @@ int main()
         mazeWallLight.DrawLightCubes(projection, camera.getViewMatrix());
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-        /***************************** render light view for Testing ********************************/
+        /***************************** Post Rendering Processing ********************************/
+        bool horizontal = true, firstIter = true;
+        GLuint blurTimes = 10;
+        BlurShader.UseShader();
+        //blur result of last blur with different orientation 10 times.
+        for (size_t i = 0; i < blurTimes; i++) {
+            HDRframebuffer.WriteColorBuffer(horizontal);
+            BlurShader.setInt("horizontal", horizontal);
+            if (firstIter) {
+                HDRframebuffer.ReadFloatBuffer(GL_TEXTURE0, 1);
+            }
+            else {
+                HDRframebuffer.ReadColorBuffer(GL_TEXTURE0, !horizontal);
+            }
+            renderQuad();
+            horizontal = !horizontal;
+            if (firstIter) {
+                firstIter = false;
+            }
+        }
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        //combine result and blured result
         glViewport(0, 0, 1920, 1080);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         HDRShader.UseShader();
-        HDRShader.setFloat("exposure", 0.1f);
-        HDRframebuffer.Read(GL_TEXTURE0);
+        HDRShader.setFloat("exposure", 0.5f);
+        HDRShader.setInt("scene", 0);
+        HDRShader.setInt("bloomBlur", 1);
+        HDRframebuffer.ReadFloatBuffer(GL_TEXTURE0,0);
+        HDRframebuffer.ReadColorBuffer(GL_TEXTURE1, !horizontal);
+        
         renderQuad();
 
         glUseProgram(0);
