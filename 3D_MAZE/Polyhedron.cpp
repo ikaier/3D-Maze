@@ -10,6 +10,7 @@ Polyhedron::Polyhedron()
     VAO = 0;
     VBO = 0;
 	VNO = 0;
+	Instancebuffer = 0;
 	gridSize = 0;
 }
 
@@ -31,7 +32,7 @@ Polyhedron::Polyhedron(std::vector<glm::vec3> polys, GLuint polysCount, GLfloat 
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
 	
 
-
+	glGenBuffers(1, &Instancebuffer);
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -96,9 +97,8 @@ void Polyhedron::SetModel()
 
 void Polyhedron::SendModel()
 {
-	unsigned int buffer;
-	glGenBuffers(1, &buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, buffer);
+	
+	glBindBuffer(GL_ARRAY_BUFFER, Instancebuffer);
 	glBufferData(GL_ARRAY_BUFFER, polysCount * sizeof(glm::mat4), &modelMatrics[0], GL_STATIC_DRAW);
 
 

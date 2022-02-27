@@ -41,14 +41,12 @@ glm::mat4 Camera::getViewMatrix()
 }
 
 
-glm::vec3 Camera::NextPos(GLfloat* keys)
+void Camera::keyControl(GLfloat* keys)
 {
-	glm::vec3 toTestCollion = glm::vec3(position);
-	toTestCollion += front * keys[0];
-	toTestCollion -= front * keys[1];
-	toTestCollion -= right * keys[2];
-	toTestCollion += right * keys[3];
-	return toTestCollion;
+	position += front * keys[0];
+	position -= front * keys[1];
+	position -= right * keys[2];
+	position += right * keys[3];
 }
 
 void Camera::mouseControl(GLfloat xChange, GLfloat yChange)
@@ -84,15 +82,15 @@ Camera::~Camera()
 {
 }
 
-void Camera::CollionRes(glm::vec3 adjust)
+void Camera::CollionRes(glm::vec2 adjust)
 {
 	
 	//assert(position.x > 0 && position.z < 0 && position.x<(GLfloat)xNum* gridSize&& position.z >(GLfloat)yNum * gridSize);
 	//0.14 0.66
 	//printf("%f,%f\n", fmod((fmod(position.x, gridSize) + gridSize), gridSize), fmod((fmod(-position.y, gridSize) + gridSize), gridSize));
-	position.x = adjust.x;
-	position.y = adjust.y;
-	position.z = adjust.z;
+	position.x += adjust.x;
+
+	position.z += adjust.y;
 	
 
 }

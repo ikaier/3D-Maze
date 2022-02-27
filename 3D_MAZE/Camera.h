@@ -27,13 +27,11 @@ public:
 	glm::vec3 getCameraDirection();
 	glm::mat4 getViewMatrix();
 
-
-
-	glm::vec3 NextPos(GLfloat* keys);
+	void keyControl(GLfloat* keys);
 	void mouseControl(GLfloat xChange, GLfloat yChange);
 	void flip(GLfloat deltaTime);
 
-	void CollionRes(glm::vec3 adjust);
+	void CollionRes(glm::vec2 adjust);
 
 	~Camera();
 

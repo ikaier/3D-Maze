@@ -186,11 +186,11 @@ int main()
         glfwPollEvents();
 		mainWindow.processInput(deltaTime);
         camera.mouseControl(mainWindow.getXchange(), mainWindow.getYchange());
-        glm::vec3 NextPos=camera.NextPos(mainWindow.getsKeys());
+        camera.keyControl(mainWindow.getsKeys());
 
         glm::vec3 position = camera.getCameraPosition();
-        glm::vec3 adjust=mazeMap.CollionDetection(NextPos);
-        printf("adjust is %f,%f,%f,\n", adjust.x, adjust.y, adjust.z);
+        glm::vec2 adjust=mazeMap.CollionDetection(position);
+        //printf("adjust is %f,%f,%f,\n", adjust.x, adjust.y, adjust.z);
         //printf("%f,%f\n", fmod((fmod(position.x, gridSize) + gridSize), gridSize), fmod((fmod(-position.z, gridSize) + gridSize), gridSize));
         camera.CollionRes(adjust);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

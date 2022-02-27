@@ -152,7 +152,7 @@ private:
 
     GLuint polysCount;
     GLfloat gridSize;
-    GLuint VAO, VBO,VNO;//VNO:normal buffer
+    GLuint VAO, VBO,VNO, Instancebuffer;//VNO:normal buffer
 
  
     //Texture* texture;

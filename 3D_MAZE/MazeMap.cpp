@@ -30,14 +30,14 @@ MazeMap::MazeMap(GLuint width, GLuint height, GLfloat gridSize):MazeMap()
 	CreatePolys();
 }
 
-glm::vec3 MazeMap::CollionDetection(glm::vec3 position)
+glm::vec2 MazeMap::CollionDetection(glm::vec3 position)
 {
 	printf("yposition: %f \n", position.z);
 	GLuint xCurrent = std::floor(position.x / gridSize);
 	GLuint yCurrent = -std::floor(position.z / gridSize)-1;
 	GLfloat xGridPos = fmod((fmod(position.x, gridSize) + gridSize), gridSize);
 	GLfloat yGridPos = fmod((fmod(-position.z, gridSize) + gridSize), gridSize);
-	glm::vec3 output = glm::vec3(position);
+	glm::vec2 output = glm::vec2(0.0f,0.0f);
 	printf("xcurrent= %d, ycurrent= %d, yNum=%d, xgrid= %f, ygrid= %f\n", xCurrent, yCurrent, yNum, xGridPos, yGridPos);
 	if (xGridPos < 0.14) {
 		if (xCurrent == 0 || map[xCurrent - 1][yCurrent].right)output.x += (0.14f- xGridPos);
@@ -46,10 +46,10 @@ glm::vec3 MazeMap::CollionDetection(glm::vec3 position)
 		if (map[xCurrent][yCurrent].right)output.x -= (xGridPos-0.66f);
 	}
 	if (yGridPos < 0.16) {
-		if (map[xCurrent][yCurrent].bot)output.z -= (0.16f-yGridPos);
+		if (map[xCurrent][yCurrent].bot)output.y -= (0.16f-yGridPos);
 	}
 	else if (yGridPos > 0.66) {
-		if (yCurrent == yNum-1||map[xCurrent][yCurrent+1].bot)output.z += ( yGridPos-0.66f);
+		if (yCurrent == yNum-1||map[xCurrent][yCurrent+1].bot)output.y += ( yGridPos-0.66f);
 	}
 	return output;
 }
