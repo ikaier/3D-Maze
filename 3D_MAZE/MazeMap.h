@@ -25,7 +25,7 @@ private:
 	GLuint xNum, yNum;
 	GLint xEnd = -1, yEnd = -1;
 	GLfloat gridSize;
-
+	bool won;
 	GLuint WallCount;
 	GLuint WallLightCount;
 	GLuint PolyCount;

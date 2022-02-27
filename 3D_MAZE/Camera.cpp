@@ -86,9 +86,6 @@ Camera::~Camera()
 void Camera::CollionRes(glm::vec3 adjust)
 {
 	
-	//assert(position.x > 0 && position.z < 0 && position.x<(GLfloat)xNum* gridSize&& position.z >(GLfloat)yNum * gridSize);
-	//0.14 0.66
-	//printf("%f,%f\n", fmod((fmod(position.x, gridSize) + gridSize), gridSize), fmod((fmod(-position.y, gridSize) + gridSize), gridSize));
 	position.x += adjust.x;
 
 	position.z += adjust.y;
@@ -110,7 +107,7 @@ void Camera::GodModeToggle()
 		GoalPosition.y = 0.2f;
 		if (position.z >= 0) { GoalPosition.z = -gridSize / 2; }
 		else if (position.z <= -(float)(yNum-1) * gridSize) { GoalPosition.z = -((float)(xNum - 0.5)) * gridSize; }
-		printf("%f, %f, %f\n", GoalPosition.x, GoalPosition.y, GoalPosition.z);
+		printf("Back to %f, %f, %f\n", GoalPosition.x, GoalPosition.y, GoalPosition.z);
 		position = GoalPosition;
 	}
 

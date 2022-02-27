@@ -167,7 +167,6 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Wall.cpp" />
     <ClCompile Include="WallLight.cpp" />
-    <ClCompile Include="WallLightWithShadows.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -187,7 +186,6 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Wall.h" />
     <ClInclude Include="WallLight.h" />
-    <ClInclude Include="WallLightWithShadows.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

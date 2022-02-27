@@ -204,9 +204,7 @@ int main()
         }
         
         glm::vec3 position = camera.getCameraPosition();
-        //printf("adjust is %f,%f,%f,\n", adjust.x, adjust.y, adjust.z);
-        //printf("%f,%f\n", fmod((fmod(position.x, gridSize) + gridSize), gridSize), fmod((fmod(-position.z, gridSize) + gridSize), gridSize));
-        
+      
 
 
 

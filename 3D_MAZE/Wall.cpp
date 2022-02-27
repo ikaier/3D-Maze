@@ -50,7 +50,6 @@ void Wall::Scale(GLfloat scaleX, GLfloat scaleY, GLfloat scaleZ)
 void Wall::Set()
 {
 	modelMatrics.clear();
-	//printf(" %f ", gridSize);
 	assert(gridSize > 0);
 	SetTexture();
 	if (WallCount == 0) {
@@ -60,7 +59,6 @@ void Wall::Set()
 	else {
 		count = 0;
 		for (size_t i = 0; i < WallCount; i = i + 1) {
-			//printf("%f,%f\n", xWallPos[i], yWallPos[i]);	
 			TransModel = glm::mat4(1.0f);	
 			if (walls[i].z) {
 				Translate(walls[i].x, 0, -walls[i].y);

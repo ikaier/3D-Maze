@@ -99,7 +99,7 @@ void Window::processInput(GLfloat deltaTime)
 
     if (glfwGetKey(mainWindow, GLFW_KEY_W) == GLFW_PRESS) {
         keys[0] = deltaTime;
-        //printf("w pressed\n");
+
     }
     if (glfwGetKey(mainWindow, GLFW_KEY_S) == GLFW_PRESS) {
         keys[1] = deltaTime;

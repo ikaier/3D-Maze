@@ -8,6 +8,7 @@ MazeMap::MazeMap()
 	WallLightCount = 0;
 	PolyCount = 0;
 	gridSize = 0;
+	won = false;
 }
 
 MazeMap::MazeMap(GLuint width, GLuint height, GLfloat gridSize):MazeMap()
@@ -32,7 +33,7 @@ MazeMap::MazeMap(GLuint width, GLuint height, GLfloat gridSize):MazeMap()
 
 glm::vec3 MazeMap::CollionDetection(glm::vec3 position)
 {
-	//printf("yposition: %f ", position.z);
+
 	GLuint xCurrent = std::floor(abs(position.x) / gridSize);
 	GLuint yCurrent = std::floor(abs(position.z) / gridSize);
 	GLfloat xGridPos = fmod((fmod(abs(position.x), gridSize) + gridSize), gridSize);
@@ -52,12 +53,16 @@ glm::vec3 MazeMap::CollionDetection(glm::vec3 position)
 		if (yCurrent == yNum-1||map[xCurrent][yCurrent+1].bot)output.y += ( yGridPos-0.66f);
 	}
 	if (map[xCurrent][yCurrent].poly!=-1) {
-		printf("counter poly at: %d", map[xCurrent][yCurrent].poly);
+		printf("Counter Icosahedron at (%d, %d)\n", xCurrent, yCurrent);
 		polys[map[xCurrent][yCurrent].poly] = glm::vec3(-1, -1, -1);
 		PolyCount--;
 		map[xCurrent][yCurrent].poly = -1;
 		output.z = 1;
 	}
+	if (xCurrent == xEnd && yCurrent == yEnd && !won) {
+		printf("You Won! time spend: %f seconds\nPlease press ESC to quit", glfwGetTime());
+		won = true;
+	};
 	return output;
 }
 
@@ -69,10 +74,7 @@ void MazeMap::recBackTrack(GLint x, GLint y)
 	direction arraydirecs[4]{ left,right,up,down };
 	GLint tx, ty;
 	shuffleArray(arraydirecs, 4);
-	//for (int i = 4 - 1; i >= 0; i--) {
-	//	printf("%d", arraydirecs[i]);
-	//}
-	//printf("\n");
+
 	bool end = true;
 	for (int i = 0; i < 4; i++)
 	{
@@ -156,8 +158,6 @@ void MazeMap::printMap()
 				printf(" ");
 			}
 
-			//printf("%s", (map[x][i].right ? "|" : " "));
-
 		}
 		printf("\n");
 	}
@@ -182,7 +182,6 @@ void MazeMap::CreateWallLights()
 			}
 		}
 	}
-	//printf("lightnumber is: %d, walllightcount is: %d", lightnumber, WallLightCount);
 }
 
 void MazeMap::CreatePolys()
@@ -195,7 +194,6 @@ void MazeMap::CreatePolys()
 		GLint randomY = rand() % yNum;
 		map[randomX][randomY].poly = ind;
 		ind++;
-		//printf("Poly is at (%d,%d)\n", randomX, randomY);
 		AddPolys(randomX * gridSize + gridSize / 2, -randomY * gridSize - gridSize / 2);
 	}
 

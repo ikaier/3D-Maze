@@ -35,14 +35,6 @@ std::vector<glm::vec3> WallLight::GetWLShadow(glm::vec3 cameraPosition)
 	this->cameraPosition = cameraPosition;
 	wallLights = quickSelect(wallLights);
 
-	//std::vector<GLfloat> list;
-	//for (size_t i = 0; i < wallLightsCount; i++) {
-	//	list.push_back(squareDistance(wallLights[i]));
-	//	printf("%f, ", squareDistance(wallLights[i]));
-	//}
-	//printf("\n");
-	
-
 	return wallLights;
 }
 std::vector<glm::vec3> WallLight::quickSelect(std::vector<glm::vec3>& wallLights)
@@ -52,7 +44,6 @@ std::vector<glm::vec3> WallLight::quickSelect(std::vector<glm::vec3>& wallLights
 	GLuint pivotIndex = wallLightsCount;
 	while (pivotIndex != SetWLShadowNumber) {
 		pivotIndex = partition(wallLights, left, right);//problem here 
-		//printf("%d\n", pivotIndex);
 		if (pivotIndex < SetWLShadowNumber) {
 			left = pivotIndex;
 		}
@@ -68,7 +59,6 @@ GLuint WallLight::partition(std::vector<glm::vec3>& wallLights, GLuint left, GLu
 	GLuint pivot = choosePivot(left, right);
 	GLfloat pivotDistance = squareDistance(wallLights[pivot]);
 	while (left < right) {
-		//printf("%d,%d\n", left,right);
 		if (squareDistance(wallLights[left]) >= pivotDistance) {
 			std::swap(wallLights[left], wallLights[right]);
 
