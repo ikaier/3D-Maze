@@ -27,6 +27,7 @@ Camera::Camera(glm::vec3 startPosition, glm::vec3 cameraY,
 
 glm::vec3 Camera::getCameraPosition()
 {
+
 	return position;
 }
 
@@ -47,6 +48,10 @@ void Camera::keyControl(GLfloat* keys)
 	position -= front * keys[1];
 	position -= right * keys[2];
 	position += right * keys[3];
+	if (!godMode)
+	{
+		position.y = 0.25f;
+	}
 }
 
 void Camera::mouseControl(GLfloat xChange, GLfloat yChange)
