@@ -164,8 +164,8 @@ int main()
     mazeWallLight = WallLight(mazeMap.GetWallLights(), mazeMap.GetWallLightCount(), workingLightsNumber);
     wallMaterial = Material(0.3f, 3.0f);
     floorMaterial = Material(0.8f, 256.0f);
-    camera = Camera(glm::vec3(1.0f, 1.0f, 0.0f), glm::vec3(0.0f, -1.0f, -1.0f),
-        0.0f, 0.0f,0.0f, 5.0f, 0.5f);
+    camera = Camera(glm::vec3(1.0f, 1.0f, -1.0f), glm::vec3(0.0f, -1.0f, -1.0f),
+        0.0f, 0.0f,0.0f, 5.0f, 0.5f, mazeWidth, mazeHeight, gridSize);
     flashLight = FlashLight(camera.getCameraPosition(), camera.getCameraDirection());
     polys = Polyhedron(mazeMap.GetPolys(), mazeMap.GetPolyCount(), gridSize);
 
@@ -186,13 +186,17 @@ int main()
         glfwPollEvents();
 		mainWindow.processInput(deltaTime);
         camera.mouseControl(mainWindow.getXchange(), mainWindow.getYchange());
-        camera.keyControl(mainWindow.getsKeys());
+        glm::vec3 NextPos=camera.NextPos(mainWindow.getsKeys());
 
-
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glm::vec3 position = camera.getCameraPosition();
+        glm::vec3 adjust=mazeMap.CollionDetection(NextPos);
+        printf("adjust is %f,%f,%f,\n", adjust.x, adjust.y, adjust.z);
+        //printf("%f,%f\n", fmod((fmod(position.x, gridSize) + gridSize), gridSize), fmod((fmod(-position.z, gridSize) + gridSize), gridSize));
+        camera.CollionRes(adjust);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         //flashLight.SetFlashLight(glm::vec3(1.0f,1.0f,0.0f), glm::vec3(0.0f, -1.0f, -1.0f));
-        glm::vec3 position = camera.getCameraPosition();
+        
         position.y += 0.02f;
         position.x += 0.02f;
         glm::vec3 direction = camera.getCameraDirection();

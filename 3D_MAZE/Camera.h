@@ -8,11 +8,13 @@
 #include<glm/gtx/string_cast.hpp>
 #include<GLFW/glfw3.h>
 #include<iostream>
+#include <cmath>
 
 #include"FlashLight.h"
 #include"Shader.h"
+#include"MazeMap.h"
 
-class Camera
+class Camera 
 {
 public:
 	Camera();
@@ -27,9 +29,11 @@ public:
 
 
 
-	void keyControl(GLfloat* keys);
+	glm::vec3 NextPos(GLfloat* keys);
 	void mouseControl(GLfloat xChange, GLfloat yChange);
 	void flip(GLfloat deltaTime);
+
+	void CollionRes(glm::vec3 adjust);
 
 	~Camera();
 
@@ -56,7 +60,7 @@ private:
 
 
 
-	void collionDetection();
+	
 	void update();
 
 

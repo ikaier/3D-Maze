@@ -20,7 +20,7 @@ Camera::Camera(glm::vec3 startPosition, glm::vec3 cameraY,
 	turnSpeed = startTurnSpeed;
 
 	//flash light
-	godMode = true;
+	godMode = false;
 	update();
 }
 
@@ -41,13 +41,14 @@ glm::mat4 Camera::getViewMatrix()
 }
 
 
-void Camera::keyControl(GLfloat* keys)
+glm::vec3 Camera::NextPos(GLfloat* keys)
 {
-	position += front * keys[0];
-	position -= front * keys[1];
-	position -= right * keys[2];
-	position += right * keys[3];
-	collionDetection();
+	glm::vec3 toTestCollion = glm::vec3(position);
+	toTestCollion += front * keys[0];
+	toTestCollion -= front * keys[1];
+	toTestCollion -= right * keys[2];
+	toTestCollion += right * keys[3];
+	return toTestCollion;
 }
 
 void Camera::mouseControl(GLfloat xChange, GLfloat yChange)
@@ -83,12 +84,16 @@ Camera::~Camera()
 {
 }
 
-void Camera::collionDetection()
+void Camera::CollionRes(glm::vec3 adjust)
 {
-	if (godMode)return;
-	assert(position.x > 0 && position.z < 0 && position.x<(GLfloat)xNum* gridSize&& position.z >(GLfloat)yNum * gridSize);
-	GLuint xCurrent = std::floor(position.x / gridSize);
-	GLuint yCurrent = -std::floor(position.z / gridSize);
+	
+	//assert(position.x > 0 && position.z < 0 && position.x<(GLfloat)xNum* gridSize&& position.z >(GLfloat)yNum * gridSize);
+	//0.14 0.66
+	//printf("%f,%f\n", fmod((fmod(position.x, gridSize) + gridSize), gridSize), fmod((fmod(-position.y, gridSize) + gridSize), gridSize));
+	position.x = adjust.x;
+	position.y = adjust.y;
+	position.z = adjust.z;
+	
 
 }
 
