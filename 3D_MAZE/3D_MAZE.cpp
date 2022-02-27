@@ -42,6 +42,7 @@ HDRProcess HDRframebuffer;
 
 Polyhedron polys;
 Floor mazeFloor;
+Floor mazeCeiling;
 Wall mazeWall;
 MazeMap mazeMap;
 WallLight mazeWallLight;
@@ -72,6 +73,9 @@ void RenderScene(const Shader &shader) {
     //render floor
     floorMaterial.UseMaterial(shader);
     mazeFloor.Draw();
+
+    floorMaterial.UseMaterial(shader);
+    mazeCeiling.Draw();
 
     //render wall
     wallMaterial.UseMaterial(shader);
@@ -159,7 +163,8 @@ int main()
     
 
     mazeMap = MazeMap(mazeWidth, mazeHeight, 0.8f);
-    mazeFloor = Floor(mazeWidth, mazeHeight, gridSize);
+    mazeFloor = Floor(mazeWidth, mazeHeight, gridSize, "Textures/wood.png",0);
+    mazeCeiling= Floor(mazeWidth, mazeHeight, gridSize, "Textures/ceiling.bmp", gridSize * 3 / 5);
     mazeWall = Wall(mazeMap.GetWalls(),mazeMap.GetWallCount(), gridSize);
     mazeWallLight = WallLight(mazeMap.GetWallLights(), mazeMap.GetWallLightCount(), workingLightsNumber);
     wallMaterial = Material(0.3f, 3.0f);

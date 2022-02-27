@@ -18,7 +18,7 @@ class Floor
 {
 public:
 	Floor();
-    Floor(GLuint xNum, GLuint yNum,GLfloat gridSize);
+    Floor(GLuint xNum, GLuint yNum,GLfloat gridSize, const char* fileLocation, GLfloat height);
 
     void Rotate(float RotateX, float RotateY , float RotateZ);
     void Translate(GLfloat transX, GLfloat transY, GLfloat transZ);
@@ -33,20 +33,36 @@ public:
 private:
     GLfloat gridSize;
     GLuint count;
+    GLfloat height;
     unsigned int Floorindices[6] = {
         0,1,3,
         1,2,3
+
     };
 
     GLfloat Floorvertices[32]= {
         //  x       y       z           u       v       nx      ny      nz
-        1.0f,       0.0f,   -1.0f,      20.0,   20.0,   0.0f,   1.0f,  0.0f,
-        1.0f,       0.0f,   0.0f,       20.0,   0.0f,   0.0f,   1.0f,  0.0f,
+        1.0f,       0.0f,   -1.0f,      1.5f,   1.5f,   0.0f,   1.0f,  0.0f,
+        1.0f,       0.0f,   0.0f,       1.5f,   0.0f,   0.0f,   1.0f,  0.0f,
         0.0f,       0.0f,   0.0f,       0.0f,   0.0f,   0.0f,   1.0f,  0.0f,
-        0.0f,       0.0f,   -1.0f,      0.0f,   20.0,   0.0f,   1.0f,  0.0f,
+        0.0f,       0.0f,   -1.0f,      0.0f,   1.5f,   0.0f,   1.0f,  0.0f,
     };
+
+    unsigned int CeilIndices[6] = {
+        3,1,0,
+        3,2,1
+    };
+
+    GLfloat CeilVertices[32] = {
+        //  x       y       z           u       v       nx      ny      nz
+        1.0f,       0.0f,   -1.0f,      10.0f,   10.0f,   0.0f,   1.0f,  0.0f,
+        1.0f,       0.0f,   0.0f,       10.0f,   0.0f,   0.0f,   1.0f,  0.0f,
+        0.0f,       0.0f,   0.0f,       0.0f,   0.0f,   0.0f,   1.0f,  0.0f,
+        0.0f,       0.0f,   -1.0f,      0.0f,   10.0f,   0.0f,   1.0f,  0.0f,
+    };
+
     Mesh obj;
-    Texture* texture;
+    Texture* floorTexture;
     std::vector<glm::mat4>modelMatrics;
    
     //glm::mat4* modelMatrics;

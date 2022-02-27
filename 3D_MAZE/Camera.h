@@ -29,7 +29,7 @@ public:
 
 	void keyControl(GLfloat* keys);
 	void mouseControl(GLfloat xChange, GLfloat yChange);
-	void flip(GLfloat deltaTime);
+	void flip();
 
 	void CollionRes(glm::vec2 adjust);
 	void GodModeToggle();

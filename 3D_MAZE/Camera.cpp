@@ -50,7 +50,7 @@ void Camera::keyControl(GLfloat* keys)
 	position += right * keys[3];
 	if (!godMode)
 	{
-		position.y = 0.25f;
+		position.y = gridSize * 3 / 10;
 	}
 }
 
@@ -72,15 +72,9 @@ void Camera::mouseControl(GLfloat xChange, GLfloat yChange)
 	update();
 }
 
-void Camera::flip(GLfloat deltaTime)
+void Camera::flip()
 {
-	GLfloat velocity = moveSpeed * deltaTime;
-	for (GLfloat i = 0; i <= 180.0f/ velocity; i++) {
-		roll += i* velocity;
-	}
-	if (roll >= 360) {
-		roll = 0;
-	}
+	roll = glm::radians(180.0f);
 }
 
 Camera::~Camera()
@@ -119,10 +113,12 @@ void Camera::GodModeToggle()
 
 void Camera::update()
 {
+	//glm::quat qRoll = glm::angleAxis(-pitch, glm::vec3(0, 0, 1));
+	//glm::quat qPitch = glm::angleAxis(-pitch, glm::vec3(1, 0, 0));
+	//glm::quat qYaw = glm::angleAxis(-yaw, glm::vec3(0, 1, 0));
+	//quaternion = qYaw *glm::quat(glm::vec3(0.0f,0.0f,0.0f)) * qPitch;
+	glm::quat quaternion = glm::quat(glm::vec3(-pitch, -yaw, -roll));
 
-	glm::quat qPitch = glm::angleAxis(-pitch, glm::vec3(1, 0, 0));
-	glm::quat qYaw = glm::angleAxis(-yaw, glm::vec3(0, 1, 0));
-	quaternion = qYaw *glm::quat(glm::vec3(0.0f,0.0f,0.0f)) * qPitch;
 
 	front = glm::vec3(
 		-2.0f * (quaternion.x * quaternion.z + quaternion.w * quaternion.y),

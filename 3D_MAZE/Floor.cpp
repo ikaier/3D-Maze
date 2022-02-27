@@ -8,23 +8,29 @@ Floor::Floor()
 	ScaleModel = glm::mat4(1.0f);
 	quaternion = glm::quat(glm::vec3(0.0f, 0.0f, 0.0f));
 
-	
+	height = 0.0f;
 	xNum = 0;
 	yNum = 0;
 	
 }
 
-Floor::Floor(GLuint xNum, GLuint yNum,GLfloat gridSize):Floor()
+Floor::Floor(GLuint xNum, GLuint yNum, GLfloat gridSize, const char* fileLocation, GLfloat height) :Floor()
 {
 	obj = Mesh();
-
-	obj.CreateMesh(Floorvertices, Floorindices, 32, 6);
-	texture = new Texture("Textures/floor.bmp");
-
-	texture->LoadTexture();
+	if (height) {
+		//ceiling
+		obj.CreateMesh(CeilVertices, CeilIndices, 32, 6);
+	}
+	else {
+		//floor
+		obj.CreateMesh(Floorvertices, Floorindices, 32, 6);
+	}
+	floorTexture = new Texture(fileLocation);
+	floorTexture->LoadTexture();
 	this->xNum = xNum;
 	this->yNum = yNum;
 	this->gridSize = gridSize;
+	this->height = height;
 	Scale(gridSize, 1.0f, gridSize);
 	Set();
 }
@@ -67,7 +73,7 @@ void Floor::Set()
 		for (GLfloat x = 0.0f; x < xNum; x = x + 1.0f) {
 			for (GLfloat y = 0.0f; y < yNum; y = y + 1.0f) {
 				TransModel = glm::mat4(1.0f);
-				Translate(x * gridSize, 0, -y * gridSize);
+				Translate(x * gridSize, height, -y * gridSize);
 				SetModel();
 				count++;
 				//
@@ -88,7 +94,7 @@ void Floor::Draw()
 void Floor::SetTexture()
 {
 
-	texture->UseTexture();
+	floorTexture->UseTexture();
 }
 
 void Floor::SetModel()
