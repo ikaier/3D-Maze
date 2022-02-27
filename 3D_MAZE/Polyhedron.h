@@ -19,7 +19,7 @@ public:
     void Translate(GLfloat transX, GLfloat transY, GLfloat transZ);
     void Scale(GLfloat scaleX, GLfloat scaleY, GLfloat scaleZ);
     void Draw();
-    void Set();
+    void Set(std::vector<glm::vec3> polys, GLuint polysCount);
 
     ~Polyhedron();
 private:

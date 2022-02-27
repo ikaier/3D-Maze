@@ -20,7 +20,7 @@ public:
 	std::vector<glm::vec3> GetWalls() { return walls; };
 	std::vector<glm::vec3> GetWallLights() { return wallLights; };
 	std::vector<glm::vec3> GetPolys() { return polys; };
-	glm::vec2 CollionDetection(glm::vec3 position);
+	glm::vec3 CollionDetection(glm::vec3 position);
 private:
 	GLuint xNum, yNum;
 	GLint xEnd = -1, yEnd = -1;
@@ -39,6 +39,7 @@ private:
 		bool bot;
 		bool right;
 		bool visited;
+		int poly;
 	};
 	GLint moveX[4] = { -1,1,0,0 };
 	GLint moveY[4] = { 0,0,1,-1 };

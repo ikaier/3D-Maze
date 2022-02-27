@@ -74,7 +74,7 @@ void RenderScene(const Shader &shader) {
     floorMaterial.UseMaterial(shader);
     mazeFloor.Draw();
 
-    floorMaterial.UseMaterial(shader);
+    wallMaterial.UseMaterial(shader);
     mazeCeiling.Draw();
 
     //render wall
@@ -194,11 +194,12 @@ int main()
         camera.keyControl(mainWindow.getsKeys());
         if (!gPressed && mainWindow.getsKeys()[5]) {
             camera.GodModeToggle();
+ 
         }
         gPressed = mainWindow.getsKeys()[5];
         if (!camera.GodModeStatus())
         {
-            glm::vec2 adjust=mazeMap.CollionDetection(camera.getCameraPosition());
+            glm::vec3 adjust=mazeMap.CollionDetection(camera.getCameraPosition());
             camera.CollionRes(adjust);
         }
         
@@ -225,7 +226,8 @@ int main()
         if (IconRotation >= 360.0f)IconRotation -= 360.0f;
         
         polys.Rotate(IconRotation);
-        polys.Set();
+        
+        polys.Set(mazeMap.GetPolys(), mazeMap.GetPolyCount());
         /************************ render depth scene from flashlight's perspective ***************************/
         
         flashShadowShader.UseShader();

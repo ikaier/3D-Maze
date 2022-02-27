@@ -31,7 +31,7 @@ public:
 	void mouseControl(GLfloat xChange, GLfloat yChange);
 	void flip();
 
-	void CollionRes(glm::vec2 adjust);
+	void CollionRes(glm::vec3 adjust);
 	void GodModeToggle();
 	bool GodModeStatus() { return godMode; };
 

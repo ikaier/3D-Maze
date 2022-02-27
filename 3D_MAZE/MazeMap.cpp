@@ -20,7 +20,7 @@ MazeMap::MazeMap(GLuint width, GLuint height, GLfloat gridSize):MazeMap()
 	map = std::vector<std::vector<struct grid>>(xNum, std::vector<struct grid>(yNum));
 	for (size_t i = 0; i < xNum; i++) {
 		for (size_t j = 0; j < yNum; j++) {
-			grid newgrid = { true, true, false };
+			grid newgrid = { true, true, false,-1 };
 			map[i][j] = newgrid;
 		}
 	}
@@ -30,14 +30,14 @@ MazeMap::MazeMap(GLuint width, GLuint height, GLfloat gridSize):MazeMap()
 	CreatePolys();
 }
 
-glm::vec2 MazeMap::CollionDetection(glm::vec3 position)
+glm::vec3 MazeMap::CollionDetection(glm::vec3 position)
 {
 	//printf("yposition: %f ", position.z);
 	GLuint xCurrent = std::floor(abs(position.x) / gridSize);
 	GLuint yCurrent = std::floor(abs(position.z) / gridSize);
 	GLfloat xGridPos = fmod((fmod(abs(position.x), gridSize) + gridSize), gridSize);
 	GLfloat yGridPos = fmod((fmod(abs(position.z), gridSize) + gridSize), gridSize);
-	glm::vec2 output = glm::vec2(0.0f,0.0f);
+	glm::vec3 output = glm::vec3(0.0f,0.0f,0);
 	//printf("xcurrent= %d, ycurrent= %d, yNum=%d, xgrid= %f, ygrid= %f\n", xCurrent, yCurrent, yNum, xGridPos, yGridPos);
 	if (xGridPos < 0.14) {
 		if (xCurrent == 0 || map[xCurrent - 1][yCurrent].right)output.x += (0.14f- xGridPos);
@@ -50,6 +50,13 @@ glm::vec2 MazeMap::CollionDetection(glm::vec3 position)
 	}
 	else if (yGridPos > 0.66) {
 		if (yCurrent == yNum-1||map[xCurrent][yCurrent+1].bot)output.y += ( yGridPos-0.66f);
+	}
+	if (map[xCurrent][yCurrent].poly!=-1) {
+		printf("counter poly at: %d", map[xCurrent][yCurrent].poly);
+		polys[map[xCurrent][yCurrent].poly] = glm::vec3(-1, -1, -1);
+		PolyCount--;
+		map[xCurrent][yCurrent].poly = -1;
+		output.z = 1;
 	}
 	return output;
 }
@@ -182,9 +189,12 @@ void MazeMap::CreatePolys()
 {
 	GLuint polyNumber = xNum * yNum / 50;
 	if (polyNumber == 0) polyNumber = 1;
+	int ind= 0;
 	while (PolyCount < polyNumber) {
 		GLint randomX = rand() % xNum;
 		GLint randomY = rand() % yNum;
+		map[randomX][randomY].poly = ind;
+		ind++;
 		//printf("Poly is at (%d,%d)\n", randomX, randomY);
 		AddPolys(randomX * gridSize + gridSize / 2, -randomY * gridSize - gridSize / 2);
 	}
@@ -206,7 +216,7 @@ void MazeMap::AddWallLights(GLfloat xPos, GLfloat yPos, GLfloat zPos)
 
 void MazeMap::AddPolys(GLfloat xPos, GLfloat zPos)
 {
-	polys.push_back(glm::vec3(xPos, 0.2f, zPos));
+	polys.push_back(glm::vec3(xPos, gridSize*3/10, zPos));
 	PolyCount++;
 }
 

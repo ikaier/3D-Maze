@@ -65,23 +65,32 @@ void Polyhedron::Scale(GLfloat scaleX, GLfloat scaleY, GLfloat scaleZ)
 
 void Polyhedron::Draw()
 {
-	
+	if (!polysCount)return;
 	glBindVertexArray(VAO);
 	//glDrawElementsInstanced(GL_TRIANGLES, 60, GL_UNSIGNED_INT, 0, polysCount);
 	glDrawArraysInstanced(GL_TRIANGLES, 0,60, polysCount);
 	glBindVertexArray(0);
 }
 
-void Polyhedron::Set()
+void Polyhedron::Set(std::vector<glm::vec3> polys, GLuint polysCount)
 {
+	this->polysCount = polysCount;
+	this->polys = polys;
+	if (!polysCount)return;
 	modelMatrics.clear();
-	for (size_t i = 0; i < polysCount; i++) {
+	for (size_t i = 0; i < polys.size(); i++) {
+		if (polys[i].x==-1)
+		{
+			polys.erase(polys.begin() + i);
+			i++;
+			continue;
+		}
+
 		TransModel = glm::translate(glm::mat4(1.0f), glm::vec3(polys[i].x, polys[i].y, polys[i].z));
-		ScaleModel= glm::scale(glm::mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
+		ScaleModel = glm::scale(glm::mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
 		SetModel();
 	}
 	SendModel();
-
 }
 
 Polyhedron::~Polyhedron()

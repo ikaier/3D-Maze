@@ -74,14 +74,16 @@ void Camera::mouseControl(GLfloat xChange, GLfloat yChange)
 
 void Camera::flip()
 {
-	roll = glm::radians(180.0f);
+
+	roll += glm::radians(180.0f);
+	update();
 }
 
 Camera::~Camera()
 {
 }
 
-void Camera::CollionRes(glm::vec2 adjust)
+void Camera::CollionRes(glm::vec3 adjust)
 {
 	
 	//assert(position.x > 0 && position.z < 0 && position.x<(GLfloat)xNum* gridSize&& position.z >(GLfloat)yNum * gridSize);
@@ -90,7 +92,10 @@ void Camera::CollionRes(glm::vec2 adjust)
 	position.x += adjust.x;
 
 	position.z += adjust.y;
-	
+	if (adjust.z) {
+		flip(); 
+	};
+	update();
 
 }
 
@@ -108,6 +113,7 @@ void Camera::GodModeToggle()
 		printf("%f, %f, %f\n", GoalPosition.x, GoalPosition.y, GoalPosition.z);
 		position = GoalPosition;
 	}
+
 	godMode = !godMode;
 }
 
