@@ -6,18 +6,17 @@ MazeMap::MazeMap()
 	yNum = 0;
 	WallCount = 0;
 	WallLightCount = 0;
+	PolyCount = 0;
 	gridSize = 0;
 }
 
-MazeMap::MazeMap(GLuint width, GLuint height, GLfloat gridSize)
+MazeMap::MazeMap(GLuint width, GLuint height, GLfloat gridSize):MazeMap()
 {
 	srand(time(0));
 	assert(width > 0 && height > 0);
 	xNum = width;
 	yNum = height;
 	this->gridSize = gridSize;
-	WallCount = 0;
-	WallLightCount = 0;
 	map = std::vector<std::vector<struct grid>>(xNum, std::vector<struct grid>(yNum));
 	for (size_t i = 0; i < xNum; i++) {
 		for (size_t j = 0; j < yNum; j++) {
@@ -28,6 +27,7 @@ MazeMap::MazeMap(GLuint width, GLuint height, GLfloat gridSize)
 	recBackTrack(3, 2);
 	printMap();
 	CreateWallLights();
+	CreatePolys();
 }
 
 void MazeMap::recBackTrack(GLint x, GLint y)
@@ -106,7 +106,6 @@ void MazeMap::printMap()
 		//left border
 		printf("|");
 
-		//+-0.25 is a small trick to indicate that the wall need to be rotated
 		AddWalls(0.0f, i * gridSize, true);
 		for (int x = 0; x < xNum; x++) {
 			//x direction
@@ -138,11 +137,11 @@ void MazeMap::CreateWallLights()
 {
 	GLuint lightnumber = xNum * yNum / 4;
 	if (lightnumber > MAX_POINT_LIGHTS) lightnumber = MAX_POINT_LIGHTS;
-
+	//Can be improved: randomly generate x,y instead of looping
 	for (int x = 0; x < xNum; x++) {
 		for (int y = 0; y < yNum; y++) {
-			int d = rand() % 100;
-			if (d < 25) {
+			GLuint d = rand() % 100;
+			if (WallLightCount <lightnumber && d < (GLuint)(100 * ((GLfloat)lightnumber /(xNum * yNum)))) {
 				if (map[x][y].bot) {
 					AddWallLights(x * gridSize + gridSize / 2, 0.2f, -y * gridSize - 0.01f);
 				}
@@ -152,6 +151,20 @@ void MazeMap::CreateWallLights()
 			}
 		}
 	}
+	//printf("lightnumber is: %d, walllightcount is: %d", lightnumber, WallLightCount);
+}
+
+void MazeMap::CreatePolys()
+{
+	GLuint polyNumber = xNum * yNum / 50;
+	if (polyNumber == 0) polyNumber = 1;
+	while (PolyCount < polyNumber) {
+		GLint randomX = rand() % xNum;
+		GLint randomY = rand() % yNum;
+		//printf("Poly is at (%d,%d)\n", randomX, randomY);
+		AddPolys(randomX * gridSize + gridSize / 2, -randomY * gridSize - gridSize / 2);
+	}
+
 }
 
 void MazeMap::AddWalls(GLfloat xPos, GLfloat yPos, bool ifRotate)
@@ -165,4 +178,10 @@ void MazeMap::AddWallLights(GLfloat xPos, GLfloat yPos, GLfloat zPos)
 	assert(WallLightCount < MAX_POINT_LIGHTS);
 	wallLights.push_back(glm::vec3(xPos, yPos, zPos));
 	WallLightCount++;
+}
+
+void MazeMap::AddPolys(GLfloat xPos, GLfloat zPos)
+{
+	polys.push_back(glm::vec3(xPos, 0.2f, zPos));
+	PolyCount++;
 }

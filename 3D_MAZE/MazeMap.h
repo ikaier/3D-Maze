@@ -16,19 +16,24 @@ public:
 	MazeMap(GLuint width, GLuint height, GLfloat gridSize);
 	GLuint GetWallCount() { return WallCount; };
 	GLuint GetWallLightCount() { return WallLightCount; };
+	GLuint GetPolyCount() { return PolyCount; };
 	std::vector<glm::vec3> GetWalls() { return walls; };
 	std::vector<glm::vec3> GetWallLights() { return wallLights; };
+	std::vector<glm::vec3> GetPolys() { return polys; };
 
 private:
 	GLuint xNum, yNum;
 	GLint xEnd = -1, yEnd = -1;
 	GLfloat gridSize;
+
 	GLuint WallCount;
 	GLuint WallLightCount;
-	//walls
+	GLuint PolyCount;
+
 	std::vector<glm::vec3> walls;
-	//wall lights
 	std::vector<glm::vec3> wallLights;
+	std::vector<glm::vec3> polys;
+
 	typedef struct grid
 	{
 		bool bot;
@@ -44,8 +49,10 @@ private:
 	void swap(direction* a, direction* b);
 	void printMap();
 	void CreateWallLights();
+	void CreatePolys();
 	void AddWalls(GLfloat xPos, GLfloat yPos, bool ifRotate);
 	void AddWallLights(GLfloat xPos, GLfloat yPos, GLfloat zPos);
+	void AddPolys(GLfloat xPos, GLfloat zPos);
 
 };
 

@@ -37,7 +37,7 @@ private:
 	GLfloat red = 246.0f/255.0f ;
 	GLfloat green = 228.0f/ 255.0f;
 	GLfloat blue = 188.0f/ 255.0f;
-	GLfloat ambientIntensity = 0.01f;
+	GLfloat ambientIntensity = 0.2f;
 	GLfloat diffuseIntensity = 0.3f;
 	GLfloat constant = 1.0f;
 	GLfloat linear = 0.8f;

@@ -6,7 +6,8 @@ Camera::Camera()
 
 Camera::Camera(glm::vec3 startPosition, glm::vec3 cameraY, 
 	GLfloat startYaw, GLfloat startPitch, GLfloat startRoll, 
-	GLfloat startMoveSpeed, GLfloat startTurnSpeed)
+	GLfloat startMoveSpeed, GLfloat startTurnSpeed,
+	GLuint xNum, GLuint yNum, GLfloat gridSize):xNum(xNum),yNum(yNum),gridSize(gridSize)
 {
 	position = startPosition;
 	worldUp = cameraY;
@@ -19,7 +20,7 @@ Camera::Camera(glm::vec3 startPosition, glm::vec3 cameraY,
 	turnSpeed = startTurnSpeed;
 
 	//flash light
-	
+	godMode = true;
 	update();
 }
 
@@ -40,17 +41,13 @@ glm::mat4 Camera::getViewMatrix()
 }
 
 
-
-
-
-
-
 void Camera::keyControl(GLfloat* keys)
 {
 	position += front * keys[0];
 	position -= front * keys[1];
 	position -= right * keys[2];
 	position += right * keys[3];
+	collionDetection();
 }
 
 void Camera::mouseControl(GLfloat xChange, GLfloat yChange)
@@ -84,6 +81,15 @@ void Camera::flip(GLfloat deltaTime)
 
 Camera::~Camera()
 {
+}
+
+void Camera::collionDetection()
+{
+	if (godMode)return;
+	assert(position.x > 0 && position.z < 0 && position.x<(GLfloat)xNum* gridSize&& position.z >(GLfloat)yNum * gridSize);
+	GLuint xCurrent = std::floor(position.x / gridSize);
+	GLuint yCurrent = -std::floor(position.z / gridSize);
+
 }
 
 void Camera::update()

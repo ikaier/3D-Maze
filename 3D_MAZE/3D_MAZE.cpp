@@ -25,6 +25,7 @@
 #include"Material.h"
 #include"WallLightWithShadows.h"
 #include"HDRProcess.h"
+#include"Polyhedron.h"
 
 
 Window mainWindow;
@@ -36,8 +37,10 @@ Shader debugDepthQuad;
 Shader HDRShader;
 Shader BlurShader;
 
+
 HDRProcess HDRframebuffer;
 
+Polyhedron polys;
 Floor mazeFloor;
 Wall mazeWall;
 MazeMap mazeMap;
@@ -56,6 +59,7 @@ GLfloat omniShadowNearPlane = 0.01f;
 GLfloat omniShadowFarPlane = 20.0f;
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
+GLfloat IconRotation = 0.0f;
 
 
 bool flashIsOn = false;
@@ -70,6 +74,8 @@ void RenderScene(const Shader &shader) {
     wallMaterial.UseMaterial(shader);
     mazeWall.Draw();
 
+    floorMaterial.UseMaterial(shader);
+    polys.Draw();
 }
 
 void RenderLightCube(const Shader& Lightingshader) {
@@ -104,7 +110,7 @@ void renderQuad()
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     }
     glBindVertexArray(quadVAO);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDrawArrays(GL_TRIANGLES, 0,6);
     glBindVertexArray(0);
 }
 
@@ -150,6 +156,7 @@ int main()
     omniShadowShader.CreateFromFiles("Shaders/OmniShadowShader.vert", "Shaders/OmniShadowShader.gs", "Shaders/OmniShadowShader.frag");
     HDRShader.CreateFromFiles("Shaders/HDRShader.vert", "Shaders/HDRShader.frag");
     BlurShader.CreateFromFiles("Shaders/BlurShader.vert", "Shaders/BlurShader.frag");
+    
 
     mazeMap = MazeMap(mazeWidth, mazeHeight, 0.8f);
     mazeFloor = Floor(mazeWidth, mazeHeight, gridSize);
@@ -160,6 +167,7 @@ int main()
     camera = Camera(glm::vec3(1.0f, 1.0f, 0.0f), glm::vec3(0.0f, -1.0f, -1.0f),
         0.0f, 0.0f,0.0f, 5.0f, 0.5f);
     flashLight = FlashLight(camera.getCameraPosition(), camera.getCameraDirection());
+    polys = Polyhedron(mazeMap.GetPolys(), mazeMap.GetPolyCount(), gridSize);
 
     //flashLight = FlashLight(glm::vec3(0.0f,1.0f,1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 100.0f);
@@ -191,6 +199,13 @@ int main()
         direction.y += 0.01f;
         direction.x += 0.01f;
         flashLight.SetFlashLight(position, direction);
+
+        //polys rotation
+        IconRotation += 45.0f* deltaTime;
+        if (IconRotation >= 360.0f)IconRotation -= 360.0f;
+        
+        polys.Rotate(IconRotation);
+        polys.Set();
         /************************ render depth scene from flashlight's perspective ***************************/
         
         flashShadowShader.UseShader();
@@ -266,7 +281,7 @@ int main()
 
         /***************************** Post Rendering Processing ********************************/
         bool horizontal = true, firstIter = true;
-        GLuint blurTimes = 10;
+        GLuint blurTimes = 8;
         BlurShader.UseShader();
         //blur result of last blur with different orientation 10 times.
         for (size_t i = 0; i < blurTimes; i++) {

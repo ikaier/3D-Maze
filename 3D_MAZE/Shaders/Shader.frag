@@ -207,7 +207,11 @@ void main()
 	vec4 finalColor=CalcPointLights();
 	finalColor += CalcSpotLights();
 	
-	//finalColor*=
+	//if(TexCoord==vec2(0.0,0.0)){
+	//	FragColor=vec4(1.0,1.0,0.0,1.0)*finalColor;
+	//}else{
+	//	FragColor=texture(ourTexture,TexCoord)*finalColor;
+	//}
 	FragColor=texture(ourTexture,TexCoord)*finalColor;
 	//gamma correction
 	//float gamma = 2.2;

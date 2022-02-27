@@ -18,7 +18,8 @@ public:
 	Camera();
 	Camera(glm::vec3 startPosition,glm::vec3 cameraY,
 		GLfloat startYaw, GLfloat startPitch, GLfloat startRoll,
-		GLfloat startMoveSpeed,GLfloat startTurnSpeed);
+		GLfloat startMoveSpeed,GLfloat startTurnSpeed,
+		GLuint xNum,GLuint yNum,GLfloat gridSize);
 
 	glm::vec3 getCameraPosition();
 	glm::vec3 getCameraDirection();
@@ -41,6 +42,11 @@ private:
 	glm::vec3 worldUp;
 
 	glm::quat quaternion;
+
+	GLuint xNum;
+	GLuint yNum;
+	GLfloat gridSize;
+	bool godMode;
 	GLfloat yaw;
 	GLfloat pitch;
 	GLfloat roll;
@@ -50,7 +56,7 @@ private:
 
 
 
-
+	void collionDetection();
 	void update();
 
 
