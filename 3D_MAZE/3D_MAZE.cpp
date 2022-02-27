@@ -64,6 +64,9 @@ GLfloat IconRotation = 0.0f;
 
 bool flashIsOn = false;
 bool lPressed = false;
+bool gPressed = false;
+
+
 
 void RenderScene(const Shader &shader) {
     //render floor
@@ -78,9 +81,6 @@ void RenderScene(const Shader &shader) {
     polys.Draw();
 }
 
-void RenderLightCube(const Shader& Lightingshader) {
-    //mazeWallLight.Draw(Lightingshader.GetTransformLocation());
-}
 
 unsigned int quadVAO = 0;
 unsigned int quadVBO;
@@ -187,15 +187,26 @@ int main()
 		mainWindow.processInput(deltaTime);
         camera.mouseControl(mainWindow.getXchange(), mainWindow.getYchange());
         camera.keyControl(mainWindow.getsKeys());
-
+        if (!gPressed && mainWindow.getsKeys()[5]) {
+            camera.GodModeToggle();
+        }
+        gPressed = mainWindow.getsKeys()[5];
+        if (!camera.GodModeStatus())
+        {
+            glm::vec2 adjust=mazeMap.CollionDetection(camera.getCameraPosition());
+            camera.CollionRes(adjust);
+        }
+        
         glm::vec3 position = camera.getCameraPosition();
-        glm::vec2 adjust=mazeMap.CollionDetection(position);
         //printf("adjust is %f,%f,%f,\n", adjust.x, adjust.y, adjust.z);
         //printf("%f,%f\n", fmod((fmod(position.x, gridSize) + gridSize), gridSize), fmod((fmod(-position.z, gridSize) + gridSize), gridSize));
-        camera.CollionRes(adjust);
+        
+
+
+
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        //flashLight.SetFlashLight(glm::vec3(1.0f,1.0f,0.0f), glm::vec3(0.0f, -1.0f, -1.0f));
+
         
         position.y += 0.02f;
         position.x += 0.02f;
@@ -226,7 +237,6 @@ int main()
         {
             choosenWallLights = mazeWallLight.GetWLShadow(camera.getCameraPosition());
             lastPos = camera.getCameraPosition();
-            //printf("%f,%f\n", camera.getCameraPosition().x, camera.getCameraPosition().z);
         }
         
         std::vector<OmniShadowMap> shaowmaps = mazeWallLight.GetShadowMap();

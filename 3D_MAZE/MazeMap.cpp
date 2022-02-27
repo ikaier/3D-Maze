@@ -32,13 +32,13 @@ MazeMap::MazeMap(GLuint width, GLuint height, GLfloat gridSize):MazeMap()
 
 glm::vec2 MazeMap::CollionDetection(glm::vec3 position)
 {
-	printf("yposition: %f \n", position.z);
-	GLuint xCurrent = std::floor(position.x / gridSize);
-	GLuint yCurrent = -std::floor(position.z / gridSize)-1;
-	GLfloat xGridPos = fmod((fmod(position.x, gridSize) + gridSize), gridSize);
-	GLfloat yGridPos = fmod((fmod(-position.z, gridSize) + gridSize), gridSize);
+	//printf("yposition: %f ", position.z);
+	GLuint xCurrent = std::floor(abs(position.x) / gridSize);
+	GLuint yCurrent = std::floor(abs(position.z) / gridSize);
+	GLfloat xGridPos = fmod((fmod(abs(position.x), gridSize) + gridSize), gridSize);
+	GLfloat yGridPos = fmod((fmod(abs(position.z), gridSize) + gridSize), gridSize);
 	glm::vec2 output = glm::vec2(0.0f,0.0f);
-	printf("xcurrent= %d, ycurrent= %d, yNum=%d, xgrid= %f, ygrid= %f\n", xCurrent, yCurrent, yNum, xGridPos, yGridPos);
+	//printf("xcurrent= %d, ycurrent= %d, yNum=%d, xgrid= %f, ygrid= %f\n", xCurrent, yCurrent, yNum, xGridPos, yGridPos);
 	if (xGridPos < 0.14) {
 		if (xCurrent == 0 || map[xCurrent - 1][yCurrent].right)output.x += (0.14f- xGridPos);
 	}

@@ -95,6 +95,23 @@ void Camera::CollionRes(glm::vec2 adjust)
 
 }
 
+void Camera::GodModeToggle()
+{
+	if (godMode) {
+		//turn off god mode
+		GoalPosition = position;
+
+		if (position.x <=0) { GoalPosition.x = gridSize / 2; }
+		else if (position.x >= (float)(xNum-1) * gridSize) { GoalPosition.x = ((float)(xNum - 0.5)) * gridSize; }
+		GoalPosition.y = 0.2f;
+		if (position.z >= 0) { GoalPosition.z = -gridSize / 2; }
+		else if (position.z <= -(float)(yNum-1) * gridSize) { GoalPosition.z = -((float)(xNum - 0.5)) * gridSize; }
+		printf("%f, %f, %f\n", GoalPosition.x, GoalPosition.y, GoalPosition.z);
+		position = GoalPosition;
+	}
+	godMode = !godMode;
+}
+
 void Camera::update()
 {
 

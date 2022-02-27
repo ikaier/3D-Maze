@@ -32,11 +32,13 @@ public:
 	void flip(GLfloat deltaTime);
 
 	void CollionRes(glm::vec2 adjust);
+	void GodModeToggle();
+	bool GodModeStatus() { return godMode; };
 
 	~Camera();
 
 private:
-
+	glm::vec3 GoalPosition;
 	glm::vec3 position;
 	glm::vec3 front;
 	glm::vec3 up;
@@ -45,8 +47,8 @@ private:
 
 	glm::quat quaternion;
 
-	GLuint xNum;
-	GLuint yNum;
+	GLint xNum;
+	GLint yNum;
 	GLfloat gridSize;
 	bool godMode;
 	GLfloat yaw;

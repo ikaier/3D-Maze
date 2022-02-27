@@ -95,6 +95,7 @@ void Window::processInput(GLfloat deltaTime)
     keys[2] = 0.0f;
     keys[3] = 0.0f;
     keys[4] = 0.0f;
+    keys[5] = 0.0f;
 
     if (glfwGetKey(mainWindow, GLFW_KEY_W) == GLFW_PRESS) {
         keys[0] = deltaTime;
@@ -112,7 +113,9 @@ void Window::processInput(GLfloat deltaTime)
     if (glfwGetKey(mainWindow, GLFW_KEY_L) == GLFW_PRESS) {
         keys[4] = 1.0f;
     }
-
+    if (glfwGetKey(mainWindow, GLFW_KEY_G) == GLFW_PRESS) {
+        keys[5] = 1.0f;
+    }
 
 }
 
