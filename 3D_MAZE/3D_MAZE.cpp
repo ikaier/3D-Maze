@@ -23,7 +23,6 @@
 #include"WallLight.h"
 #include"MazeMap.h"
 #include"Material.h"
-#include"WallLightWithShadows.h"
 #include"HDRProcess.h"
 #include"Polyhedron.h"
 
