@@ -2,7 +2,7 @@
 
 
 
-![1](C:\Users\kaier\source\repos\3D_MAZE\1.gif)
+![1](1.gif)
 
 <p  style="text-align:center; font-size:40px;">3D Maze Game</p>
 
