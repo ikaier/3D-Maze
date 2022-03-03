@@ -34,19 +34,19 @@ Use W,A,S,D to control the position, use mouse to control the view.
 
 You can turn on/off the flashllights by press "L".
 
-<img src="C:\Users\kaier\source\repos\3D_MAZE\1.png" alt="1" style="zoom: 25%;" />
+<img src="1.png" alt="1" style="zoom: 25%;" />
 
 #### God Mode
 
 This game allows you to ignore the obstacle and fly freely in the space by turning God Mode on. Press "G" to toggle the God Mode. Notice: you will be teleport to the nearest eligible location in maze after you turn off the God Mode
 
-<img src="C:\Users\kaier\source\repos\3D_MAZE\2.png" alt="2" style="zoom:25%;" />
+<img src="2.png" alt="2" style="zoom:25%;" />
 
 #### Icosahedron
 
 You may counter several icosahedron in the maze. Everytime you touch an icosahedron, the world will flip upside down, and the icosahedron will disappear. This effect will not be triggered in God Mode.
 
-<img src="C:\Users\kaier\source\repos\3D_MAZE\3.png" alt="3" style="zoom:25%;" />
+<img src="3.png" alt="3" style="zoom:25%;" />
 
 #### Timer
 
@@ -58,10 +58,10 @@ Timer will start once the game is launched, and the console will display the tim
 
   [Recursive backtracking](http://weblog.jamisbuck.org/2010/12/27/maze-generation-recursive-backtracking) is used to generate perfect maze in this game to ensure the map is different in every game. The map and end point will be displayed on console.
 
-  ![4](C:\Users\kaier\source\repos\3D_MAZE\4.png)
+  ![4](4.png)
 
 - **Dynamic lights & shadows casting**
 
   This game uses forward multi-pass rendering to render lights and shadows. Each light needs a texture mapping unit (TMU) to smaple the shadows. Since GPU only has limited number of TMU, only specific number of lights that are close to the players will cast light and shadows.
 
-<img src="C:\Users\kaier\source\repos\3D_MAZE\2.gif" alt="2"  />
+<img src="2.gif" alt="2"  />
