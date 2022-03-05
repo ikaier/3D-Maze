@@ -67,7 +67,8 @@ GLfloat IconRotation = 0.0f;
 bool flashIsOn = false;
 bool lPressed = false;
 bool gPressed = false;
-
+bool ECSPressed = false;
+bool menuState = true;
 
 
 void RenderScene(const Shader &shader) {
@@ -191,13 +192,17 @@ int main()
         //input
         glfwPollEvents();
 		mainWindow.processInput(deltaTime);
-        camera.mouseControl(mainWindow.getXchange(), mainWindow.getYchange());
-        camera.keyControl(mainWindow.getsKeys());
+        if (!menuState) {
+            camera.mouseControl(mainWindow.getXchange(), mainWindow.getYchange());
+            camera.keyControl(mainWindow.getsKeys());
+        }
+
         if (!gPressed && mainWindow.getsKeys()[5]) {
             camera.GodModeToggle();
  
         }
         gPressed = mainWindow.getsKeys()[5];
+
         if (!camera.GodModeStatus())
         {
             glm::vec3 adjust=mazeMap.CollionDetection(camera.getCameraPosition());
@@ -205,8 +210,14 @@ int main()
         }
         
         glm::vec3 position = camera.getCameraPosition();
-      
 
+        //Handle ECS to enter Menu
+      
+        if (!ECSPressed && mainWindow.getsKeys()[6]) {
+            menuState = !menuState;
+
+        }
+        ECSPressed = mainWindow.getsKeys()[6];
 
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -327,6 +338,7 @@ int main()
         HDRShader.setFloat("exposure", 0.5f);
         HDRShader.setInt("scene", 0);
         HDRShader.setInt("bloomBlur", 1);
+        HDRShader.setInt("menuState", menuState);
         HDRframebuffer.ReadFloatBuffer(GL_TEXTURE0,0);
         HDRframebuffer.ReadColorBuffer(GL_TEXTURE1, !horizontal);
         

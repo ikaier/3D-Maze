@@ -86,9 +86,9 @@ void Window::swapBuffers()
 
 void Window::processInput(GLfloat deltaTime)
 {
-    if (glfwGetKey(mainWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-        glfwSetWindowShouldClose(mainWindow, true);
-    }
+    //if (glfwGetKey(mainWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+    //    glfwSetWindowShouldClose(mainWindow, true);
+    //}
 
     keys[0] = 0.0f;
     keys[1] = 0.0f;
@@ -96,6 +96,7 @@ void Window::processInput(GLfloat deltaTime)
     keys[3] = 0.0f;
     keys[4] = 0.0f;
     keys[5] = 0.0f;
+    keys[6] = 0.0f;
 
     if (glfwGetKey(mainWindow, GLFW_KEY_W) == GLFW_PRESS) {
         keys[0] = deltaTime;
@@ -115,6 +116,9 @@ void Window::processInput(GLfloat deltaTime)
     }
     if (glfwGetKey(mainWindow, GLFW_KEY_G) == GLFW_PRESS) {
         keys[5] = 1.0f;
+    }
+    if (glfwGetKey(mainWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        keys[6] = 1.0f;
     }
 
 }

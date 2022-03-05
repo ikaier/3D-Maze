@@ -30,7 +30,7 @@ private:
 	GLint width, height;
 	GLint bufferWidth, bufferHeight;
 	
-	GLfloat keys[6] = { 0.0f,0.0f,0.0f,0.0f,0.0f,0.0f };
+	GLfloat keys[7] = { 0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f };
 
 	static void mouseCallback(GLFWwindow* window, double xPos, double yPos);
 };
